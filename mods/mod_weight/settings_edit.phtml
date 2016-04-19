@@ -1,0 +1,20 @@
+<?php
+
+	/**
+	 * Template für die Einstellungen des Gewichtsmoduls
+	 */
+
+?>
+<?php echo wpsg_drawForm_Input('wpsg_mod_weight_unit', __('Gewichtseinheit', 'wpsg'), $this->get_option('wpsg_mod_weight_unit'), array('help' => 'wpsg_mod_weight_unit')); ?>
+<?php echo wpsg_drawForm_Checkbox('wpsg_mod_weight_showProduct', __('Im Produkt anzeigen', 'wpsg'), $this->get_option('wpsg_mod_weight_showProduct'), array('help' => 'wpsg_mod_weight_showProduct')); ?>
+<?php echo wpsg_drawForm_Checkbox('wpsg_mod_weight_showBasket', __('Im Warenkorb anzeigen', 'wpsg'), $this->get_option('wpsg_mod_weight_showBasket'), array('help' => 'wpsg_mod_weight_showBasket')); ?>
+<?php echo wpsg_drawForm_Checkbox('wpsg_mod_weight_showBasketProduct', __('Im Warenkorb im Produkt anzeigen', 'wpsg'), $this->get_option('wpsg_mod_weight_showBasketProduct'), array('help' => 'wpsg_mod_weight_showBasketProduct')); ?>
+<?php echo wpsg_drawForm_Checkbox('wpsg_mod_weight_showOverview', __('In Zusammenfassung anzeigen', 'wpsg'), $this->get_option('wpsg_mod_weight_showOverview'), array('help' => 'wpsg_mod_weight_showOverview')); ?>
+<?php echo wpsg_drawForm_Checkbox('wpsg_mod_weight_showOverviewProduct', __('In Zusammenfassung im Produkt anzeigen', 'wpsg'), $this->get_option('wpsg_mod_weight_showOverviewProduct'), array('help' => 'wpsg_mod_weight_showOverviewProduct')); ?>
+<?php if ($this->hasMod('wpsg_mod_productindex')) { ?>
+<?php echo wpsg_drawForm_Checkbox('wpsg_mod_weight_showProductindex', __('Auf Produktübersichtsseiten anzeigen', 'wpsg'), $this->get_option('wpsg_mod_weight_showProductindex'), array('help' => 'wpsg_mod_weight_showProductindex')); ?>
+<?php } ?>
+<?php if ($this->hasMod('wpsg_mod_request')) { ?>
+<?php echo wpsg_drawForm_Checkbox('wpsg_mod_weight_showRequestPage', __('Auf Anfrageseite anzeigen', 'wpsg'), $this->get_option('wpsg_mod_weight_showRequestPage'), array('help' => 'wpsg_mod_weight_showRequestPage')); ?>
+<?php echo wpsg_drawForm_Checkbox('wpsg_mod_weight_showRequestPageProduct', __('Auf Anfrageseite im Produkt anzeigen', 'wpsg'), $this->get_option('wpsg_mod_weight_showRequestPageProduct'), array('help' => 'wpsg_mod_weight_showRequestPageProduct')); ?>
+<?php } ?>

@@ -1,0 +1,61 @@
+<?php
+
+	/**
+	 * Template für die Einstellungen der Produktvariablen
+	 */
+
+?>
+<script type="text/javascript">
+
+	function wpsg_addPV() 
+	{
+
+		jQuery('#wpsg_pv_list').html('<img src="<?php echo WPSG_URL; ?>views/gfx/ajax-loader.gif" alt="<?php echo __('Bitte warten ...', 'wpsg'); ?>" />');
+		
+		jQuery.ajax( {
+			url: '<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_productvars&noheader=1&do=add',
+			success: function(data) {
+				jQuery('#wpsg_pv_list').html(data);
+			}
+		} );
+		
+		return false;
+		
+	} // function wpsg_addPV()
+
+	function wpsg_removePV(pv_id)
+	{
+
+		jQuery('#wpsg_pv_list').html('<img src="<?php echo WPSG_URL; ?>views/gfx/ajax-loader.gif" alt="<?php echo __('Bitte warten ...', 'wpsg'); ?>" />');
+		
+		jQuery.ajax( {
+			url: '<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_productvars&noheader=1&do=del',
+			data: {
+				pv_id: pv_id
+			},
+			success: function(data) {
+				jQuery('#wpsg_pv_list').html(data);
+			}
+		} );
+		
+		return false;
+
+	}
+
+</script>
+
+<div class="wpsg_admin_box">		
+		  		
+	<div class="head">
+		<div class="title">
+			<div class="fulltab">
+				<?php echo __('Produktvariablen', 'wpsg'); ?>
+				<a title="<?php echo __('Neue Produktvariable anlegen', 'wpsg'); ?>" href="" class="wpsg_icon wpsg_icon_right wpsg_icon_add" onclick="return wpsg_addPV();"></a>
+			</div>
+		</div>
+	</div>
+	<div class="content" id="wpsg_pv_list">
+		<?php echo $this->mod->pv_list(); ?>
+	</div>
+			
+</div>

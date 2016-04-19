@@ -1,0 +1,23 @@
+<?php
+	
+	/**
+	 * Template für die Liste der Bilder eines Produkts
+	 */
+
+?>
+<?php if (sizeof($this->view['ProduktBilder']) > 0) { ?>
+
+	<?php foreach ($this->view['ProduktBilder'] as $b) { ?>
+	
+		<div class="wpsg_mod_produktbilder_admin_bild">
+			<a onclick="return wpsg_remove_bild('<?php echo $b; ?>');" href="#" title="<?php echo __('Dieses Bild löschen.', 'wpsg'); ?>">
+				<img src="<?php echo $this->view['modul']->makeTn($this->view['data']['id'], $b, 75, 75, 's'); ?>" alt="<?php echo wpsg_hspc($b); ?>" />
+			</a>
+		</div>
+	
+	<?php } ?>
+	<div class="wpsg_clear"></div>
+
+<?php } else { ?>
+<p><?php echo __('Bisher keine Produktbilder hochgeladen.', 'wpsg'); ?></p>
+<?php } ?>

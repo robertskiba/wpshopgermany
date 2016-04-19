@@ -1,0 +1,22 @@
+<?php
+
+	/**
+	 * Template für die Zeile eines Variantenprodukts bei der Produktansicht in der Bestellverwaltung
+	 */
+
+?>
+<tr class="wpsg_<?php echo (($this->view['i'] == 0)?'odd':'even'); ?>">
+	<td style="padding:4px; line-height:100%; vertical-align:middle;"><?php echo __('Variante', 'wpsg'); ?>:</td>
+	<td style="padding:4px; line-height:100%; vertical-align:middle;" align="right" colspan="<?php echo ((sizeof($this->view['basket']['mwst']) > 1 || $this->get_option('wpsg_showMwstAlways') == '1')?'4':'3'); ?>">
+		<?php if ($this->get_option('wpsg_vp_detailview') == 1) { ?>
+		<?php foreach ($this->view['variante'] as $vari => $value) { ?>
+		<?php if (is_numeric($vari)) { ?>
+		<?php echo $value['name'] ?>: <?php echo $value['value'] ?>; <?php echo __('Art. Nr.', 'wpsg').': '.$value['artnr'] ?>; <?php echo $value['preis'] ?> <?php echo $this->get_option('wpsg_currency') ?>
+		<br />
+		<?php } ?>
+		<?php } ?>							
+		<?php } else { ?>
+		<?php echo $this->view['variante']['key']; ?>
+		<?php } ?>
+	</td>
+</tr>

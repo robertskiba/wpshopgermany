@@ -1,0 +1,48 @@
+<?php 
+ 
+	/*
+	 * 
+	 * Template für die Ansicht einer einzelnen Produktgruppe
+	 * 
+	 */
+
+	if (!$this->hasMod("wpsg_mod_produktbilder")) die(__("Dieses Template erfordert das Modul mod_produktbilder.", "wpsg"));
+		
+	// Dimension der Bilder
+	$picW = 200;
+	$picH = 200;	
+	$picMode = 'c';
+
+	//$p['produktattribute'][$index]['name'];		Der Name des Attributs
+	//$p['produktattribute'][$index]['value'];		Der Wert des Attributs
+	//$index ist die Nummer des Produktattributs
+	
+	//Ausgabemöglichkeit bei aktiviertem Debug Modus
+	//wpsg_debug($this->view['data']);	
+	
+?>
+<div class="wpsg_pgruppen_single">
+	<div class="wpsg_pgruppen_single_produkte_wrap">
+		<div class="wpsg_pgruppen_single_produkte">
+		<?php foreach ((array)$this->view['data']['produkte'] as $p) { ?>
+		<?php //wpsg_debug($p) ?>
+			<?php if (sizeof($p['bilder']) > 0) { ?>
+			<?php $image = array_rand($p['bilder']); ?>			
+			<div class="wpsg_pgruppen_single_list_image">
+				<?php $image_path = $this->callMod('wpsg_mod_produktbilder', 'makeTn', array($p['id'], $p['bilder'][$image], $picW, $picH, $picMode)) ?>				
+				<a href="<?php echo $p['url'] ?>">
+					<img src="<?php echo $image_path; ?>" alt="<?php echo $p['name']; ?>"/>
+				</a>
+			</div>
+			<?php } ?>
+		<?php } ?>
+		</div>
+	</div>
+	<div style="clear:both;"></div>
+	<div class="wpsg_pgruppen_single_titel"><?php echo $this->view['data']['name']; ?></div>
+	<?php if ($this->view['data']['infopage'] > 0) { ?>	
+	<div class="wpsg_pgruppen_single_link">
+		<a href="<?php echo get_permalink($this->view['data']['infopage']); ?>"><?php echo __("Mehr zur Produktgruppe", "wpsg"); ?></a>
+	</div>
+	<?php } ?>	
+</div>

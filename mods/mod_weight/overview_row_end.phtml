@@ -1,0 +1,15 @@
+<?php
+
+	/**
+	 * Template für die Integration des Produktgewichts in die Bestellzusammenfassung
+	 */
+
+?>
+<tr class="wpsg_row_weight wpsg_row_small">
+	<td colspan="<?php echo $this->view['colspan']; ?>" class="wpsg_cell_weight_label">
+		<?php echo __('Gesamtgewicht', 'wpsg'); ?>:
+	</td>
+	<td class="wpsg_cell_weight_value">
+		<?php echo wpsg_ff($this->view['wpsg_mod_weight']['weight'], $this->get_option('wpsg_mod_weight_unit')); ?>
+	</td>
+</tr>

@@ -1,0 +1,531 @@
+<?php
+
+	/**
+	 * Template für die Ansicht einer Bestellung im Backend
+	 */
+
+?>
+<script type="text/javascript">
+/* <![CDATA[ */
+ 
+ 	function wpsg_reloadOrderLog()
+	{
+
+		jQuery('#wpsg_orderlog_content').html('<img src="<?php echo WPSG_URL; ?>views/gfx/ajax-loader.gif" alt="<?php echo __('Bitte warten ...', 'wpsg'); ?>" />');
+    	
+		jQuery.ajax( { 
+			url: '<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Order&action=ajax&wpsg_action=orderLog&edit_id=<?php echo $this->view['data']['id']; ?>&noheader=1',
+			success: function(data) {
+				jQuery('#wpsg_orderlog_content').html(data);
+			}
+		} );
+		
+		return false;
+	
+	} // function wpsg_reloadOrderLog()
+
+	jQuery(document).ready(function() {
+ 
+		jQuery("#normal-sortables, #side-sortables").sortable({
+			connectWith: ".meta-box-sortables",
+			placeholder: 'wpsg_placeholder',
+			dropOnEmpty: true,
+			cursor: 'move',
+			grid: [50, 20], 
+			items: ".postbox",
+			handle: '.wpsg_handlediv',
+			forceHelperSize: true,
+			forcePlaceholderSize: true,
+			opacity: 0.8,
+			stop: function(e,ui) {
+
+				var ser = jQuery("#normal-sortables").sortable("serialize");					
+				ser = ser.replace(/\&wpsg\[\]\=/g, ',').replace(/wpsg\[\]\=/g, '');
+
+				jQuery.cookie('wpsg_order_view_normal', ser);
+
+				var ser = jQuery("#side-sortables").sortable("serialize");	 		
+				ser = ser.replace(/\&wpsg\[\]\=/g, ',').replace(/wpsg\[\]\=/g, '');
+
+				jQuery.cookie('wpsg_order_view_side', ser);
+				
+			},
+			receive: function(e, ui) {
+			}
+		});  
+		
+		if (jQuery.cookie('wpsg_order_view_normal') != null)
+		{
+
+			var divs = jQuery.cookie('wpsg_order_view_normal').split(',').reverse();
+
+			for (index in divs)
+			{
+
+				jQuery('#normal-sortables').prepend(jQuery('#wpsg_' + divs[index]));
+				
+			}
+			
+		}
+		
+		if (jQuery.cookie('wpsg_order_view_side') != null)
+		{
+
+			var divs = jQuery.cookie('wpsg_order_view_side').split(',').reverse();
+ 
+			for (index in divs)
+			{
+
+				jQuery('#side-sortables').prepend(jQuery('#wpsg_' + divs[index]));
+				
+			}
+			
+		}
+		
+		jQuery('.wpsg_handlediv').bind('click', function() { 
+			jQuery(this).next().toggle();
+
+			var arClose = new Array();
+			jQuery('.wpsg_order_view .postbox .inside:hidden').each(function() {
+				arClose.push(jQuery(this).parent().attr("id"));
+			} );
+
+			jQuery.cookie('wpsg_order_closed', arClose.join(','));
+			
+		} );
+
+		if (jQuery.cookie('wpsg_order_closed') != null)
+		{
+
+			var arClose = jQuery.cookie('wpsg_order_closed').split(',');
+
+			for (index in arClose)
+			{
+
+				if (arClose[index].length > 0) jQuery('#' + arClose[index] + ' .inside').hide();
+							
+			}
+			
+		}
+
+	    jQuery('.wpsg_form_help').tipTip();
+ 		
+	} );
+	 
+/* ]]> */
+</script>
+
+<div class="wrap columns-2 wpsg_order_view">
+	<div class="icon32 icon32-posts-post" id="icon-edit"><br /></div>
+	<h2>
+		<?php echo wpsg_translate(__('Bestellung #1#', 'wpsg'), $this->view['data']['onr']); ?>
+	</h2>
+	<br />
+	<?php echo $this->writeBackendMessage(); ?>
+	
+	<div id="postbox" class="metabox-holder has-right-sidebar">
+
+		<div id="side-info-column" class="inner-sidebar" style="width:386px;">			
+			<div id="side-sortables" class="meta-box-sortables meta-box-sortables ui-sortable" style="width:380px;">
+						
+				<div id="wpsg_ranschrift" class="postbox">
+					<h3 class="wpsg_handlediv">
+						<span title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>" class="handlediv"><br /></span>
+						<span><?php echo __('Kundendaten', 'wpsg'); ?></span>
+					</h3>
+					<div class="inside">
+					
+						<div class="wpsg_form_field">
+							<div class="wpsg_form_left">
+								<?php echo __('Kundennummer', 'wpsg'); ?>:
+							</div>
+							<div class="wpsg_form_right">
+								<p>					
+									<?php echo wpsg_hspc($this->view['data']['knr']); ?>
+									<?php if ($this->hasMod('wpsg_mod_kundenverwaltung')) { ?>
+									[&nbsp;<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Customer&action=edit&edit_id=<?php echo $this->view['data']['k_id']; ?>"><?php echo __('Zum Kunden', 'wpsg'); ?></a>&nbsp;]</a>
+									<?php } ?>
+								</p>						
+							</div>
+						</div>
+						<div class="wpsg_clear"></div>
+										
+						<div class="wpsg_form_field">
+							<div class="wpsg_form_left">
+								<?php echo __('Anschrift', 'wpsg'); ?>:
+							</div>
+							<div class="wpsg_form_right">
+								<p>		
+									<?php if (trim($this->view['data']['firma']) != '') { ?>			
+									<?php echo wpsg_hspc($this->view['data']['firma']); ?><br />
+									<?php } ?>	
+									<?php echo (($this->view['data']['title'] != '' && $this->view['data']['title'] != '-1')?wpsg_hspc($this->view['data']['title']).' ':''); ?><?php echo wpsg_hspc($this->view['data']['vname']); ?> <?php echo wpsg_hspc($this->view['data']['name']); ?><br />
+									<?php echo wpsg_hspc($this->view['data']['strasse']); ?><br />
+									<?php echo wpsg_hspc($this->view['data']['plz']); ?> <?php echo wpsg_hspc($this->view['data']['ort']); ?> <?php echo wpsg_hspc($this->view['country']['kuerzel']); ?><br />
+								</p>						
+							</div>
+						</div>
+						<div class="wpsg_clear"></div>
+						
+						<?php if (strtotime($this->view['data']['geb']) > 0) { ?>
+						<?php echo wpsg_drawForm_Input('', __('Geburtsdatum', 'wpsg'), wpsg_fromDate($this->view['data']['geb']), array('text' => true)); ?>
+						<?php } ?>
+						
+						<?php if (strlen($this->view['data']['fax']) > 0) { ?>
+						<?php echo wpsg_drawForm_Input('', __('Fax', 'wpsg'), $this->view['data']['fax'], array('text' => true)); ?>
+						<?php } ?>
+						
+						<?php if (strlen($this->view['data']['tel']) > 0) { ?>
+						<?php echo wpsg_drawForm_Input('', __('Telefon', 'wpsg'), $this->view['data']['tel'], array('text' => true)); ?>
+						<?php } ?>
+						
+						<?php if (strlen($this->view['data']['ustidnr']) > 0) { ?>
+						<?php echo wpsg_drawForm_Input('', __('UStIdNr.', 'wpsg'), $this->view['data']['ustidnr'], array('text' => true)); ?>
+						<?php } ?>
+						
+						<div class="wpsg_form_field">
+							<div class="wpsg_form_left">
+								<?php echo __('E-Mail', 'wpsg'); ?>:
+							</div>
+							<div class="wpsg_form_right">
+								<p>					
+									<a href="mailto:<?php echo $this->view['data']['email']; ?>"><?php echo $this->view['data']['email']; ?></a>
+								</p>						
+							</div>
+						</div>
+						<div class="wpsg_clear"></div>
+						
+						<?php $this->callMods('wpsg_order_view_customerdata', array(&$this->view['data']['id'])); ?>		
+						
+					</div>
+				</div>
+								
+				<div id="wpsg_shippayment" class="postbox">
+					<h3 class="wpsg_handlediv">
+						<span title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>" class="handlediv"><br /></span>
+						<span><?php echo __('Versand- und Zahlungsart', 'wpsg'); ?></span>
+					</h3>
+					<div class="inside">
+					
+						<div class="wpsg_form_field">
+							<div class="wpsg_form_left">
+								<?php echo __('Versandart', 'wpsg'); ?>:
+							</div>
+							<div class="wpsg_form_right">
+								<p>					
+									<?php echo wpsg_hspc($this->view['oOrder']->getShippingTypName()); ?>
+									<?php if (isset($this->view['basket']['sum']['preis_shipping']) && $this->view['basket']['sum']['preis_shipping'] > 0) { ?>
+									(<?php echo wpsg_ff($this->view['basket']['sum']['preis_shipping'], $this->get_option('wpsg_currency')); ?>)
+									<?php } ?>
+								</p>						
+							</div>
+						</div>
+						<div class="wpsg_clear"></div>
+					
+						<div class="wpsg_form_field">
+							<div class="wpsg_form_left">
+								<?php echo __('Zahlungsart', 'wpsg'); ?>:
+							</div>
+							<div class="wpsg_form_right">
+								<p>					
+																	
+									<?php echo __($this->view['arPayment'][$this->view['data']['type_payment']]['name'], 'wpsg'); ?>
+									<?php if (isset($this->view['basket']['sum']['preis_payment']) && $this->view['basket']['sum']['preis_payment'] > 0) { ?>
+									(<?php echo wpsg_ff($this->view['basket']['sum']['preis_payment'], $this->get_option('wpsg_currency')); ?>)
+									<?php } ?>
+									
+								</p>						
+							</div>
+						</div>
+						<div class="wpsg_clear"></div>
+						<?php $this->callMods('order_view_afterpayment', array(&$this->view['data']['id'])); ?>
+					
+					</div>
+				</div>
+				
+				<?php if (trim($this->view['data']['order_comment']) != '') { ?>
+				<div id="wpsg_comment" class="postbox">
+					<h3 class="wpsg_handlediv">
+						<span title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>" class="handlediv"><br /></span>
+						<span><?php echo __('Bestellkommentar (Kunde)', 'wpsg'); ?></span>
+					</h3>
+					<div class="inside">
+						<?php echo wpsg_hspc($this->view['data']['order_comment']); ?>
+					</div>
+				</div>
+				<?php } ?>
+				
+				<div id="wpsg_admincomment" class="postbox">
+					<h3 class="wpsg_handlediv">
+						<span title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>" class="handlediv"><br /></span>
+						<span><?php echo __('Bestellkommentar (Admin)', 'wpsg'); ?></span>
+					</h3> 
+					<div class="inside">
+						<form action="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Order&noheader=1&action=setAdminComment&edit_id=<?php echo $this->view['data']['id']; ?>" method="post">
+							<textarea class="wpsg_order_admincomment" name="wpsg_order_admincomment"><?php echo wpsg_hspc($this->view['data']['admincomment']); ?></textarea>
+							<input class="button wpsg_order_admincomment_submit" type="submit" value="<?php echo __('Senden', 'wpsg'); ?>" name="admincomment_submit" />
+						</form>
+					</div>
+				</div>
+				
+				<?php $this->callMods('order_view_sidebar', array(&$this->view['data']['id'])); ?>
+				
+			</div>
+		</div>
+		
+		<div id="post-body">	
+			<div id="normal-sortables" class="meta-box-sortables" style="margin-right:400px;">	
+				<div class="postbox" id="wpsg_generally">		
+					<h3 class="wpsg_handlediv">
+						<span title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>" class="handlediv"><br /></span>
+						<span><?php echo __('Allgemein', 'wpsg'); ?></span>
+					</h3>
+					<div class="inside">
+						
+						<div class="wpsg_form_field">
+							<div class="wpsg_form_left">
+								<?php echo __('Bestellnummer', 'wpsg'); ?>:
+							</div>
+							<div class="wpsg_form_right">
+								<p>					
+									<?php echo wpsg_hspc($this->view['data']['onr']); ?> [<?php echo wpsg_hspc($this->arStatus[$this->view['data']['status']]); ?>]
+								</p>						
+							</div>
+						</div>
+						<div class="wpsg_clear"></div>
+						
+						<?php if (wpsg_isSizedString($this->view['data']['language']) && $this->view['data']['language'] != $this->getCurrentLanguage()) { $arLang = $this->getStoreLanguages(); $lang = $arLang[$this->view['data']['language']]; ?>
+						<div class="wpsg_form_field">
+							<div class="wpsg_form_left">
+								<?php echo __('Sprache', 'wpsg'); ?>:
+							</div>
+							<div class="wpsg_form_right">
+								<p>
+									<img src="<?php echo $this->getFlagURL().$lang['flag']; ?>" alt="<?php echo wpsg_translate(__('Produkt für Sprache #1# bearbeiten.', 'wpsg'), $lang['name']); ?>" />
+									<?php echo $lang['name']; ?>
+								</p>
+							</div>
+						</div>
+						<div class="wpsg_clear"></div>
+						<?php } ?>
+						
+						<div class="wpsg_form_field">
+							<div class="wpsg_form_left">
+								<?php echo __('Bestelleingang', 'wpsg'); ?>:
+							</div>
+							<div class="wpsg_form_right">
+								<p>					
+									<?php echo date('d.m.Y H:i:s', strtotime($this->view['data']['cdate'])); ?>
+								</p>						
+							</div>
+						</div>
+						<div class="wpsg_clear"></div>
+						
+						<form method="POST" action="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Order&amp;action=switchStatus&amp;edit_id=<?php echo $this->view['data']['id']; ?>&amp;noheader=1" enctype="multipart/form-data">
+						<div class="wpsg_form_field">
+							<div class="wpsg_form_left">
+								<?php echo __('Statusänderung', 'wpsg'); ?>:
+							</div>
+							<div class="wpsg_form_right">								
+									<select id="wpsg_order_view_status" name="status" style="float:left;">
+										<?php foreach ($this->arStatus as $k => $v) { ?>
+										<option value="<?php echo wpsg_hspc($k); ?>" <?php echo (($k == $this->view['data']['status'])?'selected="selected"':''); ?>><?php echo wpsg_hspc($v); ?></option>
+										<?php } ?>					
+									</select>
+									&nbsp;<input style="width:auto;" type="submit" class="button wpsg_button" id="wpsg_order_view_status_submit" name="wpsg_statusaenderung" value="<?php echo __('Status ändern', 'wpsg'); ?>" />
+									<div class="wpsg_clear"></div>
+									<label style="line-height:250%;">
+										<input style="width:auto;" type="checkbox" value="1" name="sendMail" /> <?php echo __('Kunde informieren', 'wpsg'); ?>
+									</label>
+							</div>
+						</div>
+						<div class="wpsg_clear"></div> 
+						<?php $this->callMods('order_view_switchStatus', array(&$this->view['data']['id'])); ?>						
+						</form>
+						
+						<?php if (wpsg_isSizedInt($this->get_option('wpsg_debugModus'))) { ?>
+						<div class="wpsg_form_field">
+							<div class="wpsg_form_left">
+								<span class="wpsg_developer"><?php echo __('Entwickler Optionen', 'wpsg'); ?>:</span>
+							</div>
+							<div class="wpsg_form_right">
+								<span class="wpsg_developer">
+									<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Order&action=ajax&wpsg_action=debug_customermail&noheader=1&edit_id=<?php echo $this->view['data']['id']; ?>"><?php echo __('Kundenmail simulieren (An Shop Betreiber)', 'wpsg'); ?></a><br />
+									<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Order&action=ajax&wpsg_action=debug_adminmail&noheader=1&edit_id=<?php echo $this->view['data']['id']; ?>"><?php echo __('Adminmail simulieren', 'wpsg'); ?></a><br />
+									<a href="<?php echo $this->getDoneURL($this->view['data']['id']); ?>"><?php echo __('Bestellabschlußseite', 'wpsg'); ?></a><br />
+									<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Order&action=ajax&wpsg_action=debug_urlbuy&noheader=1&edit_id=<?php echo $this->view['data']['id']; ?>"><?php echo __('URL Benachrichtigung (Kauf) auslösen', 'wpsg'); ?></a><br />
+									<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Order&action=ajax&wpsg_action=debug_urlpay&noheader=1&edit_id=<?php echo $this->view['data']['id']; ?>"><?php echo __('URL Benachrichtigung (Bezahlung) auslösen', 'wpsg'); ?></a><br />
+									<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Order&action=view&edit_id=<?php echo $this->view['data']['id']; ?>&debugBasket=1"><?php echo __('Warenkorbdaten anzeigen', 'wpsg'); ?></a><br />
+									<?php if (wpsg_isSizedInt($_REQUEST['debugBasket'])) { ?>
+									<?php wpsg_debug($this->view['basket']); ?>
+									<?php } ?>
+								</span>
+							</div>
+						</div>
+						<div class="wpsg_clear"></div>
+						<?php } ?>
+						
+					</div>					
+				</div>
+								
+				<div class="postbox" id="wpsg_orderdata">		
+					<h3 class="wpsg_handlediv">
+						<span title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>" class="handlediv"><br /></span>
+						<span><?php echo __('Bestelldaten', 'wpsg'); ?></span>
+					</h3>
+					<div class="inside">						
+						<table class="wpsg_produkte">
+							<tr class="wpsg_kopf">
+								<th class="wpsg_cell_name"><?php echo __('Produktname', 'wpsg'); ?></th>
+								<th class="wpsg_cell_preis"><?php echo __('Einzelpreis', 'wpsg'); ?></th>
+								<?php if (sizeof($this->view['basket']['mwst']) > 1 || $this->get_option('wpsg_showMwstAlways') == '1') { ?>
+								<th class="wpsg_cell_mwst"><?php echo __("MwSt.", "wpsg"); ?></th>
+								<?php } ?>
+								<th class="wpsg_cell_menge"><?php echo __("Anzahl", "wpsg"); ?></th>
+								<th class="wpsg_cell_gesamtpreis"><?php echo __("Gesamtpreis", "wpsg"); ?></th>
+							</tr>
+							<?php $i = 0; foreach ($this->view['basket']['produkte'] as $produkt_key => $p) { $i ++; ?>
+							<tr class="wpsg_<?php echo (($i % 2 == 0)?'odd':'even'); ?>">
+								<td class="wpsg_cell_name">
+									<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Produkt&action=edit&edit_id=<?php echo $this->getProduktID($p['id']); ?>" title="<?php echo __('Zum Produkt', 'wpsg'); ?>">
+										<?php echo wpsg_hspc($this->getProductName($this->getProduktID($p['id']))); ?>
+									</a>
+								</td>
+								<td class="wpsg_cell_preis"><?php echo wpsg_ff($p['preis']); ?> <?php echo $this->get_option('wpsg_currency'); ?></td>
+								<?php if (sizeof($this->view['basket']['mwst']) > 1 || $this->get_option('wpsg_showMwstAlways') == '1') { ?>
+								<td class="wpsg_cell_mwst"><?php echo wpsg_ff($p['mwst_value']); ?> %</td>				
+								<?php } ?>
+								<td class="wpsg_cell_menge"><?php echo wpsg_hspc($p['menge']); ?></td>
+								<td class="wpsg_cell_gesamtpreis"><?php echo wpsg_ff($p['menge'] * $p['preis']); ?> <?php echo $this->get_option('wpsg_currency'); ?></td>
+							</tr>
+							<?php if (wpsg_isSizedArray($p['order_allowedshipping'])) { ?>
+							<tr class="wpsg_<?php echo (($i % 2 == 0)?'odd':'even'); ?>">
+								<td class="wpsg_cell_name">
+									<?php echo __('Mögliche Versandarten', 'wpsg'); ?>: 
+								</td>
+								<td class="wpsg_cell_gesamtpreis" colspan="<?php echo ((sizeof($this->view['basket']['mwst']) > 1 || $this->get_option('wpsg_showMwstAlways') == '1')?4:3); ?>">
+									<?php $j = 0; foreach ($p['order_allowedshipping'] as $shipping) { $j ++; ?>
+									<?php echo $this->getShippingName($shipping); ?><?php if ($j < sizeof($p['order_allowedshipping'])) { ?>, <?php } ?>
+									<?php } ?> 
+								</td>								
+							</tr>
+							<?php } ?>
+							<?php $this->callMods('order_view_row', array(&$p, $i)); ?>							
+							<?php } ?>
+							<?php if (isset($this->view['basket']['gs'])) { ?>
+							<tr class="wpsg_<?php echo (($i % 2 == 0)?'odd':'even'); ?> wpsg_gutschein">
+								<td class="wpsg_cell_name"><?php echo __('Gutschein', 'wpsg'); ?> <?php echo ($this->view['basket']['gs']['code'] != '')? '('.$this->view['basket']['gs']['code'].')':'' ?></td>
+								<td class="wpsg_cell_preis"><?php echo '-'.wpsg_ff($this->view['basket']['sum']['gs'], $this->get_option('wpsg_currency')); ?></td>
+								<?php if (sizeof($this->view['basket']['mwst']) > 1 || $this->get_option('wpsg_showMwstAlways') == '1') { ?>
+								<td class="wpsg_cell_mwst"><?php echo __('anteilig', 'wpsg'); ?></td>
+								<?php } ?>
+								<td class="wpsg_cell_menge">1</td>
+								<td class="wpsg_cell_gesamtpreis"><?php echo '-'.wpsg_ff($this->view['basket']['sum']['gs'], $this->get_option('wpsg_currency')); ?></td>
+							</tr>
+							<?php } ?>
+							<?php if (isset($this->view['basket']['sum']['preis_rabatt']) && $this->view['basket']['sum']['preis_rabatt'] > 0) { ?>
+							<tr class="wpsg_<?php echo (($i % 2 == 0)?'odd':'even'); ?> wpsg_row_rabatt">
+								<td colspan="<?php echo $this->view['colspan']; ?>" class="wpsg_cell_rabatt_label">
+									<?php echo __('Abzüglich Rabatt', 'wpsg'); ?>
+								</td>
+								<td class="wpsg_cell_rabatt_value">
+									<?php echo '-'.wpsg_ff($this->view['basket']['sum']['preis_rabatt'], $this->get_option('wpsg_currency')); ?>
+								</td>
+							</tr>
+							<?php } ?>							
+							<tr class="wpsg_row_summe">
+								<td colspan="<?php echo $this->view['colspan']; ?>" class="wpsg_cell_summe_label">
+									<?php if ($this->get_option('wpsg_kleinunternehmer') == '1') { ?>
+										<?php echo wpsg_translate(__('Summe (zzgl. #1#)', 'wpsg'), '<a href="'.$this->getURL(wpsg_ShopController::URL_VERSANDKOSTEN).'" target="_blank">'.__('Versandkosten', 'wpsg').'</a>'); ?>
+									<?php } else { ?>
+										<?php if ($this->getFrontendTaxview() == WPSG_NETTO) { ?>
+										<?php echo wpsg_translate(__('Summe (zzgl. #1#, zzgl. MwSt.)', 'wpsg'), '<a href="'.$this->getURL(wpsg_ShopController::URL_VERSANDKOSTEN).'" target="_blank">'.__('Versandkosten', 'wpsg').'</a>'); ?>
+										<?php } else { ?>
+										<?php echo wpsg_translate(__('Summe (zzgl. #1#, inkl. MwSt.)', 'wpsg'), '<a href="'.$this->getURL(wpsg_ShopController::URL_VERSANDKOSTEN).'" target="_blank">'.__('Versandkosten', 'wpsg').'</a>'); ?>
+										<?php } ?>
+									<?php } ?>
+								</td>
+								<td class="wpsg_cell_summe_value">
+									<?php echo wpsg_ff($this->view['basket']['sum']['preis']); ?> <?php echo $this->get_option('wpsg_currency'); ?>
+								</td>
+							</tr>	
+							<?php if ($this->view['basket']['sum']['preis_shipping'] != 0 || $this->get_option('wpsg_hideemptyshipping') != '1') { ?>
+							<tr class="wpsg_row_shipping">
+								<td colspan="<?php echo $this->view['colspan']; ?>" class="wpsg_cell_shipping_label">
+									<a href="<?php echo $this->getURL(wpsg_ShopController::URL_VERSANDKOSTEN); ?>" target="_blank"><?php echo __('Versandkosten', 'wpsg'); ?></a>			
+								</td>
+								<td class="wpsg_cell_shipping_value">
+									<?php echo wpsg_ff($this->view['basket']['sum']['preis_shipping']); ?> <?php echo $this->get_option('wpsg_currency'); ?>
+								</td>
+							</tr>
+							<?php } ?>
+							<?php if ($this->view['basket']['sum']['preis_payment'] != 0 || $this->get_option('wpsg_hideemptypayment') != '1') { ?>
+							<tr class="wpsg_row_payment">
+								<td colspan="<?php echo $this->view['colspan']; ?>" class="wpsg_cell_payment_label">
+									<?php echo __('Zahlungsart', 'wpsg'); ?>
+								</td>
+								<td class="wpsg_cell_payment_value">
+									<?php echo wpsg_ff($this->view['basket']['sum']['preis_payment']); ?> <?php echo $this->get_option('wpsg_currency'); ?>
+								</td>
+							</tr>
+							<?php } ?>
+							<?php if ($this->get_option('wpsg_preisangaben') == '1' && $this->get_option('wpsg_kleinunternehmer') != '1') { ?>
+							<?php foreach ($this->view['basket']['mwst'] as $mwst_id => $mwst) { ?>
+							<tr class="wpsg_row_mwst">
+								<td colspan="<?php echo $this->view['colspan']; ?>" class="wpsg_cell_mwst_label">
+									<?php echo wpsg_translate(__('zuzüglich MwSt. (#1#)', 'wpsg'), $mwst['name']); ?>
+								</td>
+								<td class="wpsg_cell_mwst_value">
+									<?php echo wpsg_ff($mwst['sum']); ?> <?php echo $this->get_option('wpsg_currency'); ?>
+								</td>
+							</tr>
+							<?php } ?>
+							<?php } ?>
+							<tr class="wpsg_row_gesamt">
+								<td colspan="<?php echo $this->view['colspan']; ?>" class="wpsg_cell_gesamt_label">
+									<?php echo __('Gesamtpreis', 'wpsg'); ?>
+								</td>
+								<td class="wpsg_cell_gesamt_value">
+									<?php echo wpsg_ff($this->view['basket']['sum']['preis_gesamt_brutto']); ?> <?php echo $this->get_option('wpsg_currency'); ?>
+								</td>
+							</tr>		
+							<?php if ($this->get_option('wpsg_kleinunternehmer') == '1' || $this->get_option('wpsg_preisangaben') != '1') { ?>
+							<?php foreach ($this->view['basket']['mwst'] as $mwst_id => $mwst) { ?>
+							<tr class="wpsg_row_mwst">
+								<td colspan="<?php echo $this->view['colspan']; ?>" class="wpsg_cell_mwst_label">
+									<?php if ($this->get_option('wpsg_kleinunternehmer') == '1') { ?>
+										<?php echo $this->get_option('wpsg_kleinunternehmer_text'); ?>
+									<?php } else { ?>
+										<?php echo wpsg_translate(__('darin enthaltene MwSt. (#1#)', 'wpsg'), $mwst['name']); ?>
+									<?php } ?>
+								</td>
+								<td class="wpsg_cell_mwst_value">
+									<?php echo wpsg_ff($mwst['sum']); ?> <?php echo $this->get_option('wpsg_currency'); ?>
+								</td>
+							</tr>
+							<?php } ?>
+							<?php } ?>
+						</table>
+						
+					</div>
+				</div>
+				
+				<?php $this->callMods('order_view_content', array($this->view['data']['id'])); ?>
+				
+				<div class="postbox" id="wpsg_orderlog">		
+					<h3 class="wpsg_handlediv">
+						<span title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>" class="handlediv"><br /></span>
+						<span><?php echo __('Bestellprotokoll', 'wpsg'); ?></span>
+					</h3>
+					<div class="inside" id="wpsg_orderlog_content">
+						<?php echo $this->view['orderLog']; ?>
+					</div>
+				</div>
+				
+			</div>
+						
+		</div>
+		
+	</div>
+	
+</div>

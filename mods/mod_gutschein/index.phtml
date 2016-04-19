@@ -1,0 +1,332 @@
+<?php
+
+	/**
+	 * Template für die Übersicht der Gutschein
+	 */
+
+?>
+<div class="wrap wpsg_mod_gutschein">
+	<div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
+	<h2>
+		<?php echo __('Gutscheinverwaltung', 'wpsg'); ?>			
+		<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Voucher&amp;action=add" class="add-new-h2"><?php echo __("Hinzufügen", "wpsg"); ?></a>
+		<a href="#" onclick="return wpsg_doExport();" class="add-new-h2"><?php echo __('CSV Export', 'wpsg'); ?></a>
+		<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Voucher&amp;action=import" class="add-new-h2"><?php echo __('CSV Import', 'wpsg'); ?></a>
+	</h2>
+	
+	<script type="text/javascript">/* <![CDATA[ */
+
+		var wpsg_order = '<?php echo $this->view['filter']['order']; ?>';
+		var wpsg_ascdesc = '<?php echo $this->view['filter']['ascdesc']; ?>';
+    	
+		function wpsg_setOrder(order)
+		{
+	
+			if (order == wpsg_order)
+			{
+	
+				// Nur Richtung ändern
+				if (wpsg_ascdesc == 'asc') jQuery('#wpsg_ascdesc').val('desc');
+				else jQuery('#wpsg_ascdesc').val('asc');
+				
+			}
+			else
+			{
+	
+				jQuery('#wpsg_order').val(order);
+				jQuery('#wpsg_ascdesc').val('asc');
+				
+			}
+	 
+			jQuery('#seite').val(1);
+			jQuery('#filter_form').submit();
+			
+			return false;
+			
+		} // function wpsg_setOrder(order)
+    
+		function goPage(page)
+		{
+
+			if (page <= 0 || page == <?php echo $this->view['page']; ?> || page > <?php echo $this->view['pages']; ?>) return;			
+			
+			jQuery('#seite').val(page);
+			
+			jQuery('#filter_form').submit();
+
+			return false;
+			
+		} // function goPage(page)
+
+		function goStatus(status)
+		{
+
+			jQuery('#status').val(status);
+			jQuery('#seite').val('1');
+
+			jQuery('#filter_form').submit();
+
+			return false;
+			
+		} // public function goStatus(status)
+
+		function wpsg_doExport()
+		{
+
+			var action_alt = jQuery('#filter_form').attr('action'); 
+
+			jQuery('#wpsg_voucher_export').val('1');
+			jQuery('#filter_form').attr('target', '_blank');
+			jQuery('#filter_form').attr('action', jQuery('#filter_form').attr('action') + '&noheader=1');
+			
+			jQuery('#filter_form').submit();			
+
+			jQuery('#filter_form').attr('action', action_alt);
+			jQuery('#filter_form').attr('target', '');
+			jQuery('#wpsg_voucher_export').val('0');
+
+			return false;
+			
+		} // function wpsg_doExport()
+		
+	/* ]]> */</script>
+
+	<?php echo $this->writeBackendMessage(); ?>
+	
+	<form method="POST" id="filter_form" action="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Voucher">
+		
+		<input type="hidden" name="wpsg_status" id="status" value="<?php echo @$this->view['filter']['status']; ?>" />
+		<input type="hidden" name="wpsg_voucher_export" value="0" id="wpsg_voucher_export" />
+
+		<input id="wpsg_order" type="hidden" name="filter[order]" value="<?php echo $this->view['filter']['order']; ?>" />
+		<input id="wpsg_ascdesc" type="hidden" name="filter[ascdesc]" value="<?php echo $this->view['filter']['ascdesc']; ?>" />
+		
+		<?php if (wpsg_isSizedArray($this->view['arStatus'])) { ?>		
+		<ul class="subsubsub wpsg_order_index_status">
+			<?php foreach ($this->view['arStatus'] as $status_id => $status) { ?>
+			<li>
+				<?php if (isset($this->view['filter']['status']) && $this->view['filter']['status'] == $status_id) { ?>
+				<span class="akt"><?php echo wpsg_hspc($status[0]); ?></span> <span class="count">(<?php echo $status[1]; ?>) | </span>
+				<?php } else { ?>
+				<a onclick="return goStatus(<?php echo $status_id; ?>);" href="#"><?php echo wpsg_hspc($status[0]); ?> <span class="count">(<?php echo $status[1]; ?>)</span></a> |
+				<?php } ?>
+			</li>			 
+			<?php } ?>
+			<li>
+				<?php if (!isset($this->view['filter']['status']) || $this->view['filter']['status'] <= 0) { ?>
+				<span class="akt"><?php echo __('Alle', 'wpsg'); ?></span> <span class="count">(<?php echo $this->view['countAll']; ?>)</span>
+				<?php } else { ?>
+				<a onclick="return goStatus(0);" href="#"><?php echo __('Alle', 'wpsg'); ?> <span class="count">(<?php echo $this->view['countAll']; ?>)</span></a>
+				<?php } ?>
+			</li>
+		</ul>
+		<?php } ?>
+		
+		<p class="search-box wpsg-search-box">
+			<label for="post-search-input" class="screen-reader-text"><?php echo __('Gutscheine suchen', 'wpsg'); ?>:</label>
+			<input type="text" value="<?php echo wpsg_hspc($this->view['filter']['search']); ?>" id="wpsg_search" name="wpsg_search" id="post-search-input" />
+			<input type="submit" value="<?php echo __('Gutscheine suchen', 'wpsg'); ?>" class="button" id="search-submit" name="search-submit" />
+		</p>
+		
+		<?php if (sizeof($this->view['data'] > 0)) { ?>
+		<div class="tablenav top">
+			<div class="tablenav-pages tablenav-pages-wrap"><span class="displaying-num"><?php echo wpsg_translate(__('#1# Elemente', 'wpsg'), $this->view['count']); ?></span>
+				<div class="tablenav-pages">	
+					<span class="pagination-links">
+						<a onclick="return goPage(1);" href="#" title="<?php echo __('Zur ersten Seite gehen', 'wpsg'); ?>" class="first-page <?php echo (($this->view['page'] == '1')?'disabled':''); ?>">«</a>
+						<a onclick="return goPage(<?php echo $this->view['page'] - 1; ?>);" href="#" title="<?php echo __('Zur vorherigen Seite gehen', 'wpsg'); ?>" class="prev-page <?php echo (($this->view['page'] <= 1)?'disabled':''); ?>">‹</a>
+						<span class="paging-input"><input type="text" size="1" value="<?php echo $this->view['page']; ?>" id="seite" name="seite" title="<?php echo __('Aktuelle Seite', 'wpsg'); ?>" class="current-page"> <?php echo __('von', 'wpsg'); ?> <span class="total-pages"><?php echo $this->view['pages']; ?></span></span>
+						<a onclick="return goPage(<?php echo $this->view['page'] + 1; ?>);" href="#" title="<?php echo __('Zur nächsten Seite gehen', 'wpsg'); ?>" class="next-page <?php echo (($this->view['page'] >= $this->view['pages'])?'disabled':''); ?>">›</a>
+						<a onclick="return goPage(<?php echo $this->view['pages']; ?>);" href="#" title="<?php echo __('Zur letzten Seite gehen', 'wpsg'); ?>" class="last-page <?php echo (($this->view['page'] == $this->view['pages'])?'disabled':''); ?>">»</a>
+					</span>
+				</div>
+				
+				<script type="text/javascript">/* <![CDATA[ */
+
+					jQuery('.tablenav-pages .disabled').bind('click', function() { return false; } );
+				
+				/* ]]> */</script>
+				
+				<br class="wpsg_clear">
+			</div>
+		</div>
+		<?php } ?>
+		
+	</form> 
+	
+	<form method="POST" id="#gs_form" action="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Voucher&noheader=1">
+			 
+		<?php if (is_array($this->view['data']) && sizeof($this->view['data']) > 0) { ?>
+		<table class="widefat post fixed vouchertable">
+			<thead>
+				<tr>
+					<th class="manage-column column-checkbox"><input title="<?php echo __("Alle markieren", "wpsg"); ?>" type="checkbox" onclick="markAll(this);"/></th>
+					<th class="manage-column column-nr <?php echo (($this->view['filter']['order'] == 'id')?'sorted':'sortable'); ?> <?php echo (($this->view['filter']['ascdesc'] == 'asc')?'asc':'desc'); ?>">
+						<a href="#" onclick="return wpsg_setOrder('id');">
+							<span><?php echo __("ID", 'wpsg'); ?></span>
+							<span class="sorting-indicator"></span>
+						</a>
+					</th>
+					<th class="manage-column column-code <?php echo (($this->view['filter']['order'] == 'code')?'sorted':'sortable'); ?> <?php echo (($this->view['filter']['ascdesc'] == 'asc')?'asc':'desc'); ?>">
+						<a href="#" onclick="return wpsg_setOrder('code');">
+							<span><?php echo __("Code", 'wpsg'); ?></span>
+							<span class="sorting-indicator"></span>
+						</a>
+					</th>
+					<th class="manage-column column-start <?php echo (($this->view['filter']['order'] == 'start_date')?'sorted':'sortable'); ?> <?php echo (($this->view['filter']['ascdesc'] == 'asc')?'asc':'desc'); ?>">
+						<a href="#" onclick="return wpsg_setOrder('start_date');">
+							<span><?php echo __("Start", 'wpsg'); ?></span>
+							<span class="sorting-indicator"></span>
+						</a> 
+					</th>
+					<th class="manage-column column-end <?php echo (($this->view['filter']['order'] == 'end_date')?'sorted':'sortable'); ?> <?php echo (($this->view['filter']['ascdesc'] == 'asc')?'asc':'desc'); ?>">
+						<a href="#" onclick="return wpsg_setOrder('end_date');">
+							<span><?php echo __("End", 'wpsg'); ?></span>
+							<span class="sorting-indicator"></span>
+						</a> 
+					</th>				
+					<th class="manage-column column-value <?php echo (($this->view['filter']['order'] == 'value')?'sorted':'sortable'); ?> <?php echo (($this->view['filter']['ascdesc'] == 'asc')?'asc':'desc'); ?>">
+						<a href="#" onclick="return wpsg_setOrder('value');">
+							<span><?php echo __("Wert", 'wpsg'); ?></span>
+							<span class="sorting-indicator"></span>
+						</a>
+					</th>
+					<th class="manage-column column-status <?php echo (($this->view['filter']['order'] == 'status')?'sorted':'sortable'); ?> <?php echo (($this->view['filter']['ascdesc'] == 'asc')?'asc':'desc'); ?>">
+						<a href="#" onclick="return wpsg_setOrder('status');">
+							<span><?php echo __("Status", 'wpsg'); ?></span>
+							<span class="sorting-indicator"></span>
+						</a> 
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ($this->view['data'] as $g) { ?>
+				<tr>
+					<td class="column-checkbox"><input type="checkbox" value="<?php echo $g['id']; ?>"  class="wpsg_mod_gs_cb" name="wpsg_gs_cb[]" /></td>
+					<td class="column-nr"><?php echo wpsg_hspc($g['id']); ?>.</td>
+					<td class="column-code"><?php echo wpsg_hspc($g['code']); ?></td>
+					<td class="column-start"><?php echo date('d.m.Y H:i', strtotime($g['start_date'])); ?></td>
+					<td class="column-end"><?php echo date('d.m.Y H:i', strtotime($g['end_date'])); ?></td>
+					<td class="column-value">
+						<?php if ($g['calc_typ'] == 'w') { ?>
+							<?php echo wpsg_ff($g['value'], $this->get_option('wpsg_currency')); ?>
+						<?php } else { ?>
+							<?php echo wpsg_ff($g['value'], '%'); ?>
+						<?php } ?> 
+						<?php if (wpsg_tf($g['minvalue']) > 0) { ?>
+						<br /><div class="wpsg_hinweis"><?php echo wpsg_translate(__('Ab #1#', 'wpsg'), wpsg_ff(wpsg_tf($g['minvalue']), $this->get_option('wpsg_currency'))); ?></div>
+						<?php } ?>
+					</td>
+					<td class="column-status">
+						<?php if (trim($g['comment']) != '') { ?>
+						<a href="#" style="cursor:default;" title="<?php echo wpsg_hspc($g['comment']); ?>">
+							<img src="<?php echo WPSG_URL_CONTENT; ?>plugins/wpshopgermany/views/gfx/comment.png" alt="<?php echo wpsg_hspc($g['comment']); ?>" />
+						</a>
+						<?php } ?>
+						<?php echo wpsg_hspc($g['status']); ?>
+						<?php if ($g['multi'] == '1') { ?> 
+						<?php if ($g['ordered'] > 0) { ?>
+						<?php echo wpsg_translate(__('#1# mal benutzt', 'wpsg'), $g['ordered']); ?>
+						<?php } ?>
+						<span class="wpsg_mod_gutschein_multi">&nbsp;<a class="tooltip" href="#" onclick="return false;" title="<?php echo __('Mehrfach benutzbar', 'wpsg'); ?>">[M]</a></span>
+						<?php } ?>						
+					</td>
+				</tr>
+				<?php } ?>
+			</tbody>
+			<tfoot>
+				<tr>
+					<th class="manage-column column-checkbox"><input title="<?php echo __("Alle markieren", "wpsg"); ?>" type="checkbox" onclick="markAll(this);"/></th>
+					<th class="manage-column column-nr <?php echo (($this->view['filter']['order'] == 'id')?'sorted':'sortable'); ?> <?php echo (($this->view['filter']['ascdesc'] == 'asc')?'asc':'desc'); ?>">
+						<a href="#" onclick="return wpsg_setOrder('id');">
+							<span><?php echo __("ID", 'wpsg'); ?></span>
+							<span class="sorting-indicator"></span>
+						</a>
+					</th>
+					<th class="manage-column column-code <?php echo (($this->view['filter']['order'] == 'code')?'sorted':'sortable'); ?> <?php echo (($this->view['filter']['ascdesc'] == 'asc')?'asc':'desc'); ?>">
+						<a href="#" onclick="return wpsg_setOrder('code');">
+							<span><?php echo __("Code", 'wpsg'); ?></span>
+							<span class="sorting-indicator"></span>
+						</a>
+					</th>
+					<th class="manage-column column-start <?php echo (($this->view['filter']['order'] == 'start_date')?'sorted':'sortable'); ?> <?php echo (($this->view['filter']['ascdesc'] == 'asc')?'asc':'desc'); ?>">
+						<a href="#" onclick="return wpsg_setOrder('start_date');">
+							<span><?php echo __("Start", 'wpsg'); ?></span>
+							<span class="sorting-indicator"></span>
+						</a> 
+					</th>
+					<th class="manage-column column-end <?php echo (($this->view['filter']['order'] == 'end_date')?'sorted':'sortable'); ?> <?php echo (($this->view['filter']['ascdesc'] == 'asc')?'asc':'desc'); ?>">
+						<a href="#" onclick="return wpsg_setOrder('end_date');">
+							<span><?php echo __("End", 'wpsg'); ?></span>
+							<span class="sorting-indicator"></span>
+						</a> 
+					</th>				
+					<th class="manage-column column-value <?php echo (($this->view['filter']['order'] == 'value')?'sorted':'sortable'); ?> <?php echo (($this->view['filter']['ascdesc'] == 'asc')?'asc':'desc'); ?>">
+						<a href="#" onclick="return wpsg_setOrder('value');">
+							<span><?php echo __("Wert", 'wpsg'); ?></span>
+							<span class="sorting-indicator"></span>
+						</a>
+					</th>
+					<th class="manage-column column-status <?php echo (($this->view['filter']['order'] == 'status')?'sorted':'sortable'); ?> <?php echo (($this->view['filter']['ascdesc'] == 'asc')?'asc':'desc'); ?>">
+						<a href="#" onclick="return wpsg_setOrder('status');">
+							<span><?php echo __("Status", 'wpsg'); ?></span>
+							<span class="sorting-indicator"></span>
+						</a> 
+					</th>
+				</tr>
+			</tfoot> 
+		</table>
+		
+		<div class="tablenav top">
+			<div class="tablenav-pages"><span class="displaying-num"><?php echo wpsg_translate(__('#1# Elemente', 'wpsg'), $this->view['count']); ?></span>
+				<div class="tablenav-pages">	
+					<span class="pagination-links">
+						<a onclick="return goPage(1);" href="#" title="<?php echo __('Zur ersten Seite gehen', 'wpsg'); ?>" class="first-page <?php echo (($this->view['page'] == '1')?'disabled':''); ?>">«</a>
+						<a onclick="return goPage(<?php echo $this->view['page'] - 1; ?>);" href="#" title="<?php echo __('Zur vorherigen Seite gehen', 'wpsg'); ?>" class="prev-page <?php echo (($this->view['page'] <= 1)?'disabled':''); ?>">‹</a>
+						<span class="paging-input"><input type="text" size="1" value="<?php echo $this->view['page']; ?>" id="seite" name="seite" title="<?php echo __('Aktuelle Seite', 'wpsg'); ?>" class="current-page"> <?php echo __('von', 'wpsg'); ?> <span class="total-pages"><?php echo $this->view['pages']; ?></span></span>
+						<a onclick="return goPage(<?php echo $this->view['page'] + 1; ?>);" href="#" title="<?php echo __('Zur nächsten Seite gehen', 'wpsg'); ?>" class="next-page <?php echo (($this->view['page'] >= $this->view['pages'])?'disabled':''); ?>">›</a>
+						<a onclick="return goPage(<?php echo $this->view['pages']; ?>);" href="#" title="<?php echo __('Zur letzten Seite gehen', 'wpsg'); ?>" class="last-page <?php echo (($this->view['page'] == $this->view['pages'])?'disabled':''); ?>">»</a>
+					</span>
+				</div>
+				
+				<script type="text/javascript">/* <![CDATA[ */
+
+					jQuery('.tablenav-pages .disabled').bind('click', function() { return false; } );
+				
+				/* ]]> */</script>
+				
+				<br class="wpsg_clear">
+			</div>
+		</div>
+	  	  
+		<input class="button-primary" type="submit" onclick="if (!confirm('<?php echo __('Sind Sie sich sicher?', 'wpsg'); ?>')) return false;" name="wpshopgermany-submit-gs_del" value="<?php echo __("Markierte löschen", "wpsg"); ?>" />&nbsp;
+		<br /><br />		
+		<?php } else { ?>
+		<p><?php echo __('Keine Gutscheine in der Datenbank.', 'wpsg'); ?></p>					
+		<?php } ?>
+	
+	</form>
+</div>
+
+<script type="text/javascript">/* <![CDATA[ */
+
+	function markAll(el)
+	{
+
+		var arCB = jQuery(".wpsg_mod_gs_cb");
+
+		for (var i = 0; i < arCB.length; i ++)
+		{
+			if (el.checked)
+			{
+				jQuery(arCB[i]).attr('checked', true);
+			}
+			else
+			{
+				jQuery(arCB[i]).attr('checked', false);
+			}
+		}
+					
+	} // function markAll(el)
+
+/* ]]> */</script>

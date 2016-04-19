@@ -1,0 +1,65 @@
+<?php
+
+	/**
+	 * Template für die Integration des Produktexportes in die Bestellvarwaltung im unteren Bereich
+	 */
+
+?>
+<script type="text/javascript">/* <![CDATA[ */
+
+    /**
+     * Startet den Export, dazu wird der obere Filter mißbraucht
+     */
+	function wpsg_mod_export_do() 
+	{
+
+		var arProfileIDs = Array();
+
+		jQuery('.wpsg_mod_export_profilid:checked').each(function() {
+
+			arProfileIDs.push(jQuery(this).val());
+			 
+		} );
+
+		if (arProfileIDs.length <= 0)
+		{
+
+			alert('<?php echo __('Bitte mindestens ein Profil zum exportieren wählen.', 'wpsg'); ?>');
+			return false;
+			
+		}
+
+		jQuery('#wpsg_mod_export_profile').val(arProfileIDs.join(',')); 
+		jQuery('#submit_export').val('1');
+		jQuery('#wpsg_order_index_noheader_filter').attr('name', 'noheader');
+		jQuery('#filter_form').attr('target', '_new');
+
+		jQuery('#filter_form').submit();
+
+		jQuery('#wpsg_order_index_noheader_filter').attr('name', '');
+		jQuery('#submit_export').val('0');
+		jQuery('#filter_form').attr('target', '');
+
+		return false;
+		
+	} // function wpsg_mod_export_do() 			
+             
+/* ]]> */</script>
+ 
+<div class="metabox-holder" id="wpsg_mod_export_layer" style="<?php echo (($_COOKIE['wpsg_mod_export_layer'] == '1')?'display:block;':'display:none;'); ?>padding-top:0px;">
+	<div id="wpsg_modexport" class="postbox">		
+		<h3 class="wpsg_handlediv">
+			<span class="handlediv" title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>"><br></span>
+			<span><?php echo __('Bestellexport', 'wpsg'); ?></span>
+		</h3>
+		<div class="inside">
+			<?php foreach ($this->view['wpsg_mod_export']['arProfile'] as $p) { ?>
+			<label class="wpsg_mod_export_profillabel">
+				<input type="checkbox" class="wpsg_mod_export_profilid" value="<?php echo $p['id']; ?>" type="checkbox" />&nbsp;<?php echo __($p['name'], 'wpsg'); ?>
+			</label>			
+			<?php } ?>
+			<div class="wpsg_clear"></div><br />
+			<input type="submit" onclick="return wpsg_mod_export_do();" value="<?php echo __('Export starten', 'wpsg'); ?>" class="button" name="submit_export" />
+		</div>
+	</div>
+</div>

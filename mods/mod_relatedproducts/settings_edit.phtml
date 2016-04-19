@@ -1,0 +1,9 @@
+<?php
+
+	/**
+	 * Tempalte für die Einstellungen des Moduls "Zubehörprodukte"
+	 */
+
+?>
+<?php echo wpsg_drawForm_Select('wpsg_mod_relatedproducts_template', __('Produkttemplate für die Zubehörprodukte', 'wpsg'), $this->view['wpsg_mod_relatedproducts']['arTemplates'], $this->get_option('wpsg_mod_relatedproducts_template'), array('help' => 'wpsg_mod_relatedproducts_template')); ?>
+<?php echo wpsg_drawForm_Checkbox('wpsg_mod_relatedproducts_synchron', __('Synchrone Verküpfung der Produkte', 'wpsg'), $this->get_option('wpsg_mod_relatedproducts_synchron')); ?>

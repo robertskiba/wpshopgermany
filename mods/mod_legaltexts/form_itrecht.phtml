@@ -1,0 +1,37 @@
+<?php 
+
+	/**
+	 * Template des Rechtstext Moduls, welches ITRecht integriert
+	 */
+
+?>
+ 
+<?php if ($this->view['wpsg_mod_legaltexts']['form'] == false) { ?>
+	
+	<p><?php echo __('wpShopGermany bietet eine AGB-Schnittstelle zur <a href="http://www.it-recht-kanzlei.de/Service/rechtstexte_fuer_onlineshops.php?partner_id=150">IT-Recht Kanzlei</a> an.', 'wpsg'); ?></p>
+	
+	<p><?php echo __('Die IT-Recht Kanzlei bietet für monatlich nur 9,99 Euro abmahnsichere Rechtstexte an - natürlich inkl. Haftung. Dazu gehören die AGB, die Widerrufsbelehrung, die Datenschutzerklärung sowie das Impressum. Mit dem wpShopGermany-IT-Recht Kanzlei Plugin (ab Version 1.0) werden die angebotenen Rechtstexte auf Ihre Blog-Seiten mittels Mausklick automatisch übernommen und künftig auch automatisch aktualisiert - inklusive permanenter AGB-Überwachung.', 'wpsg'); ?></p>
+	
+	<p>
+	
+		<?php echo __('Jetzt AGB Service buchen', 'wpsg'); ?>:<br />
+		<a href="http://www.it-recht-kanzlei.de/Service/rechtstexte_fuer_onlineshops.php?partner_id=150">http://www.it-recht-kanzlei.de/Service/rechtstexte_fuer_onlineshops.php</a>
+		
+		<br /><br /> 
+
+		<?php echo __('Rechtstexte im günstigen Paketpreis finden Sie hier', 'wpsg'); ?>:<br />
+		<a href="http://www.agb-pakete.de/?partner_id=150">http://www.agb-pakete.de</a>
+		
+	</p>
+	
+	<?php if (file_exists(WP_PLUGIN_DIR."/wpshopgermany-itrecht/wpshopgermany-itrecht.php")) { ?>
+		<p style="color:red;"><?php echo __('Das Plugin wurde bereits gefunden aber noch nicht aktiviert. Bitte aktivieren sie das Plugin in der <a href="plugins.php">Pluginverwaltung</a>.', 'wpsg'); ?></p>
+	<?php } ?>
+	
+<?php } else { ?>
+	
+	<?php echo $this->view['wpsg_mod_legaltexts']['form']; ?>
+	
+	<input type="hidden" name="wpsg_mod_legaltexts_submitform" value="1" />
+	
+<?php } ?>

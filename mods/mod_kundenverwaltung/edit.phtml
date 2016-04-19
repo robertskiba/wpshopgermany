@@ -1,0 +1,260 @@
+<?php
+	
+	/**
+	 * Template für die Bearbeitung eines Kunden im Backend
+	 */
+
+?>
+<script type="text/javascript">
+/* <![CDATA[ */
+	
+	jQuery(document).ready( function() {
+
+		jQuery('.wpsg_form_help').tipTip();
+
+	    jQuery("#normal-sortables, #side-sortables").sortable({
+			connectWith: ".meta-box-sortables",
+			placeholder: 'wpsg_placeholder',
+			dropOnEmpty: true,
+			cursor: 'move',
+			handle: '.wpsg_handlediv',
+			grid: [50, 20],
+			forceHelperSize: true,
+			forcePlaceholderSize: true,
+			opacity: 0.8,
+			stop: function(e,ui) {
+
+				var ser = jQuery("#normal-sortables").sortable("serialize");				
+				ser = ser.replace(/\&wpsg\[\]\=/g, ',').replace(/wpsg\[\]\=/g, '');
+
+				jQuery.cookie('wpsg_customer_view_normal', ser);
+
+				var ser = jQuery("#side-sortables").sortable("serialize");				
+				ser = ser.replace(/\&wpsg\[\]\=/g, ',').replace(/wpsg\[\]\=/g, '');
+
+				jQuery.cookie('wpsg_customer_view_side', ser);
+				
+			},
+			receive: function(e, ui) {
+			}
+		}); 
+
+	    if (jQuery.cookie('wpsg_customer_view_normal') != null)
+		{
+
+			var divs = jQuery.cookie('wpsg_customer_view_normal').split(',').reverse();
+
+			for (index in divs)
+			{
+
+				jQuery('#normal-sortables').prepend(jQuery('#wpsg_' + divs[index]));
+				
+			}
+			
+		}
+
+		if (jQuery.cookie('wpsg_customer_view_side') != null)
+		{
+
+			var divs = jQuery.cookie('wpsg_customer_view_side').split(',').reverse();
+
+			for (index in divs)
+			{
+				 
+				jQuery('#side-sortables').prepend(jQuery('#wpsg_' + divs[index]));
+				
+			}
+			
+		}
+
+		jQuery('.wpsg_handlediv').bind('click', function() {
+			jQuery(this).next().toggle();
+
+			var arClose = new Array();
+			jQuery('.wpsg_customer_view .postbox .inside:hidden').each(function() {
+				arClose.push(jQuery(this).parent().attr("id"));
+			} );
+
+			jQuery.cookie('wpsg_customer_closed', arClose.join(','));
+			
+		} );
+
+		if (jQuery.cookie('wpsg_customer_closed') != null)
+		{
+
+			var arClose = jQuery.cookie('wpsg_customer_closed').split(',');
+
+			for (index in arClose)
+			{
+				
+				jQuery('#' + arClose[index] + ' .inside').hide();
+							
+			}
+			
+		}
+		
+	} );
+
+/* ]]> */
+</script>
+             
+<div class="wrap columns-2 wpsg_produkt_addedit wpsg_customer_view">
+	<div class="icon32 icon32-posts-post" id="icon-edit"><br /></div>
+	<h2>
+		<?php echo wpsg_hspc($this->view['data']['vname'].' '.$this->view['data']['name']); ?>		
+	</h2>
+	<br />
+	
+	<?php echo $this->writeBackendMessage(); ?>
+	
+ 	<form method="POST" action="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Customer&amp;action=save&amp;noheader=1" enctype="multipart/form-data">
+
+		<div id="postbox" class="metabox-holder has-right-sidebar">
+		
+			<div id="side-info-column" class="inner-sidebar" style="width:386px;">
+				<div id="side-sortables" class="meta-box-sortables ui-sortable" style="width:380px;">
+				
+					<div id="wpsg_customerpasswd" class="postbox">
+						<div class="handlediv" title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>"><br /></div>
+						<h3 class="wpsg_handlediv">
+							<span><?php echo __('Passwortänderung', 'wpsg'); ?></span>
+						</h3>
+						<div class="inside">
+							<?php echo wpsg_drawForm_Input('password1', __('Passwort', 'wpsg'), ''); ?>
+							<?php echo wpsg_drawForm_Input('password2', __('Wiederholung', 'wpsg'), ''); ?>
+						</div>
+					</div>
+					
+					<div id="wpsg_customerstats" class="postbox">
+						<div class="handlediv" title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>"><br /></div>
+						<h3 class="wpsg_handlediv">
+							<span><?php echo __('Information', 'wpsg'); ?></span>
+						</h3>
+						<div class="inside">
+							<div class="wpsg_form_field">
+								<div class="wpsg_form_left"><?php echo __('Bestellungen', 'wpsg'); ?>:</div>
+								<div class="wpsg_form_right">
+									<p>
+										<?php echo $this->view['data']['countOrder']; ?>
+										<?php if ($this->view['data']['countOrder'] > 0) { ?>
+										[ <a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Order&filter%5Bk_id%5D=<?php echo $this->view['data']['id']; ?>"><?php echo __('Bestellungen anzeigen', 'wpsg'); ?></a> ]										
+										<?php } ?>
+									</p>
+								</div>
+							</div>
+							<div class="wpsg_clear"></div>
+							<div class="wpsg_form_field">
+								<div class="wpsg_form_left"><?php echo __('Letzte Bestellung', 'wpsg'); ?>:</div>
+								<div class="wpsg_form_right"><p><?php echo wpsg_formatTimestamp(strtotime($this->view['data']['lastorder'])); ?></p></div>
+							</div>
+							<div class="wpsg_clear"></div>
+							<?php if ($this->hasMod('wpsg_mod_statistics')) { ?>
+							<div class="wpsg_form_field">
+								<div class="wpsg_form_left"><?php echo wpsg_translate(__('Umsatz in #1#', 'wpsg'), $this->get_option('wpsg_currency')); ?>:</div>
+								<div class="wpsg_form_right wpsg_mod_kundenverwaltung_customeramount">
+									<p>
+										<?php 
+											echo wpsg_translate(__('<a href="#1#" title="Storniert" class="wpsg_storno">#2#</a> / <a href="#3#" title="Offen" class="wpsg_open">#4#</a> / <a href="#5#" title="Bezahlt" class="wpsg_payed">#6#</a>', 'wpsg'),
+												WPSG_URL_WP.'wp-admin/admin.php?page=wpsg-Order&filter[status]=500&filter[k_id]='.$this->view['data']['id'],
+												wpsg_ff($this->view['amountStorno']),
+												WPSG_URL_WP.'wp-admin/admin.php?page=wpsg-Order&filter[status]=0&filter[k_id]='.$this->view['data']['id'],
+												wpsg_ff($this->view['amountAll'] - $this->view['amountStorno'] - $this->view['amountPayed']),
+												WPSG_URL_WP.'wp-admin/admin.php?page=wpsg-Order&filter[status]=100,110&filter[k_id]='.$this->view['data']['id'],
+												wpsg_ff($this->view['amountPayed'])
+											); 
+										?>
+									</p>
+								</div>
+							</div>
+							<?php } ?>
+							<div class="wpsg_clear"></div>														
+						</div>
+					</div>
+					
+					<?php if (wpsg_isSizedArray($this->view['pflicht']['custom'])) { ?>
+					<div id="wpsg_customercustomfields" class="postbox">
+						<div class="handlediv" title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>"><br /></div>
+						<h3 class="wpsg_handlediv">
+							<span><?php echo __('Benutzerdefinierte Felder', 'wpsg'); ?></span>
+						</h3>
+						<div class="inside">
+							<?php foreach ($this->view['pflicht']['custom'] as $c_id => $c) { ?>							
+								<?php if ($c['typ'] == '0') { // Textfeld ?>
+								<?php echo wpsg_drawForm_Input('custom['.$c_id.']', __($c['name'], 'wpsg'), @$this->view['data']['custom'][$c_id]); ?>
+								<?php } else if ($c['typ'] == '1') { // Auswahl ?>
+								<?php echo wpsg_drawForm_Select('custom['.$c_id.']', __($c['name'], 'wpsg'), wpsg_array_merge(array('' => __('Keine Auswahl', 'wpsg')), explode('|', $c['auswahl'])), @$this->view['data']['custom'][$c_id], array('noIndex' => true)); ?>
+								<?php } else if ($c['typ'] == '2') { // Checkbox?>
+								<?php echo wpsg_drawForm_Checkbox('custom['.$c_id.']', __($c['name'], 'wpsg'), @$this->view['data']['custom'][$c_id]); ?>	
+								<?php } ?>			
+							<?php } ?>	
+						</div>
+					</div>
+					<?php } ?>
+					
+					<?php $this->callMods('wpsg_mod_customer_sidebar', array(&$this->view['data'])); ?>
+					
+				</div>
+			</div>
+				
+			<div id="post-body">	
+			
+				<div id="normal-sortables" class="meta-box-sortables" style="margin-right:400px;">
+				
+					<div id="wpsg_customeraddress" class="postbox">								
+						<h3 class="wpsg_handlediv">
+							<span title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>" class="handlediv"><br /></span>
+							<span><?php echo __('Name/Anschrift', 'wpsg'); ?></span>
+						</h3>
+						<div class="inside">
+							<?php echo wpsg_drawForm_Input('knr', __('Kundennummer', 'wpsg'), $this->view['data']['knr']); ?>
+							
+							<?php if ($this->hasMod('wpsg_mod_customergroup')) { ?>
+							<?php echo wpsg_drawForm_Select('group_id', __('Kundengruppe', 'wpsg'), $this->view['arCustomergroup'], $this->view['data']['group_id']); ?>
+							<?php } ?>							
+							
+							<?php echo wpsg_drawForm_Select('title', __('Anrede', 'wpsg'), $this->view['arTitles'], $this->view['data']['title'], array('noIndex' => true)); ?>
+							<?php echo wpsg_drawForm_Input('name', __('Name', 'wpsg'), $this->view['data']['name']); ?>
+							<?php echo wpsg_drawForm_Input('vname', __('Vorname', 'wpsg'), $this->view['data']['vname']); ?>
+							<?php echo wpsg_drawForm_Input('geb', __('Geburtsdatum', 'wpsg'), wpsg_formatTimestamp(strtotime($this->view['data']['geb']), true), array('datepicker' => true, 'hint' => __('Format: TT.MM.JJJJ', 'wpsg'))); ?>
+							<?php echo wpsg_drawForm_Input('email', __('E-Mail', 'wpsg'), $this->view['data']['email']); ?>
+							<?php echo wpsg_drawForm_Input('firma', __('Firma', 'wpsg'), $this->view['data']['firma']); ?>
+							<?php echo wpsg_drawForm_Input('tel', __('Telefon', 'wpsg'), $this->view['data']['tel']); ?>
+							<?php echo wpsg_drawForm_Input('fax', __('Fax', 'wpsg'), $this->view['data']['fax']); ?>
+							<?php echo wpsg_drawForm_Input('strasse', __('Straße', 'wpsg'), $this->view['data']['strasse']); ?>
+							<?php echo wpsg_drawForm_Input('plz', __('PLZ', 'wpsg'), $this->view['data']['plz']); ?>
+							<?php echo wpsg_drawForm_Input('ort', __('Ort', 'wpsg'), $this->view['data']['ort']); ?>
+							<?php echo wpsg_drawForm_Select('land', __('Land', 'wpsg'), $this->view['arLand'], $this->view['data']['land']); ?>
+							<?php echo wpsg_drawForm_Input('ustidnr', __('UStIdNr.', 'wpsg'), $this->view['data']['ustidnr']); ?>	
+							<?php echo wpsg_drawForm_Select('status', __('Status', 'wpsg'), array('inaktiv', 'aktiv'), $this->view['data']['status'], array()); ?>						
+							<?php echo wpsg_drawForm_Checkbox('info-mail', __('Mail bei Statusänderung', 'wpsg'), '', array()); ?>
+						</div>
+					</div>
+					
+					<div id="wpsg_customercomment" class="postbox">
+						<h3 class="wpsg_handlediv">
+							<span title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>" class="handlediv"><br /></span>
+							<span><?php echo __('Kundenkommentar', 'wpsg'); ?></span>
+						</h3>
+						<div class="inside">
+							<textarea name="comment"><?php echo wpsg_hspc($this->view['data']['comment']); ?></textarea>
+						</div>
+					</div>
+					
+				</div>
+				
+				<?php if ($_REQUEST['edit_id'] > 0) { ?>
+				<input type="hidden" name="edit_id" value="<?php echo $_REQUEST['edit_id']; ?>" />
+				<?php } ?>
+					
+				<p class="submit">
+					<input type="submit" value="<?php echo __('Kunde speichern', 'wpsg'); ?>" class="button-primary" id="submit" name="submit" />
+					<input type="submit" value="<?php echo __('Kunde speichern und zur Übersicht', 'wpsg'); ?>" class="button-primary" id="submit_index" name="submit_index" />
+				</p>
+				
+			</div>
+			
+		</div>
+		
+						
+	</form>
+</div>

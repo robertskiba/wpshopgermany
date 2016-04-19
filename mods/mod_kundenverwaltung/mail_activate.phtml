@@ -1,0 +1,14 @@
+<?php
+
+	/**
+	 * Diese Mail wird an den Kunden geschickt, wenn der Status seines Accounts ändert
+	 * und die entsprechende Option aktiviert ist
+	 */
+
+?><?php echo wpsg_translate(__('Hallo #1# #2#,', 'wpsg'), $this->view['kunde']['vname'], $this->view['kunde']['name']); ?>  
+ 
+<?php echo __('Der Status Ihres Accounts hat sich gändert auf:', 'wpsg'); ?> <?php echo $this->view['kunde']['status'] ?> 
+ 
+<?php echo __('Viele Grüße', 'wpsg'); ?> 
+ 
+<?php echo __($this->get_option('wpsg_shopdata_name'), 'wpsg'); ?> - <?php echo __('Team', 'wpsg'); ?>

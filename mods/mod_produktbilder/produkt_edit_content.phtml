@@ -1,0 +1,123 @@
+<?php
+
+	/**
+	 * Template für die Integration der Produktbilder in das Backend der Produktverwaltung
+	 * wird von Template /views/Produkt/addedit.phtml eingebunden
+	 */
+
+?>
+<div class="postbox" id="wpsg_produktbilder">		
+	<h3 class="wpsg_handlediv">
+		<span title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>" class="handlediv"><br /></span>
+		<span><?php echo __('Produktbilder', 'wpsg'); ?></span>
+	</h3>	
+	<div class="inside">
+	
+		<?php if ($this->view['data']['id'] > 0) { ?>
+		
+			<div id="produktbilder_target"><?php echo $this->view['ProduktList']; ?></div>
+		
+			<?php if (get_option("wpsg_classicupload") == "1") { ?>
+				
+			<div class="wpsg_clear"></div><br />
+			<div><?php echo __("Um ein Bild zu löschen klicken Sie einfach auf das Bild.", "wpsg"); ?></div>
+			<div class="wpsg_clear"></div><br />
+				
+			<input type="file" name="wpsg_mod_produktbilder_file" />
+				
+			<?php } else { ?>
+		
+			<div class="wpsg_clear"></div><br />
+			<div><?php echo __("Bitte klicken Sie auf Upload um ein Bild hochzuladen. Um ein Bild zu löschen klicken Sie einfach auf das Bild.", "wpsg"); ?></div>
+			<div class="wpsg_clear"></div><br />
+			
+			<input value="Upload" type="text" style="text-align:center;" size="10" id="upload_button" />
+			
+			<script type="text/javascript">/* <![CDATA[ */
+						   
+				jQuery(document).ready(function() {									
+					new AjaxUpload(
+						"upload_button", {
+							action: "<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Produkt&action=ajax&mod=wpsg_mod_produktbilder&cmd=upload&edit_id=<?php echo $this->view['data']['id']; ?>&noheader=1",
+							onSubmit: function(file, extension) {
+
+								jQuery('#produktbilder_target').html('<img src="<?php echo WPSG_URL; ?>views/gfx/ajax-loader.gif" alt="<?php echo __('Bitte warten ...', 'wpsg'); ?>" />');
+								
+							},
+							onComplete: function(file, response) {
+
+								if (response == '1')
+								{
+									
+									jQuery("#produktbilder_target").load("<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Produkt&action=ajax&mod=wpsg_mod_produktbilder&cmd=produktbilder_liste&edit_id=<?php echo $this->view['data']['id']; ?>&noheader=1");
+
+									if (typeof wpsg_vp_refresh == "function") wpsg_vp_refresh();
+									
+								}
+								else
+								{
+									alert(response);
+								}
+								
+							}										
+						}
+					);					   
+			   	});
+			
+			/* ]]> */</script>
+			
+			<?php } ?> 
+			
+			<script type="text/javascript">/* <![CDATA[ */
+
+				/**
+				 * Wird beim löschen eines Bilds (anklicken) aufgerufen
+				 */
+				function wpsg_remove_bild(strBild)
+				{
+
+					if (!confirm('<?php echo __('Sind Sie sicher, das Sie dieses Bild löschen möchten?', 'wpsg'); ?>')) return false;
+
+					jQuery('#produktbilder_target').html('<img src="<?php echo WPSG_URL; ?>views/gfx/ajax-loader.gif" alt="<?php echo __('Bitte warten ...', 'wpsg'); ?>" />');
+					
+					jQuery.ajax( {
+						url: '<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Produkt&action=ajax&mod=wpsg_mod_produktbilder&cmd=remove&noheader=1&edit_id=<?php echo $this->view['data']['id']; ?>',
+						async: false,
+						data: {
+							file: strBild
+						},
+						success: function(data) {
+							
+							jQuery('#produktbilder_target').html(data);
+
+							if (typeof wpsg_vp_refresh == "function") wpsg_vp_refresh();
+							
+						}
+					} );
+
+					return false;
+					
+				}
+			
+			/* ]]> */</script>
+			
+		<?php } else { ?>
+		<?php echo __('Das Hochladen von Produktbildern ist erst nach erstmaligem speichern möglich.', 'wpsg'); ?>
+		<?php } ?>
+		
+		<br /><br />
+		
+		<div class="wpsg_form_field">
+			<div class="wpsg_form_left">
+				<label for="feinheit"><?php echo __('FTP Pfad', 'wpsg'); ?>:</label>
+			</div>
+			<div class="wpsg_form_right">
+				<p>
+					<a href="#" onclick="alert('<?php echo addslashes($this->callMod('wpsg_mod_produktbilder', 'getPicPath', array($this->view['data']['id']))); ?>'); return false;"><?php echo __('Anzeigen', 'wpsg'); ?></a>
+				</p>
+			</div>
+			<div class="wpsg_clear"></div>
+		</div>	
+	
+	</div>
+</div>

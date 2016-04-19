@@ -1,0 +1,25 @@
+<?php
+
+	/**
+	 * Template für die Liste der Profile
+	 */
+
+?>
+<?php if (sizeof($this->view['arProfile']) > 0) { ?>
+<select name="wpsg_mod_export[profil]" id="wpsg_mod_export_profil" onchange="wpsg_mod_export_profilSwitch();" style="width:99%;">
+	<?php foreach ($this->view['arProfile'] as $p) { ?>
+	<option value="<?php echo $p['id']; ?>" <?php echo ((isset($this->view['profil_id']) && $p['id'] == $this->view['profil_id'])?'selected="selected"':''); ?>><?php echo $p['name']; ?></option>
+	<?php } ?>
+</select>
+<div id="profil_content" style="padding:5px 0px 5px 0px;"></div>
+<?php } else { ?>
+<p><?php echo __('Bisher noch keine Profile angelegt.', 'wpsg'); ?></p>
+<?php } ?>
+
+<script type="text/javascript">
+
+	jQuery(document).ready(function() {
+		wpsg_mod_export_profilSwitch();
+	} );
+
+</script>

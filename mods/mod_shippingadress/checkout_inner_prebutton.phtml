@@ -1,0 +1,126 @@
+<div class="wpsg_mod_shippingadress">
+
+	<h2><?php echo __('Gesonderte Lieferadresse', 'wpsg'); ?></h2>
+	
+	<div class="wpsg_spacer"></div>
+	
+	<div class="wpsg_inner">
+	
+		<div class="wpsg_checkoutblock">
+			<label for="act_checkout_shippingadress">
+				<input id="act_checkout_shippingadress" class="wpsg_checkout formfield_checkbox" type="checkbox" name="wpsg[checkout][diff_shippingadress]" value="" <?php echo ($_SESSION['wpsg']['checkout']['diff_shippingadress'] == 1)? 'checked="checked"':'' ?> onclick="view_checkout_shippingadresss()" />
+				<?php echo __('Gesonderte Lieferadresse abweichend von der Rechnungsadresse verwenden', 'wpsg') ?>
+			</label>			
+		</div>
+		
+		<div class="wpsg_clear"></div>
+		
+		<div class="checkout_shippingadress" style="display:none;"> 
+		
+			<div class="wpsg_checkoutblock">
+				<label for="firma" class="wpsg_checkout"><?php echo __("Firma:", "wpsg"); ?></label>
+				<input class="wpsg_checkout <?php echo ((in_array("name", (array)$this->view['error']))?'wpsg_error':''); ?>" type="text" id="shipping_name" name="wpsg[checkout][shipping_firma]" value="<?php echo htmlspecialchars($this->view['basket']['checkout']['shipping_firma']); ?>" />
+			</div>
+		
+			<div class="wpsg_checkoutblock">
+				<label for="title" class="wpsg_checkout"><?php echo __("Anrede:", "wpsg"); ?>
+					<span class="wpsg_required">*</span>
+				</label>
+				<select class="validate[required_shipping] wpsg_checkout <?php echo ((in_array("title", (array)$this->view['error']))?'wpsg_error':''); ?>" type="select" name="wpsg[checkout][shipping_title]" id="shipping_title" >
+				<?php foreach (explode("|", $this->view['pflicht']['anrede_auswahl']) as $t) { ?>
+				<option value="<?php echo $t; ?>" <?php echo (($this->view['basket']['checkout']['shipping_title'] == $t)?'selected="selected"':''); ?>><?php echo $t; ?></option>
+				<?php } ?>
+				</select>
+			</div>
+			
+			<div class="wpsg_checkoutblock">
+				<label for="vname" class="wpsg_checkout"><?php echo __("Vorname:", "wpsg"); ?>
+					<span class="wpsg_required">*</span>
+				</label>
+				<input class="validate[required_shipping] wpsg_checkout <?php echo ((in_array("shipping_vname", (array)$this->view['error']))?'wpsg_error':''); ?>" type="text" id="shipping_vname" name="wpsg[checkout][shipping_vname]" value="<?php echo htmlspecialchars($this->view['basket']['checkout']['shipping_vname']); ?>" />
+			</div>
+				
+			<div class="wpsg_checkoutblock">
+				<label for="name" class="wpsg_checkout"><?php echo __("Name:", "wpsg"); ?>
+					<span class="wpsg_required">*</span>
+				</label>
+				<input class="validate[required_shipping] wpsg_checkout <?php echo ((in_array("shipping_name", (array)$this->view['error']))?'wpsg_error':''); ?>" type="text" id="shipping_name" name="wpsg[checkout][shipping_name]" value="<?php echo htmlspecialchars($this->view['basket']['checkout']['shipping_name']); ?>" />
+			</div>
+				
+			<div class="wpsg_checkoutblock">
+				<label for="strasse" class="wpsg_checkout"><?php echo __("Strasse, Nr.:", "wpsg"); ?>
+					<span class="wpsg_required">*</span>
+				</label>
+				<input class="validate[required_shipping] wpsg_checkout <?php echo ((in_array("shipping_strasse", (array)$this->view['error']))?'wpsg_error':''); ?>" type="text" id="shipping_strasse" name="wpsg[checkout][shipping_strasse]" value="<?php echo htmlspecialchars($this->view['basket']['checkout']['shipping_strasse']); ?>" />		
+			</div>
+			
+			<div class="wpsg_checkoutblock">
+				<label for="plz" class="wpsg_checkout"><?php echo __("Postleitzahl:", "wpsg"); ?> 
+					<span class="wpsg_required">*</span>
+				</label>
+				<input class="validate[required_shipping] wpsg_checkout <?php echo ((in_array("shipping_plz", (array)$this->view['error']))?'wpsg_error':''); ?>" type="text" id="shipping_plz" name="wpsg[checkout][shipping_plz]" value="<?php echo htmlspecialchars($this->view['basket']['checkout']['shipping_plz']); ?>" />
+			</div>
+				
+			<div class="wpsg_checkoutblock">
+				<label for="ort" class="wpshopgermany_checkout"><?php echo __("Ort:", "wpsg"); ?> 
+					<span class="wpsg_required">*</span>
+				</label>
+				<input class="validate[required_shipping] wpsg_checkout <?php echo ((in_array("shipping_ort", (array)$this->view['error']))?'wpsg_error':''); ?>" type="text" id="shipping_ort" name="wpsg[checkout][shipping_ort]" value="<?php echo htmlspecialchars($this->view['basket']['checkout']['shipping_ort']); ?>" />
+			</div>
+				
+			<div class="wpsg_checkoutblock">
+				<label for="wpsg_land" class="wpsg_checkout"><?php echo __("Land:", "wpsg"); ?>
+					<span class="wpsg_required">*</span>
+				</label>					
+				<select name="wpsg[checkout][shipping_land]" class="wpsg_checkout <?php echo ((in_array("shipping_land", (array)$this->view['error']))?'wpsg_error':''); ?>" id="shipping_land">
+					<option value="-1"><?php echo __('Bitte auswählen', 'wpsg'); ?></option>
+					<?php foreach ($this->view['laender'] as $l) { ?>
+					<option value="<?php echo $l['id']; ?>" <?php echo (($l['id'] == $this->view['basket']['checkout']['shipping_land'])?'selected="selected"':''); ?>><?php echo wpsg_hspc($l['name']); ?></option>
+					<?php } ?>
+				</select>
+			</div>
+		 
+			<script type="text/javascript">/* <![CDATA[ */
+					
+				function view_checkout_shippingadresss()
+				{
+			 
+					if (jQuery('#act_checkout_shippingadress').prop('checked') != true)
+					{
+						
+						jQuery('.checkout_shippingadress').attr('style', 'display:none;');
+						jQuery('#act_checkout_shippingadress').attr('value', null);
+
+						<?php if ($this->get_option('wpsg_form_validation') == '2') { ?>
+						jQuery.validator.removeClassRules('validate[required_shipping]', { cRequired: true } );
+						<?php } ?>
+						
+					}
+			
+					if (jQuery('#act_checkout_shippingadress').prop('checked') == true)
+					{
+						
+						jQuery('.checkout_shippingadress').attr('style', 'display:display;');
+						jQuery('#act_checkout_shippingadress').attr('value', 1);
+
+						<?php if ($this->get_option('wpsg_form_validation') == '2') { ?>
+						jQuery.validator.addClassRules('validate[required_shipping]', { cRequired: true } );
+						<?php } ?>
+						
+					}	
+					
+					return false;
+					
+				}
+		
+				jQuery(document).ready(function()
+				{	
+					
+					view_checkout_shippingadresss();
+					
+				});
+				
+			/* ]]> */</script>
+		</div>
+	</div>
+</div>

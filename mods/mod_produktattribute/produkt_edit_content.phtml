@@ -1,0 +1,45 @@
+<?php
+
+	/**
+	 * Template für die Eingabe der Produktattribute innerhalb der Produktverwaltung
+	 */
+
+?>
+<?php if (sizeof($this->view['data']['pa']) > 0) { ?>
+<div class="postbox" id="wpsg_produktattribute">		
+	<h3 class="wpsg_handlediv">
+		<span title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>" class="handlediv"><br /></span>
+		<span><?php echo __('Produktattribute', 'wpsg'); ?></span>
+	</h3>	
+	<div class="inside">
+	
+		<?php foreach ($this->view['data']['pa'] as $pa) { ?>			
+			<div class="wpsg_form_field">
+				<div class="wpsg_form_left">
+					<label for="produkt_pa_<?php echo $pa['id']; ?>"><?php echo __($pa['name'], 'wpsg'); ?>:</label>
+				</div>
+				<div class="wpsg_form_right">
+					<?php if ($pa['typ'] == '1') { /* RTE */ ?>
+					
+						<?php wp_editor($pa['value'], 'pa_'.$pa['id'].''); ?>
+						
+					<?php } else if ($pa['typ'] == '2') { /* Auswahl */ ?>
+						<select id="produkt_pa_<?php echo $pa['id']; ?>" name="pa_<?php echo $pa['id']; ?>">
+							<?php foreach ((array)explode("|", $pa['auswahl']) as $option) { ?>
+							<option <?php echo (($pa['value'] == $option)?'selected="selected"':''); ?> value="<?php echo wpsg_hspc($option); ?>"><?php echo wpsg_hspc($option); ?></option>
+							<?php } ?>
+						</select>
+					<?php } else if ($pa['typ'] == '3') { /* Checkbox */ ?>
+						<input type="hidden" value="0" name="pa_<?php echo $pa['id']; ?>" />
+						<input id="produkt_pa_<?php echo $pa['id']; ?>" class="checkbox" type="checkbox" value="1" name="pa_<?php echo $pa['id']; ?>" <?php echo (($pa['value'] == '1')?'checked="checked"':''); ?> />
+					<?php } else { /* Normales Eingabefeld */ ?>
+						<input id="produkt_pa_<?php echo $pa['id']; ?>" type="text" name="pa_<?php echo $pa['id']; ?>" value="<?php echo wpsg_hspc($pa['value']); ?>" />
+					<?php } ?>
+				</div>
+			</div>
+			<div class="wpsg_clear"></div>
+		<?php } ?>
+	
+	</div>
+</div>
+<?php } ?>

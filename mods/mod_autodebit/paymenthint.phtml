@@ -1,0 +1,67 @@
+<?php
+
+	/**
+	 * Template für die Integration der Kundeneingaben für das Modul "Bankeinzug" in den Checkout2
+	 */
+ 
+?>
+<br /><br />
+<div class="wpsg_mod_autodebit">
+	
+	<div class="wpsg_mod_autodebit_inhaber wpsg_mod_autodebit_field">
+		<label>
+			<?php echo __('Inhaber', 'wpsg'); ?><span class="wpsg_required">*</span>:
+			<input class="<?php echo ((in_array("mod_autodebit_inhaber", (array)$this->view['error']))?'wpsg_error':''); ?>" type="text" name="wpsg_mod_autodebit[inhaber]" value="<?php echo wpsg_hspc($this->view['wpsg_mod_autodebit']['inhaber']); ?>" />
+		</label>
+	</div>
+	<div class="wpsg_clear"></div>
+	
+	<?php if ($this->get_option('wpsg_mod_autodebit_iban') == '1') { ?>
+	<div class="wpsg_mod_autodebit_bic wpsg_mod_autodebit_field">
+		<label>
+			<?php echo __('BIC', 'wpsg'); ?><span class="wpsg_required">*</span>:
+			<input class="<?php echo ((in_array("mod_autodebit_bic", (array)$this->view['error']))?'wpsg_error':''); ?>" type="text" name="wpsg_mod_autodebit[bic]" value="<?php echo wpsg_hspc($this->view['wpsg_mod_autodebit']['bic']); ?>" />
+		</label>
+	</div>
+	<div class="wpsg_clear"></div>
+	<?php } else { ?>
+	<div class="wpsg_mod_autodebit_blz wpsg_mod_autodebit_field">
+		<label>
+			<?php echo __('Bankleitzahl', 'wpsg'); ?><span class="wpsg_required">*</span>:
+			<input class="<?php echo ((in_array("mod_autodebit_blz", (array)$this->view['error']))?'wpsg_error':''); ?>" type="text" name="wpsg_mod_autodebit[blz]" value="<?php echo wpsg_hspc($this->view['wpsg_mod_autodebit']['blz']); ?>" />
+		</label>
+	</div>
+	<div class="wpsg_clear"></div>
+	<?php } ?>
+	
+	<?php if ($this->get_option('wpsg_mod_autodebit_iban') == '1') { ?>
+	<div class="wpsg_mod_autodebit_iban wpsg_mod_autodebit_field">
+		<label>
+			<?php echo __('IBAN', 'wpsg'); ?><span class="wpsg_required">*</span>:
+			<input class="<?php echo ((in_array("mod_autodebit_iban", (array)$this->view['error']))?'wpsg_error':''); ?>" type="text" name="wpsg_mod_autodebit[iban]" value="<?php echo wpsg_hspc($this->view['wpsg_mod_autodebit']['iban']); ?>" />
+		</label>
+	</div>
+	<div class="wpsg_clear"></div>
+	<?php } else { ?>
+	<div class="wpsg_mod_autodebit_knr wpsg_mod_autodebit_field">
+		<label>
+			<?php echo __('Kontonummer', 'wpsg'); ?><span class="wpsg_required">*</span>:
+			<input class="<?php echo ((in_array("mod_autodebit_knr", (array)$this->view['error']))?'wpsg_error':''); ?>" type="text" name="wpsg_mod_autodebit[knr]" value="<?php echo wpsg_hspc($this->view['wpsg_mod_autodebit']['knr']); ?>" />
+		</label>
+	</div>
+	<div class="wpsg_clear"></div>
+	<?php } ?>	
+
+	<div class="wpsg_mod_autodebit_name wpsg_mod_autodebit_field">
+		<label>
+			<?php echo __('Name der Bank', 'wpsg'); ?><span class="wpsg_required">*</span>:
+			<input class="<?php echo ((in_array("mod_autodebit_name", (array)$this->view['error']))?'wpsg_error':''); ?>" type="text" name="wpsg_mod_autodebit[name]" value="<?php echo wpsg_hspc($this->view['wpsg_mod_autodebit']['name']); ?>" />
+		</label>
+	</div>
+	<div class="wpsg_clear"></div>
+	
+	<div class="wpsg_mandatoryfield_hint">
+		<?php echo wpsg_translate(__('Mit #1# gekennzeichnete Felder sind Pflichtfelder.', 'wpsg'), '<span class="wpsg_required">*</span>'); ?>
+	</div>
+	
+</div>

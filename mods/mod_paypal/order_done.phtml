@@ -1,0 +1,25 @@
+<?php
+
+	/**
+	 * Dieses Template wird nach einer PayPal Zahlung angezeigt
+	 */
+
+?>
+
+<p><?php echo __('Um den Betrag mit PayPal zu bezahlen klicken Sie bitte auf folgendes Logo.', 'wpsg'); ?></p> 
+<p>
+	<a title="<?php echo __('Mit PayPal bezahlen', 'wpsg'); ?>" href="<?php echo $this->view['paypalLink']; ?>">
+		<img src="<?php echo $this->getRessourceURL('gfx/pp-logo-big.png'); ?>" align="left" alt="<?php echo __('Mit PayPal bezahlen', 'wpsg'); ?>" style="margin-right:7px;">
+	</a>
+</p>
+<?php if ($this->get_option('wpsg_mod_paypal_autostart') == '1') { ?>
+<script type="text/javascript">/* <![CDATA[ */
+ 
+	jQuery(document).ready(function() { 
+		window.setTimeout(function() {
+    	location.href = "<?php echo $this->view['paypalLink']; ?>";
+		}, 1000);
+	} );
+	
+/* ]]> */</script>
+<?php } ?>

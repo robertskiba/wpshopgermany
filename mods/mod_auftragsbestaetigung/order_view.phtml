@@ -1,0 +1,51 @@
+<script type="text/javascript">
+					
+	jQuery(document).ready(function() { 
+		
+		jQuery(".handlediv").bind("click", function() { 
+			if (jQuery(this.parentNode).hasClass("closed"))
+			{
+			
+				jQuery.cookie("wpsg_ab_field", "0", { expires: 999999 } );
+			
+			}
+			else
+			{
+			
+				jQuery.cookie("wpsg_ab_field", "1", { expires: 999999 } );
+			
+			}
+		} );
+
+		if (jQuery.cookie("wpsg_ab_field") == "1")
+		{
+		
+			jQuery("#wpsg_ab_postbox").removeClass("closed");
+		}
+		
+	} );
+
+</script>
+
+<div class="postbox" id="wpsg_auftragsbestaetigung">			
+	<h3 class="wpsg_handlediv">
+		<span title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>" class="handlediv"><br /></span>
+		<span><?php echo __('Auftragsbestätigung', 'wpsg'); ?></span>
+	</h3>
+	<div class="inside">						
+		<div class="inside" style="padding:5px;">
+			
+			<form method="post" action="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Order&action=ajax&mod=wpsg_mod_auftragsbestaetigung&edit_id=<?php echo $this->view['data']['id']; ?>&noheader=1">			
+				<textarea class="wpsg_order_view_auftragsbestaetigung" name="auftrag_note"></textarea>
+				<input class="wpsg_order_view_auftragsbestaetigung_submit" type="submit" value="<?php echo __('Senden', 'wpsg'); ?>" /><br />
+				<i>
+					<?php echo __('Die Auftragsbestätigung bestätigt dem Kunden die erfolgreiche Erfassung des Auftrages. Abweichungen vom Auftrag können mittels des Textfeldes mitgesendet werden.', 'wpsg'); ?>
+					<?php echo __('Der Status ändert sich automatisch auf "Bestätigt".', 'wpsg'); ?>
+				</i>
+				<br />
+				<input type="hidden" name="mod_auftragbestaetigung" value="1"/>
+			</form>
+			
+		</div>
+	</div>
+</div>

@@ -1,0 +1,61 @@
+<?php
+
+	/**
+	 * Template für die Produktgruppenübersicht
+	 */
+
+?>
+<div class="wrap">
+	<div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
+	<h2>
+		<?php echo __('Produktgruppenverwaltung', 'wpsg'); ?>
+		<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Productgroups&wpsg_mod_action=add" class="add-new-h2"><?php echo __("Hinzufügen", "wpsg"); ?></a>				
+	</h2>
+	
+	<br />
+
+	<?php echo $this->writeBackendMessage(); ?>
+	
+	<?php if (!is_array($this->view['data']) || sizeof($this->view['data']) == 0) { ?>
+	<p><?php echo __("Keine Produktgruppen hinterlegt.", "wpsg"); ?></p>
+	<?php } else { ?>
+	<div class="clear"></div>
+	<table cellspacing="0" class="widefat post fixed">
+		<thead>
+			<tr>
+				<th style="" class="manage-column column-title" id="title" scope="col"><?php echo __("Name", "wpsg"); ?></th>
+				<th style="" class="manage-column column-title" id="title" scope="col"><?php echo __("Template", "wpsg"); ?></th>
+				<th style="" class="manage-column column-title" id="title" scope="col"><?php echo __("Produkte", "wpsg"); ?></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach ($this->view['data'] as $g) { ?>
+			<tr valign="top" class="alternate author-self status-draft iedit" id="post-<?php echo $g['id']; ?>">
+				<td class="post-title column-title">
+					<strong><a title="<?php echo __("Diese Produktgruppe bearbeiten", "wpsg"); ?>" href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Productgroups&wpsg_mod_action=edit&edit_id=<?php echo $g['id']; ?>" class="row-title"><?php echo $g['name']; ?></a></strong>
+					<div class="row-actions">
+						<span class="edit"><a title="<?php echo __("Diese Produktgruppe bearbeiten", "wpsg"); ?>" href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Productgroups&wpsg_mod_action=edit&edit_id=<?php echo $g['id']; ?>"><?php echo __("Bearbeiten", "wpsg"); ?></a>
+						|
+						<span class="del"><a onclick="if (!confirm('<?php echo __("Sind Sie sich sicher?", "wpsg"); ?>')) return false;" title="<?php echo __("Diese Produktgruppe löschen", "wpsg"); ?>" href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Productgroups&wpsg_mod_action=del&noheader=1&edit_id=<?php echo $g['id']; ?>"><?php echo __("Löschen", "wpsg"); ?></a>
+						<?php if ($g['countProdukte'] > 0) { ?>
+						|
+						<span class="edit"><a title="<?php echo __("Zur Produktliste", "wpsg"); ?>" href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Produkt&search[pgruppe]=<?php echo $g['id']; ?>"><?php echo __("Zur Produktliste", "wpsg"); ?></a>
+						<?php } ?>						
+					</span>
+				</td> 
+				<td><?php echo (($g['template_file'] == "0")?'Individuelle Produkttemplates':$g['template_file']); ?></td>
+				<td><?php echo $g['countProdukte']; ?></td>
+			</tr>
+			<?php } ?>
+		</tbody>
+		<tfoot>
+			<tr>
+				<th style="" class="manage-column column-title" id="title" scope="col"><?php echo __("Name", "wpsg"); ?></th>
+				<th style="" class="manage-column column-title" id="title" scope="col"><?php echo __("Template", "wpsg"); ?></th>
+				<th style="" class="manage-column column-title" id="title" scope="col"><?php echo __("Produkte", "wpsg"); ?></th>
+			</tr>
+		</tfoot>
+	</table>
+	<?php } ?>
+	
+</div>

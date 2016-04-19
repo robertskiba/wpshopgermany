@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * Template für die Anzeige der Produktattribute in der Bestellzusammenfassung 
+*/
+//wpsg_debug($this->view);
+?>
+
+<?php foreach ((array)$this->view['wpsg_mod_produktattribute']['data'] as $pa_id) { ?>
+					
+<tr class="wpsg_<?php echo (($this->view['i'] % 2 == 0)?'odd':'even'); ?>">	
+	<td colspan="1"><?php echo __('Attribut', 'wpsg'); ?>:</td>
+	<td class="wpsg_cell_produktattribute_value" colspan="<?php echo ((sizeof($this->view['basket']['mwst']) > 1 || $this->get_option('wpsg_showMwstAlways') == '1')?'2':'1'); ?>">
+		<?php echo $this->callMod('wpsg_mod_produktattribute', 'getAttributeValue', array($this->view['wpsg_mod_produktattribute']['id'], $pa_id)); ?>
+	</td>
+</tr>
+<?php }?>

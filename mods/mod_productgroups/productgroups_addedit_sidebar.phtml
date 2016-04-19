@@ -1,0 +1,17 @@
+<?php
+
+	/**
+	 * Template für die Lagerverwaltung innerhalb der Einstellungen der Produktgruppe
+	 */
+	//wpsg_debug($this->view['wpsg_mod_productgroups']['data']);
+?>
+<div id="postbox_productgroupstock" class="postbox">
+	<div class="handlediv" title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>"><br /></div>
+	<h3 class="handle">
+		<span><?php echo __('Produktgruppen Lagerbestand', 'wpsg'); ?></span>
+	</h3>
+	<div class="inside">
+		<?php echo wpsg_drawForm_Checkbox('wpsg_mod_productgroups[stock_aktiv]', __('Lagerbestand zählen', 'wpsg'), $this->view['wpsg_mod_productgroups']['data']['stock_aktiv'], array()); ?>
+		<?php echo wpsg_drawForm_Input('wpsg_mod_productgroups[stock_value]', __('Bestand', 'wpsg'), wpsg_hspc($this->view['wpsg_mod_productgroups']['data']['stock_value']), array()); ?>
+	</div>
+</div>

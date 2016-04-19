@@ -1,0 +1,27 @@
+<?php
+
+	/**
+	 * Template für die Integration der CrefoPay Zahlungsart in die Bestellverwaltung
+	 */
+
+?>
+
+<?php if (wpsg_isSizedString($this->view['oOrder']->getMeta('wpsg_mod_paypal_paymentid'))) { ?>
+	
+	<div class="wpsg_form_field ">
+		<div class="wpsg_form_left">
+			<label for=""><?php echo __('PaymentID', 'wpsg'); ?>: [<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Order&action=ajax&noheader=1&mod=wpsg_mod_paypal&do=refresh&edit_id=<?php echo $this->view['oOrder']->id; ?>"><?php echo __('Status Aktualisieren', 'wpsg'); ?></a>]</label>
+		</div>
+		<div class="wpsg_form_right">
+			<p class="" id=""><?php echo wpsg_translate(__('#1# (#2#)', 'wpsg'), $this->view['oOrder']->getMeta('wpsg_mod_paypal_paymentid'), $this->view['oOrder']->getMeta('wpsg_mod_paypal_paymentstate')); ?></p>
+		</div>
+		<div class="wpsg_clear"></div>
+	</div>
+		
+<?php } ?>
+
+<?php if (wpsg_isSizedString($this->view['oOrder']->getMeta('wpsg_mod_paypal_saleid'))) { ?>
+
+	<?php echo wpsg_drawForm_Input('', __('SaleID', 'wpsg'), $this->view['oOrder']->getMeta('wpsg_mod_paypal_saleid'), array('text' => true)); ?>
+		
+<?php } ?>

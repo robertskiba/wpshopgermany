@@ -1,0 +1,264 @@
+<?php 
+
+	/**
+	 * Template für die Kundenübersichtsseite im Backend
+	 */
+
+?>
+<script type="text/javascript">/* <![CDATA[ */
+
+	var wpsg_order = '<?php echo $this->view['filter']['order']; ?>';
+	var wpsg_ascdesc = '<?php echo $this->view['filter']['ascdesc']; ?>';
+
+	function wpsg_setOrder(order)
+	{
+	
+		if (order == wpsg_order)
+		{
+	
+			// Nur Richtung ändern
+			if (wpsg_ascdesc == 'asc') jQuery('#wpsg_ascdesc').val('desc');
+			else jQuery('#wpsg_ascdesc').val('asc');
+			
+		}
+		else
+		{
+	
+			jQuery('#wpsg_order').val(order);
+			jQuery('#wpsg_ascdesc').val('asc');
+			
+		}
+	
+		jQuery('#seite').val(1);
+		jQuery('#filter_form').submit();
+		
+		return false;
+		
+	} // function wpsg_setOrder(order)
+
+	jQuery(document).ready(function() {
+		
+		jQuery('.wpsg_handlediv').bind('click', function() {
+			
+			jQuery(this).next().toggle();
+
+			var arClose = new Array();
+			jQuery('.wpsg_customer_index .postbox .inside:hidden').each(function() {
+				arClose.push(jQuery(this).parent().attr("id"));
+			} );
+
+			jQuery.cookie('wpsg_customer_index_closed', arClose.join(','));
+			
+		} );
+
+		if (jQuery.cookie('wpsg_customer_index_closed') != null)
+		{
+
+			var arClose = jQuery.cookie('wpsg_customer_index_closed').split(',');
+
+			for (index in arClose)
+			{
+
+				if (arClose[index] != '') jQuery('#' + arClose[index] + ' .inside').hide();
+							
+			}
+			
+		}
+
+	} );
+		
+/* ]]> */</script>
+
+<div class="wrap wpsg_customer_index">
+	<div class="icon32 icon32-posts-post" id="icon-edit"><br /></div>
+	<h2>
+		<?php echo __('Kundenverwaltung', 'wpsg'); ?>		
+		<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Customer&amp;action=add" class="add-new-h2"><?php echo __("Hinzufügen", "wpsg"); ?></a>
+		<?php if (wpsg_isSizedArray($this->view['data'])) { ?>
+		<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Customer&amp;action=export&amp;noheader=1" class="add-new-h2"><?php echo __('Exportieren', 'wpsg'); ?></a>
+		<?php } ?>
+		<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Customer&amp;action=import" class="add-new-h2"><?php echo __('Importieren', 'wpsg'); ?></a>
+	</h2>
+
+	<?php echo $this->writeBackendMessage(); ?>
+		
+	<form method="POST" id="filter_form">
+		
+		<?php if ($this->hasMod('wpsg_mod_customergroup')) { ?>
+		<select style="float:left;" name="customergroup" onchange="jQuery('#filter_form').submit();">
+			<option value="-1"><?php echo __('Alle Kundengruppen', 'wpsg'); ?></option>
+			<option value="0" <?php echo (($_REQUEST['customergroup'] === '0')?'selected="selected"':''); ?>><?php echo __('Unzugeordnet', 'wpsg'); ?></option>
+			<?php foreach ((array)$this->view['arCustomergroup'] as $customer_group_id => $customer_group_name) { ?>
+			<option value="<?php echo $customer_group_id; ?>" <?php echo (($customer_group_id == $_REQUEST['customergroup'])?'selected="selected"':''); ?>><?php echo $customer_group_name; ?></option>
+			<?php } ?>
+		</select>
+		<?php } ?>
+	
+		<p class="search-box">
+			<label for="post-search-input" class="screen-reader-text"><?php echo __('Kunden suchen', 'wpsg'); ?>:</label>
+			<input type="text" value="<?php echo wpsg_hspc($_REQUEST['s']); ?>" name="s" id="post-search-input">
+			<input type="submit" value="<?php echo __('Kunden suchen', 'wpsg'); ?>" class="button" id="search-submit" name="">
+		</p>
+				
+		<div class="tablenav top">
+		
+			<?php if (sizeof($this->view['data'] > 0)) { ?>
+			<div class="tablenav-pages"><span class="displaying-num"><?php echo wpsg_translate(__('#1# Elemente', 'wpsg'), $this->view['count']); ?></span>
+				<div class="tablenav-pages">	
+					<span class="pagination-links">
+						<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Customer&amp;seite=1&amp;s=<?php echo $_REQUEST['s']; ?>" title="<?php echo __('Zur ersten Seite gehen', 'wpsg'); ?>" class="first-page <?php echo (($this->view['seite'] == '1')?'disabled':''); ?>">«</a>
+						<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Customer&amp;seite=<?php echo $this->view['seite'] - 1; ?>" title="<?php echo __('Zur vorherigen Seite gehen', 'wpsg'); ?>" class="prev-page <?php echo (($this->view['seite'] <= 1)?'disabled':''); ?>">‹</a>
+						<span class="paging-input"><input type="text" size="1" value="<?php echo $this->view['seite']; ?>" name="seite" title="<?php echo __('Aktuelle Seite', 'wpsg'); ?>" class="current-page"> <?php echo __('von', 'wpsg'); ?> <span class="total-pages"><?php echo $this->view['pages']; ?></span></span>
+						<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Customer&amp;seite=<?php echo $this->view['seite'] + 1; ?>" title="<?php echo __('Zur nächsten Seite gehen', 'wpsg'); ?>" class="next-page <?php echo (($this->view['seite'] >= $this->view['pages'])?'disabled':''); ?>">›</a>
+						<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Customer&amp;seite=<?php echo $this->view['pages']; ?>" title="<?php echo __('Zur letzten Seite gehen', 'wpsg'); ?>" class="last-page <?php echo (($this->view['seite'] == $this->view['pages'])?'disabled':''); ?>">»</a>
+					</span>
+				</div>
+				
+				<script type="text/javascript">
+
+					jQuery('.tablenav-pages .disabled').bind('click', function() { return false; } );
+				
+				</script>
+				
+				<br class="clear" />
+			</div>
+			<?php } ?>
+		
+		</div>
+		
+		<input id="wpsg_order" type="hidden" name="filter[order]" value="<?php echo $this->view['filter']['order']; ?>" />
+		<input id="wpsg_ascdesc" type="hidden" name="filter[ascdesc]" value="<?php echo $this->view['filter']['ascdesc']; ?>" />
+		
+		<input style="display:none;" type="submit" name="suchen" value="" />
+		
+		<?php $this->callMods('wpsg_mod_customer_head'); ?>
+		
+		<?php if (is_array($this->view['data']) && sizeof($this->view['data']) > 0) { ?>
+		<table class="widefat post fixed">
+			<thead>
+				<tr>
+					<th class="manage-column column-title <?php echo (($this->view['filter']['order'] == 'nr')?'sorted':'sortable'); ?> <?php echo (($this->view['filter']['ascdesc'] == 'asc')?'asc':'desc'); ?>" style="width:60px;">
+						<a href="#" onclick="return wpsg_setOrder('nr');">
+							<span><?php echo __("Nr.", 'wpsg'); ?></span>
+							<span class="sorting-indicator"></span>
+						</a>
+					</th>
+					<th class="manage-column column-title <?php echo (($this->view['filter']['order'] == 'name')?'sorted':'sortable'); ?> <?php echo (($this->view['filter']['ascdesc'] == 'asc')?'asc':'desc'); ?>">
+						<a href="#" onclick="return wpsg_setOrder('name');">
+							<span><?php echo __("Name", 'wpsg'); ?></span>
+							<span class="sorting-indicator"></span>
+						</a>
+					</th>
+					<th class="manage-column column-adress <?php echo (($this->view['filter']['order'] == 'adress')?'sorted':'sortable'); ?> <?php echo (($this->view['filter']['ascdesc'] == 'asc')?'asc':'desc'); ?>">
+						<a href="#" onclick="return wpsg_setOrder('adress');">
+							<span><?php echo __("Anschrift", 'wpsg'); ?></span>
+							<span class="sorting-indicator"></span>
+						</a>
+					</th>
+					<th class="manage-column column-status <?php echo (($this->view['filter']['order'] == 'status')?'sorted':'sortable'); ?> <?php echo (($this->view['filter']['ascdesc'] == 'asc')?'asc':'desc'); ?>">
+						<a href="#" onclick="return wpsg_setOrder('status');">
+							<span><?php echo __("Status", 'wpsg'); ?></span>
+							<span class="sorting-indicator"></span>
+						</a>
+					</th>				
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ($this->view['data'] as $k) { ?>
+				<tr>
+					<td class="manage-column column-title">
+						<?php echo ((strlen($k['knr']) > 0)?$k['knr']:$k['id']); ?>						
+					</td>
+					<td class="manage-column column-title">
+						<strong>&nbsp;<?php echo wpsg_hspc((trim($k['vname'].' '.$k['name']) == "")?__("---- ", "wpsg"):$k['vname'].' '.$k['name']); ?>&nbsp;<a href="mailto:<?php echo wpsg_hspc($k['email']); ?>" style="font-weight:normal;">(<?php echo wpsg_hspc($k['email']); ?>)</a></strong>
+					</td>
+					<td rowspan="2" class="manage-column column-adress">						
+						<?php echo (($k['firma'] != '')?$k['firma']:'').'<br />'; ?>
+						<?php echo isset($this->$k['strasse']) && $k['strasse'].' '.isset ($this->$k['hausnr']) && $k['hausnr']; ?><br />
+						<?php echo $k['plz'].' '.$k['ort'].' '.$k['land_kuerzel']; ?><br />
+					</td>
+					<td rowspan="2" class="manage-column column-status">
+						<?php echo wpsg_translate(__('#1# Bestellungen', 'wpsg'), $k['order_count']); ?><br />
+						<?php echo wpsg_translate(__('Umsatz: #1#', 'wpsg'), wpsg_ff($k['order_umsatz'], $this->get_option('wpsg_currency'))); ?>
+						<?php if ($k['order_count'] > 0) { ?>
+						<br />
+						<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Order&filter%5Bk_id%5D=<?php echo $k['id']; ?>"><?php echo __('Bestellungen einsehen', 'wpsg'); ?></a>
+						<?php } ?>
+					</td>
+				</tr>
+				<tr>
+					<td class="manage-column wpsg-row-actions" colspan="2">
+						<div>
+							<span class="edit"><a title="<?php echo __("Diesen Kunden bearbeiten", "wpsg"); ?>" href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Customer&amp;action=edit&amp;edit_id=<?php echo $k['id']; ?>"><?php echo __("Bearbeiten", "wpsg"); ?></a></span>
+							|
+							<span class="del"><a onclick="if (!confirm('<?php echo __("Sind Sie sicher, dass Sie diesen Kunden löschen wollen?", "wpsg"); ?>')) return false;" title="<?php echo __("Diesen Kunden löschen", "wpsg"); ?>" href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Customer&amp;action=del&amp;edit_id=<?php echo $k['id']; ?>&amp;noheader=1"><?php echo __("Löschen", "wpsg"); ?></a></span>
+							<?php if ($k['order_count'] > 0) { ?>
+							|
+							<span class="order"><a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Order&filter%5Bk_id%5D=<?php echo $k['id']; ?>"><?php echo __('Bestellungen einsehen', 'wpsg'); ?></a></span>
+							<?php } ?>						
+						</div>
+					</td>
+				</tr>
+				<?php } ?>
+			</tbody>
+			<tfoot>
+				<tr>
+					<th class="manage-column column-title <?php echo (($this->view['filter']['order'] == 'nr')?'sorted':'sortable'); ?> <?php echo (($this->view['filter']['ascdesc'] == 'asc')?'asc':'desc'); ?>">
+						<a href="#" onclick="return wpsg_setOrder('nr');">
+							<span><?php echo __("Nr.", 'wpsg'); ?></span>
+							<span class="sorting-indicator"></span>
+						</a>
+					</th>
+					<th class="manage-column column-title <?php echo (($this->view['filter']['order'] == 'name')?'sorted':'sortable'); ?> <?php echo (($this->view['filter']['ascdesc'] == 'asc')?'asc':'desc'); ?>">
+						<a href="#" onclick="return wpsg_setOrder('name');">
+							<span><?php echo __("Name", 'wpsg'); ?></span>
+							<span class="sorting-indicator"></span>
+						</a>
+					</th>
+					<th class="manage-column column-adress <?php echo (($this->view['filter']['order'] == 'adress')?'sorted':'sortable'); ?> <?php echo (($this->view['filter']['ascdesc'] == 'asc')?'asc':'desc'); ?>">
+						<a href="#" onclick="return wpsg_setOrder('adress');">
+							<span><?php echo __("Anschrift", 'wpsg'); ?></span>
+							<span class="sorting-indicator"></span>
+						</a>
+					</th>
+					<th class="manage-column column-status <?php echo (($this->view['filter']['order'] == 'status')?'sorted':'sortable'); ?> <?php echo (($this->view['filter']['ascdesc'] == 'asc')?'asc':'desc'); ?>">
+						<a href="#" onclick="return wpsg_setOrder('status');">
+							<span><?php echo __("Status", 'wpsg'); ?></span>
+							<span class="sorting-indicator"></span>
+						</a>
+					</th>				
+				</tr>
+			</tfoot>
+		</table>
+		
+			<?php if (sizeof($this->view['data'] > 0)) { ?>
+			<div class="tablenav">
+				<div class="tablenav-pages"><span class="displaying-num"><?php echo wpsg_translate(__('#1# Elemente', 'wpsg'), $this->view['count']); ?></span>
+					<div class="tablenav-pages">	
+						<span class="pagination-links">
+							<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Customer&amp;seite=1&amp;s=<?php echo $_REQUEST['s']; ?>" title="<?php echo __('Zur ersten Seite gehen', 'wpsg'); ?>" class="first-page <?php echo (($this->view['seite'] == '1')?'disabled':''); ?>">«</a>
+							<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Customer&amp;seite=<?php echo $this->view['seite'] - 1; ?>" title="<?php echo __('Zur vorherigen Seite gehen', 'wpsg'); ?>" class="prev-page <?php echo (($this->view['seite'] <= 1)?'disabled':''); ?>">‹</a>
+							<span class="paging-input"><input type="text" size="1" value="<?php echo $this->view['seite']; ?>" name="seite" title="<?php echo __('Aktuelle Seite', 'wpsg'); ?>" class="current-page"> <?php echo __('von', 'wpsg'); ?> <span class="total-pages"><?php echo $this->view['pages']; ?></span></span>
+							<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Customer&amp;seite=<?php echo $this->view['seite'] + 1; ?>" title="<?php echo __('Zur nächsten Seite gehen', 'wpsg'); ?>" class="next-page <?php echo (($this->view['seite'] >= $this->view['pages'])?'disabled':''); ?>">›</a>
+							<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Customer&amp;seite=<?php echo $this->view['pages']; ?>" title="<?php echo __('Zur letzten Seite gehen', 'wpsg'); ?>" class="last-page <?php echo (($this->view['seite'] == $this->view['pages'])?'disabled':''); ?>">»</a>
+						</span>
+					</div>
+					
+					<script type="text/javascript">
+			
+						jQuery('.tablenav-pages .disabled').bind('click', function() { return false; } );
+					
+					</script>
+					
+					<br class="clear">
+				</div>
+			</div>
+			<?php } ?>
+			
+		<?php } else { ?>
+		<p><?php echo __('Keine Kunden in der Datenbank.', 'wpsg'); ?></p>
+		<?php } ?>
+		
+	</form>
+	
+</div>

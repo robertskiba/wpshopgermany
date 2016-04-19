@@ -1,0 +1,113 @@
+<?php
+
+	/**
+	 * Template für die Varianten wird vom Produkttemplate z.B. standard.phtml geladen
+	 */
+ 
+?>
+ 
+<script type="text/javascript">/* <![CDATA[ */
+ 
+	wpsg_vp_vari[<?php echo $this->getProduktId($this->view['data']['id']); ?>] = new Array();
+	 
+/* ]]> */</script>
+
+<?php $vAktiv = false; if (is_array($this->view['data']['vp_data']) && sizeof($this->view['data']['vp_data']) > 0) { ?>
+	<?php foreach ($this->view['data']['vp_data'] as $k => $var) { if ($var['aktiv'] == "1") { $vAktiv = true; ?>
+	
+	<div class="wpsg_vp_field wpsg_vp_field_<?php echo $this->getProduktId($this->view['data']['id']); ?>">
+		
+		<script type="text/javascript">/* <![CDATA[ */
+
+			wpsg_vp_vari[<?php echo $this->getProduktId($this->view['data']['id']); ?>][<?php echo $k; ?>] = "<?php echo $var['typ']; ?>";			
+						
+			/* ]]> */</script>
+		
+		<?php if ($var['typ'] != 'radio') { ?>
+		<label class="wpsg_vp_field_label" for="wpsg_vpfield_<?php echo $this->getProduktId($this->view['data']['id']); ?>_<?php echo $k; ?>">
+			<?php echo $var['name']; ?>
+		</label>
+		<?php } else { ?>
+		<span class="wpsg_vp_field"><?php echo $var['name']; ?></span>
+		<?php } ?>
+		
+		<div class="wpsg_vp_field_typ_<?php echo $var['typ']; ?>">
+		
+			<?php if ($var['typ'] == "select") { ?>
+			<label>			 			
+				<select onchange="wpsg_vp_switch(<?php echo $this->getProduktId($this->view['data']['id']); ?>, <?php echo $this->view['product_index']; ?>);" name="wpsg_vp[<?php echo $k; ?>]" id="wpsg_vpfield_<?php echo $this->getProduktId($this->view['data']['id']); ?>_<?php echo $k; ?>">
+					<?php foreach ($var['vari'] as $kv => $vari) { if ($vari['aktiv'] == "1" && (!$this->hasMod('wpsg_mod_stock') || $vari['stock'] > 0)) { ?>
+					<option value="<?php echo $kv; ?>" <?php echo (($this->view['wpsg_mod_varianten']['set'][$k] == $kv)?'selected="selected"':''); ?>>						
+						<?php echo $vari['name']; ?>
+						<?php if ($this->callMod('wpsg_mod_varianten', 'showVariPrice', array($vari['preis']))) { ?>
+						(<?php echo wpsg_ff($vari['preis'], $this->get_option('wpsg_currency')); ?>)
+						<?php } ?>
+					</option>
+					<?php } } ?>
+				</select> 
+				<?php if ($this->get_option("wpsg_vp_showpic") == "1") { ?>
+				<span class="wpsg_vp_field_image">				
+					<?php foreach ($var['vari'] as $kv => $vari) { if ($vari['aktiv'] == "1" && isset($vari['showpic'])) { ?>
+					<span class="wpsg_vp_image wpsg_vp_image_<?php echo $kv; ?>" style="display:<?php echo (($this->view['wpsg_mod_varianten']['set'][$k] == $kv)?'block':'none'); ?>;">
+						<?php echo $this->callMod('wpsg_mod_produktbilder', 'genBild', array($this->getProduktId($this->view['data']['id']), $vari['showpic'], $this->get_option("wpsg_vp_showpic_width"), $this->get_option("wpsg_vp_showpic_height"), 's')); ?>
+					</span>
+					<?php } } ?>
+				</span>
+				<?php } ?>		
+			</label>
+			<?php } ?>
+			
+			<?php if ($var['typ'] == 'image' && $this->hasMod('wpsg_mod_produktbilder')) { ?>
+			<div class="wpsg_mod_varianten_imageselect wpsg_mod_varianten_imageselect_<?php echo $k; ?>">
+			<input type="hidden" name="wpsg_vp[<?php echo $k; ?>]" value="<?php echo $this->view['wpsg_mod_varianten']['set'][$k]; ?>" />
+			<?php foreach ($var['vari'] as $kv => $vari) { if ($vari['aktiv'] == '1' && (!$this->hasMod('wpsg_mod_stock') || $vari['stock'] > 0)) { ?>
+				<?php $img = $this->callMod('wpsg_mod_varianten', 'getImageSelectImage', array($this->getProduktId($this->view['data']['id']), $k, $kv, $this->view['data']['product_key'])); ?>								
+				<?php if (wpsg_isSizedString($img)) { ?>
+				<a data-wpsg-id="<?php echo $kv; ?>" class="image <?php echo (($this->view['wpsg_mod_varianten']['set'][$k] == $kv)?'akt':''); ?>" onclick="jQuery(this).parent().find('a').removeClass('akt'); jQuery(this).addClass('akt'); wpsg_vp_switch(<?php echo $this->getProduktId($this->view['data']['id']); ?>, <?php echo $this->view['product_index']; ?>); return false;" href="#">
+					<img src="<?php echo $this->callMod('wpsg_mod_produktbilder', 'makeTn', array($this->getProduktId($this->view['data']['id']), $img, $this->get_option('wpsg_vp_imageselect_width'), $this->get_option('wpsg_vp_imageselect_height'), $this->get_option('wpsg_vp_imageselect_mode'))); ?>" />
+				</a>
+				<?php } ?>
+			<?php } } ?>
+			</div>
+			<?php } ?>
+			
+			<?php if ($var['typ'] == "radio") { ?>
+			<?php $j = 0; foreach ($var['vari'] as $kv => $vari) { if ($vari['aktiv'] == "1" && (!$this->hasMod('wpsg_mod_stock') || $vari['stock'] > 0)) { $j ++; ?>			
+			<label>
+				<input <?php echo (($this->view['wpsg_mod_varianten']['set'][$k] == $kv)?'checked="checked"':''); ?> id="wpsg_vpfield_<?php echo $this->getProduktId($this->view['data']['id']); ?>_<?php echo $k; ?>_<?php echo $j; ?>" onclick="wpsg_vp_switch(<?php echo $this->getProduktId($this->view['data']['id']); ?>, <?php echo $this->view['product_index']; ?>);" type="radio" name="wpsg_vp[<?php echo $k; ?>]" value="<?php echo $kv; ?>" />&nbsp;<?php echo $vari['name']; ?>
+				<?php if ($this->callMod('wpsg_mod_varianten', 'showVariPrice', array($vari['preis']))) { ?>
+				<span class="wpsg_vp_vari_preisinfo">(<?php echo wpsg_ff($vari['preis'], $this->get_option('wpsg_currency')); ?>)</span>
+				<?php } ?>
+				<?php if ($this->get_option("wpsg_vp_showpic") == "1" && isset($vari['showpic']) && $vari['showpic'] != false) { ?>
+				<span class="wpsg_vp_field_image">
+					<?php echo $this->callMod('wpsg_mod_produktbilder', 'genBild', array($this->getProduktId($this->view['data']['id']), $vari['showpic'], $this->get_option("wpsg_vp_showpic_width"), $this->get_option("wpsg_vp_showpic_height"), 's')); ?>
+				</span>
+				<?php } ?>		
+			</label>
+			<?php } } ?>			
+			<?php } ?>
+			
+			<?php if ($var['typ'] == "checkbox" && $var['aktiv'] == 1) { ?>
+			<label>
+				<input onchange="wpsg_vp_switch(<?php echo $this->getProduktId($this->view['data']['id']); ?>, <?php echo $this->view['product_index']; ?>);" type="hidden" value="0" name="wpsg_vp[<?php echo $k; ?>]" />
+				<input <?php echo (($this->view['wpsg_mod_varianten']['set'][$k] == '1')?'checked="checked"':''); ?> onchange="wpsg_vp_switch(<?php echo $this->getProduktId($this->view['data']['id']); ?>, <?php echo $this->view['product_index']; ?>);" type="checkbox" value="1" name="wpsg_vp[<?php echo $k; ?>]" />
+				<?php if ($this->callMod('wpsg_mod_varianten', 'showVariPrice', array($var['preis']))) { ?>
+				<span class="wpsg_vp_vari_preisinfo">(<?php echo wpsg_ff($var['preis'], $this->get_option('wpsg_currency')); ?>)</span>
+				<?php } ?>
+				<?php if ($this->get_option("wpsg_vp_showpic") == "1" && $var['showpic'] != false) { ?>
+				<span class="wpsg_vp_field_image">
+					<?php echo $this->callMod('wpsg_mod_produktbilder', 'genBild', array($this->getProduktId($this->view['data']['id']), $var['showpic'], $this->get_option("wpsg_vp_showpic_width"), $this->get_option("wpsg_vp_showpic_height"), 's')); ?>
+				</span>
+				<?php } ?>
+			</label>
+			<?php } ?>
+									
+		</div>
+		 	
+		<div style="clear:both;"></div>
+	
+	</div>
+	
+	<?php } } ?>
+	
+<?php } ?>

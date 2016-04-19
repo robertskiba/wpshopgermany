@@ -1,0 +1,23 @@
+<?php
+
+	/**
+	 * Das Template wird in der Bestellansicht eingebunden und zeigt die Kontodaten des Kunden an, die er während der Bestellung angegeben hat
+	 */
+
+?>
+<br />
+<?php echo wpsg_drawForm_Input('', __('Name der Bank', 'wpsg'), $this->view['wpsg_mod_autodebit']['name'], array('text' => true, 'clear_after' => true)); ?>
+
+<?php if ($this->get_option('wpsg_mod_autodebit_iban') == '1') { ?>
+<?php echo wpsg_drawForm_Input('', __('BIC der Bank', 'wpsg'), $this->view['wpsg_mod_autodebit']['bic'], array('text' => true, 'clear_after' => true)); ?>
+<?php } else { ?>
+<?php echo wpsg_drawForm_Input('', __('BLZ der Bank', 'wpsg'), $this->view['wpsg_mod_autodebit']['blz'], array('text' => true, 'clear_after' => true)); ?>
+<?php } ?>
+
+<?php echo wpsg_drawForm_Input('', __('Inhaber', 'wpsg'), $this->view['wpsg_mod_autodebit']['inhaber'], array('text' => true, 'clear_after' => true)); ?>
+
+<?php if ($this->get_option('wpsg_mod_autodebit_iban') == '1') { ?>
+<?php echo wpsg_drawForm_Input('', __('IBAN Nr.', 'wpsg'), $this->view['wpsg_mod_autodebit']['iban'], array('text' => true, 'clear_after' => true)); ?>
+<?php } else { ?>
+<?php echo wpsg_drawForm_Input('', __('Kontonummer', 'wpsg'), $this->view['wpsg_mod_autodebit']['knr'], array('text' => true, 'clear_after' => true)); ?>
+<?php } ?>

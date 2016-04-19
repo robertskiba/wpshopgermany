@@ -1,0 +1,33 @@
+<?php
+
+	/**
+	 * Template für die Lagerbestands Einstellungen innerhalb des Produkts
+	 */
+
+?>
+<div id="wpsg_stock" class="postbox">
+	<h3 class="wpsg_handlediv">
+		<span title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>" class="handlediv"><br /></span>
+		<span><?php echo __('Lagerbestand', 'wpsg'); ?> </span>
+	</h3>
+	<div class="inside">
+		<div class="wpsg_form_field">
+			<div class="wpsg_form_left">
+				<label for="wpsg_mod_stock_stock"><?php echo __('Lagerbestand', 'wpsg'); ?>:</label>
+			</div>
+			<div class="wpsg_form_right">
+				<input id="wpsg_mod_stock_stock" type="text" name="wpsg_mod_stock_stock" value="<?php echo $this->view['data']['stock']; ?>" />
+			</div>
+			<div class="wpsg_clear"></div>
+		</div>
+		<div class="wpsg_form_field">
+			<div class="wpsg_form_left">
+				<label for="wpsg_mod_stock_stock_count"><?php echo __('Lagerbestand zählen', 'wpsg'); ?>:</label>
+			</div>
+			<div class="wpsg_form_right">
+				<input id="wpsg_mod_stock_stock_count" type="checkbox" class="checkbox" name="wpsg_mod_stock_stock_count" value="1" <?php echo (($this->view['data']['stock_count'] == '1')?'checked="checked"':''); ?> />
+			</div>
+			<div class="wpsg_clear"></div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,184 @@
+<script type="text/javascript">
+				
+	jQuery(document).ready(function() { 
+ 
+		kk_switchTemplate();
+						
+	} );	
+
+	/**
+	 *
+	 */
+	function kk_switchTemplate()
+	{
+ 
+		var template_val = jQuery("#kk_template").val();
+
+		if (template_val != "-1")
+		{
+
+			jQuery.ajax( { 
+				url: "<?php echo WPSG_URL_WP.'wp-admin/admin.php?page=wpsg-Order&action=ajax&mod=wpsg_mod_kundenkontakt&edit_id='.$this->view['data']['id'].'&noheader=1&do=kk_switchTemplate' ?>",
+				dataType: 'json',
+				data: {					
+					template_file: template_val
+				},
+				success: function(data) {
+					
+					jQuery("#kk_subject").val(data.subject);
+					
+					<?php if ($this->get_option('wpsg_htmlmail') === '1') { ?>
+					jQuery('#kk_html').html(data.content); 
+					tinyMCE.get("kk_html").setContent(data.content);					
+					<?php } else { ?>
+					jQuery("#kk_text").text(data.content);
+					<?php } ?>					
+					
+				}
+			} ); 
+			
+		}
+		else
+		{
+			
+			jQuery("#kk_subject").val('');			
+			jQuery("#kk_template").val(-1);
+
+			<?php if ($this->get_option('wpsg_htmlmail') === '1') { ?>
+			jQuery('#kk_html').html(''); 
+			//tinyMCE.get("kk_html").setContent('');
+			<?php } else { ?>
+			jQuery("#kk_text").text('');
+			<?php } ?>
+			
+		}
+		
+	}
+
+	/**
+	 *
+	 */
+	function kk_sendMail()
+	{
+		
+		if (jQuery('#kk_subject').val() == '')
+		{
+
+			alert("<?php echo __('Bitte einen Betreff angeben!', 'wpsg'); ?>");
+			return;
+			
+		}
+
+		if (jQuery('#kk_text').val() == '')
+		{
+
+			alert("<?php echo __('Bitte einen Text angeben!', 'wpsg'); ?>");
+			return;
+			
+		}
+
+		var text = "";
+
+		<?php if ($this->get_option('wpsg_htmlmail') === '1') { ?>
+		text = tinyMCE.get('kk_html').getContent();
+		<?php } else { ?>
+		text = jQuery('#kk_text').val();
+		<?php } ?>
+		
+		jQuery.ajax( {
+			url: "<?php echo WPSG_URL_WP.'wp-admin/admin.php?page=wpsg-Order&action=ajax&mod=wpsg_mod_kundenkontakt&edit_id='.$this->view['data']['id'].'&noheader=1&do=kk_sendMail' ?>",
+			method: 'post',
+			data: {
+				text: text,				
+				absendermail: jQuery('#kk_absendermail').val(),
+				absendername: jQuery('#kk_absendername').val(),
+				subject: jQuery('#kk_subject').val(),
+				empfaenger: "<?php echo $this->view['data']['email']; ?>"
+			},
+			success: function(data) {
+				
+				if (data != '1')
+				{
+					alert("<?php echo __("Mail konnte nicht versendet werden es ist ein Fehler aufgetreten!", "wpsg"); ?>");
+				}
+				else
+				{
+
+					<?php if ($this->get_option('wpsg_htmlmail') === '1') { ?>
+					tinyMCE.get('kk_html').setContent('');
+					<?php } else { ?>
+					jQuery('#kk_text').html('');
+					<?php } ?>
+					
+					jQuery('#kk_subject').val('');
+					jQuery('#kk_absendermail').val('');
+					jQuery('#kk_absendername').val('');
+					jQuery('#kk_template').val(-1);
+
+					alert("<?php echo __('Mail wurde erfolgreich an den Kunden gesendet.', 'wpsg'); ?>");
+
+					location.reload();
+					
+				}
+				
+			}
+			
+		} );	
+		
+	}
+	
+	
+</script>
+<?php //wpsg_debug($this->view) ?>
+<div class="postbox" id="wpsg_kundenkontakt">			
+	<h3 class="wpsg_handlediv">
+		<span title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>" class="handlediv"><br /></span>
+		<span><?php echo __('Kundenkontakt', 'wpsg'); ?></span>
+	</h3>
+	<div class="inside">						
+		<div style="padding:5px;">
+			
+			<form method="post" action="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Order&action=ajax&mod=wpsg_mod_kundenkontakt&edit_id=<?php echo $this->view['data']['id']; ?>&noheader=1">	
+					
+				<label>
+					<?php echo __("Template", "wpsg"); ?>:
+					<select name="kk_template" style="width:50%; float:right;" id="kk_template" onchange="kk_switchTemplate();">
+					<option value="-1"><?php echo __("Bitte auswählen", "wpsg"); ?></option>
+					<?php foreach ($this->view['arTemplates'] as $k => $v) { ?>
+					<option value="<?php echo rawurlencode($v['filename']); ?>"><?php echo htmlspecialchars($v['name']); ?></option>
+					<?php } ?>
+					</select>			
+				</label>
+				<div class="wpsg_clear"></div>
+									
+				<label>
+					<?php echo __("Betreff", "wpsg"); ?>:
+					<input type="text" name="kk_subject" style="width:50%; float:right;" id="kk_subject" />
+				</label>
+				<div class="wpsg_clear"></div>
+							
+				<?php if ($this->get_option('wpsg_htmlmail') === '1') { ?>				
+				
+					<?php echo __('Text (HTML)', 'wpsg'); ?>:<br /><br />		
+					
+					<?php wp_editor('', 'kk_html'); ?>
+					
+				
+				<div class="wpsg_clear"></div>
+				<?php } else { ?>			
+				<label>
+					<?php echo __("Text", "wpsg"); ?>:<br />
+					<textarea id="kk_text" style="width:100%; float:right; height:150px;"></textarea>
+				</label>
+				<div class="wpsg_clear"></div>
+				<?php } ?>
+									
+				<br />
+				<input type="button" class="button" onclick="kk_sendMail(); return false;" value="<?php echo __("Absenden", "wpsg"); ?>" style="float:right;" />
+				<div class="wpsg_clear"></div>
+				
+			</form>
+			
+		</div>
+	</div>
+</div>

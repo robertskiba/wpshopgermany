@@ -1,0 +1,23 @@
+<?php
+
+	/**
+	 * Template für die Registrierung während des Checkouts
+	 * wird von checkout.phtml eingebunden
+	 */
+
+?>
+<div class="wpsg_checkoutblock">
+	<label for="wpsg_mod_kundenverwaltung_pwd1"><?php echo __("Passwort", "wpsg"); ?>
+	<?php if ($this->get_option('wpsg_mod_kundenverwaltung_showCheckoutRegisterzwand') == '1') { ?><span class="wpsg_required">*</span><?php } ?>:
+	</label>
+	<input class="wpsg_checkout <?php echo (($this->get_option('wpsg_mod_kundenverwaltung_showCheckoutRegisterzwand') == '1')?'validate[required]':''); ?> <?php echo ((in_array("mod_kundenverwaltung_pwd1", (array)$this->view['error']))?'wpsg_error':''); ?>" type="password" id="mod_kundenverwaltung_pwd1" name="wpsg[mod_kundenverwaltung][pwd1]" value="" />			
+</div>
+
+<div class="wpsg_checkoutblock">		
+	<label for="wpsg_mod_kundenverwaltung_pwd2"><?php echo __("Passwort wiederholen", "wpsg"); ?>
+	<?php if ($this->get_option('wpsg_mod_kundenverwaltung_showCheckoutRegisterzwand') == '1') { ?><span class="wpsg_required">*</span><?php } ?>:
+	</label>
+	<input class="wpsg_checkout <?php echo (($this->get_option('wpsg_mod_kundenverwaltung_showCheckoutRegisterzwand') == '1')?'validate[required]':''); ?> <?php echo ((in_array("mod_kundenverwaltung_pwd2", (array)$this->view['error']))?'wpsg_error':''); ?>" type="password" id="wpsg_mod_kundenverwaltung_pwd2" name="wpsg[mod_kundenverwaltung][pwd2]" value="" />
+</div>
+
+<div class="wpsg_clear"></div>

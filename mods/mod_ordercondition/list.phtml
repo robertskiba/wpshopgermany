@@ -1,0 +1,121 @@
+<?php
+
+	/**
+	 * Template für die Liste der Bestellbedingungen im Backend
+	 */
+
+?>
+<script type="text/javascript">/* <![CDATA[ */
+
+	jQuery(document).ready(function() {
+	
+		jQuery('.wpsg_mod_ordercondition_edit_name').each(function() {
+	
+			var oc_id = jQuery(this).attr("id").replace(/wpsg_mod_ordercondition_name_/, '');
+			
+			jQuery(this).editable('<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_ordercondition&do=inlinedit&noheader=1', {
+				submitdata: { 
+		    		field: 'name',
+		    		oc_id: oc_id
+				}, 					
+				submit: '<?php echo __('Speichern', 'wpsg'); ?>',
+				placeholder: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+				indicator: '<?php echo __('Speicher ...', 'wpsg'); ?>',
+		    	tooltip: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>'
+			} );
+	
+		} );
+	
+		jQuery('.wpsg_mod_ordercondition_edit_typ').bind('change', function() {
+	
+			var oc_id = jQuery(this).attr("id").replace(/wpsg_mod_ordercondition_typ_/, '');
+			var value = jQuery(this).val();
+			
+			jQuery.ajax( {
+				url: '<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_ordercondition&do=inlinedit&noheader=1',
+				data: {
+					field: 'typ',
+					value: value,
+					oc_id: oc_id
+				}				
+			} );
+			
+		} );
+	
+		jQuery('#wpsg_oc_list .wpsg_icon_remove').bind('click', function() {
+	
+			if (!confirm('<?php echo __('Sind Sie sich sicher, dass sie diese Bestellbedingung entfernen möchten?', 'wpsg'); ?>')) return false;
+
+			jQuery('#wpsg_oc_list').html('<img src="<?php echo WPSG_URL; ?>views/gfx/ajax-loader.gif" alt="<?php echo __('Bitte warten ...', 'wpsg'); ?>" />');
+			
+			jQuery.ajax( {
+				url: '<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_ordercondition&do=remove&noheader=1',
+				data: {
+					oc_id: jQuery(this).parent().attr("id")
+				},
+				success: function(data)
+				{
+
+					jQuery('#wpsg_oc_list').html(data);
+					
+				}				
+			} );
+			
+		} );
+		
+	} );
+
+/* ]]> */</script>
+<?php if (!is_array($this->view['wpsg_mod_ordercondition']['data']) || sizeof($this->view['wpsg_mod_ordercondition']['data']) <= 0) { ?>
+<?php echo __('Bisher keine Bestellbedingungen angelegt.', 'wpsg'); ?>
+<?php } else { ?>
+<?php $i = 0; foreach ($this->view['wpsg_mod_ordercondition']['data'] as $oc) { $i ++; ?>
+	
+	<div id="wpsg_mod_ordercondition_row_<?php echo $oc['id']; ?>">
+
+		<?php echo wpsg_drawForm_Input($oc['id'], __('ID', 'wpsg'), $oc['id'], array('text' => true, 'remove' => '1')); ?>
+		<?php echo wpsg_drawForm_Input('wpsg_mod_ordercondition_name_'.$oc['id'], __('Bezeichnung', 'wpsg'), $oc['name'], array('text' => true, 'class_text' => 'wpsg_mod_ordercondition_edit_name wpsg_editable')); ?>
+		<?php echo wpsg_drawForm_Select('wpsg_mod_ordercondition_typ_'.$oc['id'], __('Wirkungsbereich', 'wpsg'), array('0' => __('Inaktiv', 'wpsg'), '1' => __('Jede Bestellung', 'wpsg'), '2' => __('Bestimmte Produkte', 'wpsg')), $oc['typ'], array('class_select' => 'wpsg_editable wpsg_mod_ordercondition_edit_typ')); ?>
+		
+		<div class="wpsg_form_field">
+			<div class="wpsg_form_left">
+				<label for="wpsg_mod_ordercondition_text_<?php echo $oc['id']; ?>"><?php echo __('Bedingungstext', 'wpsg'); ?>:</label>
+			</div>
+			<div class="wpsg_form_right">
+				<p>
+					<a href="#" onclick="return wpsg_showOCText(<?php echo $oc['id']; ?>);"><?php echo __('Editor anzeigen/verbergen', 'wpsg'); ?></a>
+				</p>
+			</div>
+		</div>
+		<div class="wpsg_clear"></div>
+				
+		<div class="wpsg_form_field wpsg_mod_ordercondition_editor wpsg_mod_ordercondition_editor_<?php echo $oc['id']; ?>" style="display:none; width:745px; min-height:225px;">	
+			<textarea class="wpsg_mod_ordercondition_text" id="oc_<?php echo $oc['id']; ?>" name="oc[<?php echo $oc['id']; ?>]"><?php echo wpsg_hspc($oc['text']); ?></textarea>
+			<div class="wpsg_clear"></div><br />
+			<input class="button" type="button" onclick="wpsg_saveOCText(<?php echo $oc['id']; ?>);" value="<?php echo __('Text speichern', 'wpsg'); ?>" /><br /><br />
+		</div>
+	
+		<div class="wpsg_form_field">
+			<div class="wpsg_form_left">
+				<label for="wpsg_mod_ordercondition_errortext_<?php echo $oc['id']; ?>"><?php echo __('Fehlertext', 'wpsg'); ?>:</label>
+			</div>
+			<div class="wpsg_form_right">
+				<p>
+					<a href="#" onclick="return wpsg_showOCErrorText(<?php echo $oc['id']; ?>);"><?php echo __('Editor anzeigen/verbergen', 'wpsg'); ?></a>
+				</p>
+			</div>
+		</div>
+		<div class="wpsg_clear"></div>
+				
+		<div class="wpsg_form_field wpsg_mod_ordercondition_editor wpsg_mod_ordercondition_editor_errortext_<?php echo $oc['id']; ?>" style="display:none; width:745px; min-height:225px;">	
+			<textarea class="wpsg_mod_ordercondition_text" id="oc_errortext_<?php echo $oc['id']; ?>" name="oc[<?php echo $oc['id']; ?>]"><?php echo wpsg_hspc($oc['errortext']); ?></textarea>
+			<div class="wpsg_clear"></div><br />
+			<input class="button" type="button" onclick="wpsg_saveOCErrorText(<?php echo $oc['id']; ?>);" value="<?php echo __('Text speichern', 'wpsg'); ?>" /><br />
+		</div>		
+	
+		<?php if ($i < sizeof($this->view['wpsg_mod_ordercondition']['data'])) { ?><br /><hr /><?php } ?>
+	
+	</div>
+
+<?php } ?>
+<?php } ?>

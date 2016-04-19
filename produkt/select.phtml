@@ -1,0 +1,160 @@
+<?php
+
+	/**
+	 * Template für die Produktauswahl über den RTE
+	 */
+
+?><html>
+	<head>
+	
+		<?php if ($_REQUEST['wpsg_mode'] != 'wpsg_mod_relatedproducts') { ?>
+		<script language="javascript" type="text/javascript" src="<?php echo get_option('siteurl'); ?>/wp-includes/js/tinymce/tiny_mce_popup.js"></script>
+		<script language="javascript" type="text/javascript" src="<?php echo get_option('siteurl'); ?>/wp-includes/js/tinymce/utils/mctabs.js"></script>
+		<script language="javascript" type="text/javascript" src="<?php echo get_option('siteurl'); ?>/wp-includes/js/tinymce/utils/form_utils.js"></script>
+	 	<?php } ?>
+	 
+		<link rel="stylesheet" href="<?php echo $this->getRessourceURL('css/admin.css'); ?>" type="text/css" media="all" />
+				
+		<title><?php echo __('wpShopGermany Produktauswahl', 'wpsg'); ?></title>
+			
+		<script type="text/javascript">
+		
+			function insertProdukt()
+			{
+
+				<?php if ($_REQUEST['wpsg_mode'] == 'wpsg_mod_relatedproducts') { ?>
+				var produkt_id = document.getElementById("produkt").value;
+				var template = document.getElementById("template").value;
+				var template_file = document.getElementById("template").options[document.getElementById("template").selectedIndex].text;
+
+				jQuery('#relatedproducts_list').html('<img src="<?php echo WPSG_URL; ?>views/gfx/ajax-loader.gif" alt="<?php echo __('Bitte warten ...', 'wpsg'); ?>" />');
+				
+				jQuery.ajax( { 
+					url: '<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Produkt&action=ajax&mod=wpsg_mod_relatedproducts&cmd=wpsg_rp_add&noheader=1&edit_id=<?php echo $_REQUEST['edit_id'] ?>',
+					data: {
+						'rel_id': produkt_id,
+						'template': template,
+						'template_file': template_file
+					},
+					success: function(data) {
+						jQuery('#relatedproducts_list').html(data);
+					}
+				} );
+				
+				<?php } else { ?>
+				var produkt_id = document.getElementById("produkt").value;
+				var text = "[wpshopgermany product=\"" + produkt_id + "\"";
+		
+				if (document.getElementById("template") != null && document.getElementById("template").value != "0")
+				{
+
+					text += " template=\"" + document.getElementById("template").options[document.getElementById("template").selectedIndex].text + "\"";
+				
+				}
+				
+				text += "]";
+									
+				if (window.tinyMCE)
+				{
+
+					<?php if (get_bloginfo('version') < 3.9) { ?>
+						
+					window.tinyMCE.execInstanceCommand("content", "mceInsertContent", false, text);
+					tinyMCEPopup.editor.execCommand("mceRepaint");			
+						
+					<?php } else { ?>
+
+					parent.tinyMCE.execCommand('mceInsertContent', false, text);
+					parent.tinyMCE.activeEditor.windowManager.close();
+						
+					<?php } ?>
+													
+									
+					tinyMCEPopup.close();
+																			
+				}
+				<?php } ?>
+				
+				return false;
+									
+			} // function insertProdukt()
+
+			<?php if ($_REQUEST['wpsg_mode'] != 'wpsg_mod_relatedproducts' && $this->hasMod('wpsg_mod_productgroups')) { ?>			
+			function insertProductgroup()
+			{
+
+				var group = document.getElementById("produktgroup").value; 
+				var order = document.getElementById("produktgroup_order").value; 
+				var direction = document.getElementById("produktgroup_direction").value; 
+
+				if (window.tinyMCE)
+				{
+
+					var text = '[wpshopgermany produktgruppe="' + group + '" sortierung="' + order + '" richtung="' + direction + '"]';
+
+					<?php if (get_bloginfo('version') < 3.9) { ?>
+								 			
+					window.tinyMCE.execInstanceCommand("content", "mceInsertContent", false, text);							
+					tinyMCEPopup.editor.execCommand("mceRepaint");							
+
+					<?php } else { ?>
+
+					parent.tinyMCE.execCommand('mceInsertContent', false, text);
+					parent.tinyMCE.activeEditor.windowManager.close();
+						
+					<?php } ?>
+					
+					tinyMCEPopup.close();
+																			
+				}
+
+				return false;
+				
+			} // function insertProductgroup()
+			<?php } ?>
+			
+			<?php if ($_REQUEST['wpsg_mode'] == 'wpsg_mod_relatedproducts') { ?>
+			function insertProduktClose()
+			{
+
+				insertProdukt();
+				jQuery('#wpsg_relatedproducts_produktauswahl').dialog('destroy');
+
+				return false;
+				
+			} // function insertProduktClose()
+			<?php } ?>
+			
+		</script> 
+	</head>
+	
+	<body style="margin:0px; padding:0px;">
+
+		<div class="wpsg_productselect">
+			<?php if (sizeof($this->view['arProdukte']) <= 0) { ?>
+				<p><?php echo __('Keine Produkte in der Datenbank.', 'wpsg'); ?></p>
+			<?php } else { ?>			
+				
+				<?php echo wpsg_drawForm_Select('produkt', __('Produkt', 'wpsg'), $this->view['arProdukte'], false); ?>
+				<?php echo wpsg_drawForm_Select('template', __('Template', 'wpsg'), $this->view['arTemplates'], false); ?>
+				
+				<?php if ($_REQUEST['wpsg_mode'] == 'wpsg_mod_relatedproducts') { ?>
+				<input class="button" type="button" style="float:right; padding:2px 10px 2px 10px;" value="<?php echo __('Einfügen und schließen', 'wpsg'); ?>" onclick="return insertProduktClose();" />
+				<input class="button" type="button" style="float:right; padding:2px 10px 2px 10px; margin-right:5px;" value="<?php echo __('Einfügen', 'wpsg'); ?>" onclick="return insertProdukt();" />
+				<?php } else { ?>
+				<input type="button" style="float:right; padding:2px;" value="<?php echo __('Einfügen', 'wpsg'); ?>" onclick="return insertProdukt();" />
+				<?php } ?>
+				
+				<div class="wpsg_clear"></div><br />
+						 		
+				<?php if ($this->hasMod('wpsg_mod_productgroups') && $_REQUEST['wpsg_mode'] != 'wpsg_mod_relatedproducts') { ?>		
+				<?php echo wpsg_drawForm_Select('produktgroup', __('Produktgruppe', 'wpsg'), $this->view['arProduktgroups'], false); ?>
+				<?php echo wpsg_drawForm_Select('produktgroup_order', __('Sortierung', 'wpsg'), $this->view['arProductgroupsOrder'], false); ?>
+				<?php echo wpsg_drawForm_Select('produktgroup_direction', __('Richtung', 'wpsg'), $this->view['arProductgroupsDirection'], false); ?> 
+				<input type="button" style="float:right; padding:2px;" value="<?php echo __('Einfügen', 'wpsg'); ?>" onclick="return insertProductgroup();" />
+				<?php } ?>
+						 				
+			<?php } ?>
+		</div>
+	</body>
+</html>

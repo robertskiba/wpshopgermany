@@ -1,0 +1,8 @@
+<?php 
+
+	/**
+	 * Template für ein Produktbild
+	 */
+ 
+?>
+<a href="<?php echo $this->view['url_orginal']; ?>" class="wpsg_imagelink thickbox" rel="<?php echo $this->view['rel']; ?>-<?php echo $this->view['produkt']['id']; ?>" title="<?php echo wpsg_hspc($this->view['produkt']['name']); ?>"><img src="<?php echo $this->view['url_tn']; ?>" alt="<?php echo htmlspecialchars($this->view['produkt']['name']); ?>" /></a>

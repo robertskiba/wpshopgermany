@@ -1,0 +1,524 @@
+<?php
+	
+	/**
+	 * Template für das Produkt Anlegen/Bearbeiten Formular
+	 * Hier sollten keine Anpassungen vorgenommen werden
+	 */
+
+?>
+<script type="text/javascript">/* <![CDATA[ */
+
+	wpsg_product_edit_change = new Array();
+	                                            
+	jQuery(document).ready( function() {
+		
+	    jQuery('.wpsg_form_help').tipTip();
+
+	    jQuery("#normal-sortables, #side-sortables").sortable({
+			connectWith: ".meta-box-sortables",
+			placeholder: 'wpsg_placeholder',
+			dropOnEmpty: true, 
+			cursor: 'move',
+			grid: [50, 20],
+			handle: '.wpsg_handlediv',
+			forceHelperSize: true,
+			forcePlaceholderSize: true,
+			opacity: 0.8,
+			stop: function(e,ui) {
+
+				var ser = jQuery("#normal-sortables").sortable("serialize");				
+				ser = ser.replace(/\&wpsg\[\]\=/g, ',').replace(/wpsg\[\]\=/g, '');
+
+				jQuery.cookie('wpsg_product_view_normal', ser);
+
+				var ser = jQuery("#side-sortables").sortable("serialize");								
+				ser = ser.replace(/\&wpsg\[\]\=/g, ',').replace(/wpsg\[\]\=/g, '');
+				
+				jQuery.cookie('wpsg_product_view_side', ser);
+				
+			},
+			receive: function(e, ui) {
+			}
+		}); 
+
+	    if (jQuery.cookie('wpsg_product_view_normal') != null)
+		{
+
+			var divs = jQuery.cookie('wpsg_product_view_normal').split(',').reverse();
+
+			for (index in divs)
+			{
+
+				jQuery('#normal-sortables').prepend(jQuery('#wpsg_' + divs[index]));
+				
+			}
+			
+		}
+
+		if (jQuery.cookie('wpsg_product_view_side') != null)
+		{
+
+			var divs = jQuery.cookie('wpsg_product_view_side').split(',').reverse();
+
+			for (index in divs)
+			{
+
+				jQuery('#side-sortables').prepend(jQuery('#wpsg_' + divs[index]));
+				
+			}
+			
+		}
+
+		var click_x = false;
+		var click_y = false;
+		
+		jQuery('.wpsg_handlediv').bind('click', function(ev) {
+
+			if (Math.abs(click_x - ev.pageX) <= 5 && Math.abs(click_y - ev.pageY) <= 5)
+			{
+
+				jQuery(this).next().toggle();
+
+				var arClose = new Array();
+				jQuery('.wpsg_product_view .postbox .inside:hidden').each(function() {
+					arClose.push(jQuery(this).parent().attr("id"));
+				} );
+
+				jQuery.cookie('wpsg_product_closed', arClose.join(','));
+					
+			}
+			
+		} );
+		
+		jQuery('.wpsg_handlediv').bind('mousedown', function(ev) {
+
+			click_x = ev.pageX;
+			click_y = ev.pageY;	
+						
+		} );
+
+		if (jQuery.cookie('wpsg_product_closed') != null && jQuery.cookie('wpsg_product_closed') != '')
+		{
+
+			var arClose = jQuery.cookie('wpsg_product_closed').split(',');
+
+			for (index in arClose)
+			{
+
+				jQuery('#' + arClose[index] + ' .inside').hide();
+							
+			}
+			
+		}
+
+		jQuery('#submit, #submit_index').bind('click', function() {
+
+			if (wpsg_product_edit_change.length > 0)
+			{
+
+				jQuery('.wpsg_change_error').removeClass('wpsg_change_error');
+				
+			    for (var i = 0; i < wpsg_product_edit_change.length; i++) {
+			    	 
+			        jQuery('#' + wpsg_product_edit_change[i]).addClass('wpsg_change_error');
+			        
+			    }
+
+			    alert('<?php echo __('Bitte überprüfen Sie die rot markierten Felder. Änderungen in diesen Feldern gehen beim Speichern verloren.', 'wpsg'); ?>');
+
+			    return false;
+				
+			}
+			else
+			{
+
+				return true;
+				
+			}
+			
+		} );
+		
+		// Flaggen für die aktuelle Sprache davorbauen
+		<?php if ($this->isMultiLingual() && isset($_REQUEST['wpsg_lang'])) { $arLang = $this->getStoreLanguages(); $lang = $arLang[$_REQUEST['wpsg_lang']]; ?>
+		jQuery('.wpsg_handlediv').prepend('<img src="<?php echo $this->getFlagURL().$lang['flag']; ?>" alt="<?php echo $lang['name']; ?>" />&nbsp;');
+		<?php } ?>
+	    
+	} );
+             
+/* ]]> */</script> 
+
+<div class="wrap columns-2 wpsg_produkt_addedit wpsg_product_view" id="wpsg_product_view">
+	
+	<div id="wpsg_relatedproducts_produktauswahl"></div>
+
+	<div class="icon32 icon32-posts-post" id="icon-edit"><br /></div>
+	<h2>
+		<?php if ($_REQUEST['edit_id'] > 0) { ?>
+		<?php echo __('Produkt bearbeiten', 'wpsg'); ?>
+		<?php if (isset($_REQUEST['wpsg_lang'])) { ?>
+		&nbsp;[<?php $arLang = $this->getStoreLanguages(); echo $arLang[$_REQUEST['wpsg_lang']]['name']; ?> <img src="<?php echo $this->getFlagURL().$arLang[$_REQUEST['wpsg_lang']]['flag']; ?>" alt="" />]
+		<?php } ?>
+		<?php } else { ?>
+		<?php echo __('Neues Produkt', 'wpsg'); ?>
+		<?php } ?>		
+	</h2>
+	<br />
+	
+	<?php echo $this->writeBackendMessage(); ?>
+	
+ 	<form method="POST" action="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Produkt&amp;action=save&amp;noheader=1" enctype="multipart/form-data">
+
+		<div id="postbox" class="metabox-holder has-right-sidebar">
+
+			<div id="side-info-column" class="inner-sidebar" style="width:386px;">
+				<div id="side-sortables" class="meta-box-sortables ui-sortable" style="width:380px;">
+							
+					<?php if (!isset($_REQUEST['wpsg_lang'])) { ?>
+					<div id="wpsg_preis" class="postbox">						
+						<h3 class="wpsg_handlediv">
+							<div class="handlediv" title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>"><br /></div>
+							<span><?php echo __('Preis / Steuer', 'wpsg'); ?></span>
+						</h3>
+						<div class="inside">
+							<?php echo wpsg_drawForm_Select('mwst_key', __('Steuergruppe', 'wpsg'), wpsg_tax_groups(true), $this->view['data']['mwst_key']); ?>
+							<?php if ($this->get_option('wpsg_preisangaben') == WPSG_NETTO) { ?>
+							<div class="wpsg_form_field">
+								<div class="wpsg_form_left">
+									<label for="preis">
+										<?php echo __('Preis (NETTO)', 'wpsg'); ?>:										
+									</label>
+								</div>
+								<div class="wpsg_form_right">
+									<p class="waehrung"><?php echo $this->get_option('wpsg_currency'); ?></p>									
+									<input id="preis" type="text" value="<?php echo wpsg_hspc(wpsg_ff($this->view['data']['preis'])); ?>" name="preis" class="wpsg_preis" />																		
+								</div>
+								<div class="wpsg_clear"></div>
+							</div>
+							<?php } ?>
+							<?php if ($this->get_option('wpsg_preisangaben') == WPSG_BRUTTO) { ?>
+							<div class="wpsg_form_field">
+								<div class="wpsg_form_left">									
+									<?php echo __('Preis (BRUTTO)', 'wpsg'); ?>:
+								</div>
+								<div class="wpsg_form_right">
+									<p class="waehrung"><?php echo $this->get_option('wpsg_currency'); ?></p>
+									<input id="preis" type="text" value="<?php echo wpsg_hspc(wpsg_ff($this->view['data']['preis'])); ?>" name="preis" class="wpsg_preis" />
+								</div>
+								<div class="wpsg_clear"></div>
+							</div>
+							<?php } ?>
+							<?php echo wpsg_drawForm_Input('', __('Steueranteil', 'wpsg'), wpsg_ff($this->view['data']['tax_sum_value'], $this->get_option('wpsg_currency')).' / '.$this->getDefaultCountry()->kuerzel, array('text' => true)); ?>
+							<?php echo wpsg_drawForm_Checkbox('euleistungsortregel', __('Produkt unterliegt den EU-Leistungsortregeln', 'wpsg'), $this->view['data']['euleistungsortregel'], array('fullrow' => true, 'help' => 'EU-Leistungsortregel')); ?>
+							<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&amp;subaction=laender">Länderverwaltung</a>							
+						</div>
+					</div>
+					<div id="wpsg_paymentmethods" class="postbox">						
+						<h3 class="wpsg_handlediv">
+							<div class="handlediv" title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>"><br /></div>
+							<span><?php echo __('Erlaubte Zahlungsarten', 'wpsg'); ?></span>
+						</h3>
+						<div class="inside wpsg_form_field_max">	
+							<select id="wpsg_paymentmethods_select" name="wpsg_paymentmethods_select">
+								<option value="0"><?php echo __('Alle', 'wpsg'); ?></option>
+								<option value="1" <?php echo ((wpsg_isSizedArray($this->view['allowedPayment']))?'selected="selected"':''); ?>><?php echo __('Auswahl', 'wpsg'); ?></option>
+							</select>
+							<div class="wpsg_paymentmethods_select">
+								<?php foreach ($this->arPayment as $p) { if (!isset($p['deleted']) || $p['deleted'] != '1') { ?>
+									<?php echo wpsg_drawForm_Checkbox('wpsg_paymentmethods[]', $p['name'], in_array($p['id'], (array)$this->view['allowedPayment']), array('id' => 'wpsg_paymentmethods_'.$p['id'], 'value' => $p['id'])); ?>
+								<?php } } ?>
+							</div>
+							
+							<script type="text/javascript">/* <![CDATA[ */
+
+								jQuery('#wpsg_paymentmethods_select').bind('change', function() {
+
+									if (jQuery(this).val() == '1')
+									{
+
+										jQuery('.wpsg_paymentmethods_select').show();
+										
+									}
+									else
+									{
+
+										jQuery('.wpsg_paymentmethods_select').hide();
+										
+									}
+									
+								} ).change();
+							
+							/* ]]> */</script>
+						</div>
+					</div>
+					<div id="wpsg_shippingmethods" class="postbox">
+						<h3 class="wpsg_handlediv">
+							<div class="handlediv" title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>"><br /></div>
+							<span><?php echo __('Erlaubte Versandarten', 'wpsg'); ?></span>
+						</h3>
+						<div class="inside wpsg_form_field_max">
+							<select id="wpsg_shippingmethods_select" name="wpsg_shippingmethods_select">
+								<option value="0"><?php echo __('Alle', 'wpsg'); ?></option>
+								<option value="1" <?php echo ((wpsg_isSizedArray($this->view['allowedShipping']))?'selected="selected"':''); ?>><?php echo __('Auswahl', 'wpsg'); ?></option>								
+							</select>
+							<div class="wpsg_shippingmethods_select">
+								<?php foreach ($this->arShipping as $s) { if (!isset($s['deleted']) || $s['deleted'] != '1') { ?>
+									<?php echo wpsg_drawForm_Checkbox('wpsg_shippingmethods[]', $s['name'], in_array($s['id'], (array)$this->view['allowedShipping']), array('id' => 'wpsg_paymentmethods_'.$s['id'], 'value' => $s['id'])); ?>
+								<?php } } ?>
+							</div>
+						</div>
+						
+						<script type="text/javascript">/* <![CDATA[ */
+
+							jQuery('#wpsg_shippingmethods_select').bind('change', function() {
+
+								if (jQuery(this).val() == '1')
+								{
+
+									jQuery('.wpsg_shippingmethods_select').show();
+									
+								}
+								else
+								{
+
+									jQuery('.wpsg_shippingmethods_select').hide();
+									
+								}
+								
+							} ).change();
+						
+						/* ]]> */</script>
+					</div>
+					<?php } ?>
+										
+					<?php $this->callMods('produkt_edit_sidebar', array(&$this->view['data'])); ?>
+					 
+				</div>
+			</div>
+		
+			<div id="post-body">
+				
+				<div id="titlediv" style="margin-right:400px;">
+					<div id="titlewrap">					
+						<input type="text" placeholder="<?php echo __('Produktname', 'wpsg'); ?>" id="title" value="<?php echo wpsg_hspc($this->view['data']['name']); ?>" tabindex="1" size="30" name="name">
+					</div>
+				</div>
+				
+				<br />
+								
+				<div id="normal-sortables" class="meta-box-sortables" style="margin-right:400px;">
+						
+					<div id="wpsg_generally" class="postbox">		
+						<h3 class="wpsg_handlediv">
+							<span title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>" class="handlediv"><br /></span>
+							<span><?php echo __('Allgemein', 'wpsg'); ?></span>
+						</h3>
+						<div class="inside">
+							<?php if ($this->isMultiLingual()) { ?>
+							<div class="wpsg_form_field">
+								<div class="wpsg_form_left">
+									<label for="produkt_anr"><?php echo __("Übersetzungen", "wpsg"); ?>:</label>
+								</div>								
+								<div class="wpsg_form_right wpsg_form_language">																											
+									<?php foreach ($this->getStoreLanguages() as $a) { ?>
+										<?php if ((isset($_REQUEST['wpsg_lang']) && $_REQUEST['wpsg_lang'] != $a['locale']) || (!isset($_REQUEST['wpsg_lang']) && $a['lang'] != $GLOBALS['q_config']['default_language'])) { ?>
+										<?php if (isset($_REQUEST['wpsg_lang']) && $a['lang'] == $GLOBALS['q_config']['default_language']) { ?>
+										<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Produkt&action=edit&edit_id=<?php echo $_REQUEST['edit_id']; ?>" title="<?php echo wpsg_translate(__('Zu Sprache #1# wechseln.', 'wpsg'), $a['name']); ?>">
+										<?php } else { ?>
+										<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Produkt&action=edit&edit_id=<?php echo $_REQUEST['edit_id']; ?>&wpsg_lang=<?php echo $a['locale']; ?>" title="<?php echo wpsg_translate(__('Zu Sprache #1# wechseln.', 'wpsg'), $a['name']); ?>">
+										<?php } ?>
+											<img src="<?php echo $this->getFlagURL().$a['flag']; ?>" alt="<?php echo wpsg_translate(__('Zu Sprache #1# wechseln.', 'wpsg'), $a['name']); ?>" />
+										</a>
+										<?php } ?>
+									<?php } ?>
+								</div>
+								<div class="wpsg_clear"></div>
+							</div>
+							<?php } ?>
+							<div class="wpsg_form_field">
+								<div class="wpsg_form_left">
+									<label for="produkt_anr"><?php echo __("Produktname (Detail)", "wpsg"); ?>:</label>
+								</div>
+								<div class="wpsg_form_right">
+									<input id="detailname" type="text" value="<?php echo wpsg_hspc($this->view['data']['detailname']); ?>" name="detailname" />
+								</div>
+								<div class="wpsg_clear"></div>
+							</div>
+							<?php if (wpsg_isSizedInt($this->view['data']['id']) && !isset($_REQUEST['wpsg_lang'])) { ?>
+							<div class="wpsg_form_field">
+								<div class="wpsg_form_left">
+									<label for="produkt_id"><?php echo __('Produkt ID', 'wpsg'); ?>:</label>
+								</div>
+								<div class="wpsg_form_right">
+									<input type="text" name="produkt_id" value="<?php echo wpsg_hspc($this->view['data']['id']); ?>" readonly="readonly" />
+								</div>
+								<div class="wpsg_clear"></div>
+							</div>
+							<?php } ?>
+							<?php if (!isset($_REQUEST['wpsg_lang'])) { ?>
+							<div class="wpsg_form_field">
+								<div class="wpsg_form_left">
+									<label for="produkt_anr"><?php echo __("Artikelnummer", "wpsg"); ?>:</label>
+								</div>
+								<div class="wpsg_form_right">
+									<input id="produkt_anr" type="text" value="<?php echo wpsg_hspc($this->view['data']['anr']); ?>" name="anr" />
+								</div>
+								<div class="wpsg_clear"></div>
+							</div>
+							<div class="wpsg_form_field">
+								<div class="wpsg_form_left">
+									<label for="produkt_ptemplate"><?php echo __('Produkttemplate', 'wpsg'); ?>:</label>									
+								</div>
+								<div class="wpsg_form_right">
+									<?php if (!is_array($this->view['templates']) || sizeof($this->view['templates']) <= 0) { ?>
+									<p class="wpsg_error"><?php echo __('Keine Templatedatein gefunden!', 'wpsg'); ?></p>
+									<?php } else { ?>
+									<select name="ptemplate_file" id="produkt_ptemplate">
+										<?php foreach ($this->view['templates'] as $t) { ?>
+										<option <?php echo (($t == $this->view['data']['ptemplate_file'] || (!isset($this->view['data']['ptemplate_file']) && $t == 'standard.phtml'))?'selected="selected"':''); ?> value="<?php echo wpsg_hspc($t); ?>"><?php echo wpsg_hspc($t); ?></option>
+										<?php } ?>
+									</select>
+									<?php } ?>
+								</div>
+								<div class="wpsg_clear"></div>
+							</div>
+							<div class="wpsg_form_field">
+								<div class="wpsg_form_left">
+									<label for="produkt_ptemplate"><?php echo __('URL Benachrichtigung', 'wpsg'); ?>:</label>									
+								</div>
+								<div class="wpsg_form_right">
+									<input style="width:95%;" type="text" name="posturl" class="wpsg_posturl" value="<?php echo wpsg_hspc($this->view['data']['posturl']); ?>" />
+									<div class="wpsg_clear"></div>
+									<label><input type="checkbox" <?php echo (($this->view['data']['posturl_verkauf'] == '1')?'checked="checked"':''); ?> value="1" name="posturl_verkauf" style="width:auto; float:none;" />&nbsp;<?php echo __('beim Verkauf', 'wpsg'); ?></label>
+									&nbsp;&nbsp;
+									<label><input type="checkbox" <?php echo (($this->view['data']['posturl_bezahlung'] == '1')?'checked="checked"':''); ?> value="1" name="posturl_bezahlung" style="width:auto; float:none;" />&nbsp;<?php echo __('bei Bezahlung', 'wpsg'); ?></label>
+									<a rel="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=URLBenachrichtigung" href="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=URLBenachrichtigung" class="wpsg_form_help"></a>									 						 
+								</div>
+								<div class="wpsg_clear"></div>
+							</div>	
+							<?php } ?>
+							
+							<?php if (!$this->hasMod('wpsg_mod_produktartikel') && !isset($_REQUEST['wpsg_lang'])) { ?>
+							<div class="wpsg_form_field">
+								<div class="wpsg_form_left">
+									<label for="partikel"><?php echo __('Zugeordneter Wordpress Artikel', 'wpsg'); ?>:</label>
+								</div>								
+								<div class="wpsg_form_right">
+									<select id="partikel" name="partikel">
+										<option value=""><?php echo __("Bitte auswählen", "wpsg"); ?></option>									
+										<?php $arArtikel = get_posts('numberposts=-1'); if (is_array($arArtikel) && sizeof($arArtikel) > 0) { ?>
+										<optgroup label="<?php echo __('Artikel', 'wpsg'); ?>">
+											<?php foreach ($arArtikel as $a) { ?>
+											<option <?php echo (($a->ID == $this->view['data']['partikel'])?'selected="selected"':''); ?> value="<?php echo $a->ID; ?>"><?php echo $a->post_title; ?></option>
+											<?php } ?>
+										</optgroup>
+										<?php } ?>
+										<?php $arPages = get_pages(); if (is_array($arPages) && sizeof($arPages) > 0) { ?>
+										<optgroup label="<?php echo __('Seiten', 'wpsg'); ?>">
+											<?php foreach ($arPages as $p) { ?>
+											<option <?php echo (($p->ID == $this->view['data']['partikel'])?'selected="selected"':''); ?> value="<?php echo $p->ID; ?>"><?php echo $p->post_title; ?></option>
+											<?php } ?>
+										</optgroup>
+										<?php } ?>
+									</select>
+								</div>
+								<div class="wpsg_clear"></div>
+							</div>
+							<?php } ?>
+							
+							<?php if (!isset($_REQUEST['wpsg_lang'])) { ?>
+							<?php echo wpsg_drawForm_Select('basket_multiple', __('Verhalten im Warenkorb', 'wpsg'), array(
+								'0' => __('Nur einmal mit beliebiger Menge (Standard)', 'wpsg'),
+								'4' => __('Nur einmal mit Menge 1', 'wpsg'),
+								'1' => __('Mehrfach mit beliebiger Menge', 'wpsg'),
+								'2' => __('Mehrfach mit Menge 1', 'wpsg')
+							), $this->view['data']['basket_multiple'], array('help' => 'basket_multiple')); ?>							
+							<?php } ?>
+							 
+							<?php if ($this->view['data']['id'] > 0) { ?>
+							<div class="wpsg_form_field">
+								<div class="wpsg_form_left">
+									<label for="produkt_ptemplate"><?php echo __('URL', 'wpsg'); ?>:</label>									
+								</div>
+								<div class="wpsg_form_right">	
+									<p>									
+										<a href="<?php echo $this->getProduktLink(array('id' => ((wpsg_isSizedInt($this->view['data']['lang_parent']))?$this->view['data']['lang_parent']:$this->view['data']['id']))); ?>"><?php echo $this->getProduktLink(array('id' => ((wpsg_isSizedInt($this->view['data']['lang_parent']))?$this->view['data']['lang_parent']:$this->view['data']['id']))); ?></a>
+									</p>
+								</div>
+								<div class="wpsg_clear"></div>
+							</div>	
+							<?php } ?>
+							
+							<?php $this->callMods('produkt_edit_allgemein', array(&$this->view['data'])); ?>
+							
+						</div>
+					</div>
+				
+					<div id="wpsg_description" class="postbox">		
+						<h3 class="wpsg_handlediv">
+							<span title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>" class="handlediv"><br /></span>
+							<span><?php echo __('Beschreibung', 'wpsg'); ?></span>
+						</h3>	
+						<div class="inside">
+						 
+							<?php 
+							
+							function wpsg_ShowTinyMCE() { 
+								
+								 
+								
+								wp_print_scripts('editor');
+								if (function_exists('add_thickbox')) add_thickbox();
+								wp_print_scripts('media-upload');
+								if (function_exists('wp_tiny_mce')) wp_tiny_mce();
+								wp_admin_css();
+								
+								do_action("admin_print_styles-post-php");
+								do_action('admin_print_styles');
+								
+							}
+							
+							function wpsg_formatTinyMCE($in)
+							{
+								
+								if (isset($in['theme_advanced_buttons1'])) $in['theme_advanced_buttons1'] = str_replace(",wpsg", "", $in['theme_advanced_buttons1']);
+								
+								return $in;
+								
+							}
+							
+							// Damit die qTranslate Interne Editor Übersetzung nicht aufgerufen wird
+							remove_filter('the_editor', 'qtrans_modifyRichEditor');
+							
+							add_filter('tiny_mce_before_init', 'wpsg_formatTinyMCE');
+							add_filter('admin_head','wpsg_ShowTinyMCE');
+							wp_editor($this->view['data']['beschreibung'], 'beschreibung');
+							
+							?>
+										
+						</div>
+					</div>
+			
+					<?php $this->callMods('produkt_edit_content', array(&$this->view['data'])); ?>
+				
+				</div>
+						
+				<?php if ($_REQUEST['edit_id'] > 0) { ?>
+				<input type="hidden" name="edit_id" value="<?php echo $_REQUEST['edit_id']; ?>" />
+				<?php } ?>
+				
+				<?php if (isset($_REQUEST['wpsg_lang'])) { ?>
+				<input type="hidden" name="wpsg_lang" value="<?php echo $_REQUEST['wpsg_lang']; ?>" />
+				<?php } ?>
+			
+				<p class="submit">
+					<input type="submit" value="<?php echo __('Produkt speichern', 'wpsg'); ?>" class="button-primary" id="submit" name="submit" />
+					<input type="submit" value="<?php echo __('Produkt speichern und zur Übersicht', 'wpsg'); ?>" class="button-primary" id="submit_index" name="submit_index" />
+				</p>
+				
+			</div>
+	
+		</div>
+	
+	</form>
+	
+</div> 

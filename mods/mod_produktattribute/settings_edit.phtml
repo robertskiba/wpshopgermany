@@ -1,0 +1,116 @@
+<?php
+
+	/**
+	 * Template für die Einstellungen des Moduls "Produktattribute"
+	 */
+
+	
+
+?>
+<script type="text/javascript">
+ 
+	/**
+	 * Wird beim wechsel des Typs von der Selectbox aufgerufen
+	 */
+	function wpsg_mod_produktattribute_changeTyp(pa_id)
+	{
+	
+		if (jQuery('#typ_' + pa_id).val() == '2')
+		{
+			jQuery('.auswahlrow_' + pa_id).show();
+		}
+		else
+		{
+			jQuery('.auswahlrow_' + pa_id).hide();
+		}
+
+		jQuery.ajax( {
+			url: '<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&subaction=module&modul=wpsg_mod_produktattribute&do=inlinedit&noheader=1',
+			data: {
+				field: 'typ',
+				value: jQuery('#typ_' + pa_id).val(),
+				pa_id: pa_id
+			},
+			success: function(data) {
+				if (data != "1") alert(data);
+			}
+		} );
+		
+	} // function wpsg_mod_produktattribute_changeTyp(pa_id)
+
+	/**
+	 * Wird beim hinzufügen eines neuen Produktattributes aufgerufen
+	 */
+	function wpsg_addPA()
+	{
+
+		jQuery('#wpsg_pa_list').html('<img src="<?php echo WPSG_URL; ?>views/gfx/ajax-loader.gif" alt="<?php echo __('Bitte warten ...', 'wpsg'); ?>" />');
+		
+		jQuery.ajax( {
+			url: '<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&subaction=module&modul=wpsg_mod_produktattribute&do=add&noheader=1',
+			success: function(data) {
+				jQuery('#wpsg_pa_list').html(data);
+			}
+		} );
+
+		return false;
+		
+	} // function wpsg_addPA()
+
+	/**
+	 * Zeigt den HTML Code, der das gewählte Produktattribute im Produkttemplate einbindet
+	 */
+	function wpsg_genPACode(pa_id)
+	{
+
+		jQuery("#wpsg_pa_code_dialog").dialog( {
+			'dialogClass': 'wp-dialog',           
+	        'modal': true,
+	        'width': 600,
+	        'height': 300,	       
+	        'title': '<?php echo __('HTML Code Block', 'wpsg'); ?>',
+	        open: function(event, ui) {
+
+	        	jQuery('#wpsg_pa_code_dialog .wpsg_dialog').html('<img src="<?php echo WPSG_URL; ?>views/gfx/ajax-loader.gif" alt="<?php echo __('Bitte warten ...', 'wpsg'); ?>" />');
+	        	
+	        	jQuery.ajax( {
+	    			url: 'admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_produktattribute&do=genPACode&noheader=1',
+	    			data: {
+	    				'pa_id': pa_id
+	    			},
+	    			success: function(data)
+	    			{
+		    			jQuery('#wpsg_pa_code_dialog .wpsg_dialog').html(data);
+	    			}
+	        	} );
+		        
+	        }
+		} );
+		
+		return false;
+		
+	} // function wpsg_genPACode(pa_id)
+	
+</script>
+
+<div id="wpsg_pa_code_dialog" style="display:none;"><div class="wpsg_dialog"></div></div>
+
+<div class="wpsg_admin_content">
+	<div class="wpsg_admin_box">		
+			  		
+		<div class="head">
+			<div class="title">
+				<div class="fulltab">
+					<?php echo __('Produktattribute', 'wpsg'); ?>
+					<a title="<?php echo __('Neues Produktattribut anlegen', 'wpsg'); ?>" href="" class="wpsg_icon wpsg_icon_right wpsg_icon_add" onclick="return wpsg_addPA();"></a>
+				</div>
+			</div>
+		</div>
+		<div class="content" id="wpsg_pa_list">
+			<?php $this->mod->pa_listAction(); ?>
+		</div>
+				
+	</div>
+</div>
+
+<div class="clear"></div>

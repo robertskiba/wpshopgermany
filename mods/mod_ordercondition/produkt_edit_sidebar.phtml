@@ -1,0 +1,18 @@
+<?php
+
+	/**
+	 * Template für die Integration der Bestellbedingungen in die Produktverwaltung
+	 */
+
+?>
+<div class="postbox" id="wpsg_ordercondition">		
+	<h3 class="wpsg_handlediv">
+		<span title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>" class="handlediv"><br /></span>
+		<span><?php echo __('Bestellbedingungen', 'wpsg'); ?></span>
+	</h3>	
+	<div class="inside">
+		<?php foreach ($this->view['wpsg_mod_ordercondition']['data'] as $oc) { ?>
+		<?php echo wpsg_drawForm_Checkbox('wpsg_mod_ordercondition['.$oc['id'].']', __($oc['name'], 'wpsg'), $oc['selected']); ?>		
+		<?php } ?>
+	</div>
+</div>

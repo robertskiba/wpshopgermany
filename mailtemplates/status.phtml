@@ -1,0 +1,19 @@
+<?php
+
+	/**
+	 * Dieses Template wird für die Mail bei einer Statusänderung verwendet
+	 */
+
+	$this->htmlMail = false;
+
+?><?php echo wpsg_translate(__('Hallo #1# #2#,', 'wpsg'), $this->view['kunde']['vname'], $this->view['kunde']['name']); ?> 
+  
+<?php echo wpsg_translate(
+	__('Der Status Ihrer Bestellung mit der Bestellnummer #1# hat sich von "#2#" auf "#3#" geändert.', 'wpsg'), 
+	$this->view['order']['onr'], 
+	__($this->view['status_alt'], 'wpsg'), 
+	__($this->view['status_neu'], 'wpsg')); ?> 
+<?php $this->callMods('mail_status', array(&$this->view['order'], &$this->view['kunde'])); ?>  
+<?php echo __('Mit freundlichen Grüßen', 'wpsg'); ?>
+
+<?php echo __($this->get_option('wpsg_shopdata_name'), 'wpsg'); ?> - <?php echo __('Team', 'wpsg'); ?>

@@ -1,0 +1,13 @@
+<?php
+
+	/**
+	 * Template für die Einstellungsseite des Produktbilder Moduls
+	 */
+
+?> 
+<?php echo wpsg_drawForm_Input('wpsg_mod_produktbilder_width', __('Bildbreite (Vorschau)', 'wpsg'), $this->get_option('wpsg_mod_produktbilder_width'), array('help' => 'wpsg_mod_produktbilder_width')); ?>
+<?php echo wpsg_drawForm_Input('wpsg_mod_produktbilder_height', __('Bildhöhe (Vorschau)', 'wpsg'), $this->get_option('wpsg_mod_produktbilder_height'), array('help' => 'wpsg_mod_produktbilder_height')); ?>
+<?php echo wpsg_drawForm_Select('wpsg_mod_produktbilder_mode', __('Bildmodus (Vorschau)', 'wpsg'), $this->callMod('wpsg_mod_produktbilder', 'getImageModes'), $this->get_option('wpsg_mod_produktbilder_mode'), array('help' => 'wpsg_mod_produktbilder')); ?>
+<?php echo wpsg_drawForm_Input('wpsg_mod_produktbilder_quality', __('Bildqualität (PNG/JPG)', 'wpsg'), $this->get_option('wpsg_mod_produktbilder_quality'), array('help' => 'wpsg_mod_produktbilder_quality','hint' => __('0 = Schlechte Qualität, 100 = Gute Qualität', 'wpsg'))); ?>
+
+<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_produktbilder&wpsg_mod_produktbilder_clearcache=1&noheader=1"><?php echo __('Bildercache löschen', 'wpsg'); ?></a>

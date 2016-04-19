@@ -1,0 +1,13 @@
+<?php
+
+	/**
+	 * Template für die Integration der Exportprofile in die Übersicht der Bestellungen
+	 */
+
+?>  
+<input type="hidden" name="submit_export" id="submit_export" value="" />
+<input type="hidden" id="wpsg_mod_export_profile" name="wpsg_mod_export_profile" value="" />
+
+<label>
+	<input type="checkbox" <?php echo (($_COOKIE['wpsg_mod_export_layer'] == '1')?'checked="checked"':''); ?> onclick="if (jQuery(this).attr('checked') == 'checked') { jQuery('#wpsg_mod_export_layer').show(); jQuery.cookie('wpsg_mod_export_layer', '1'); } else { jQuery('#wpsg_mod_export_layer').hide(); jQuery.cookie('wpsg_mod_export_layer', null); }" />&nbsp;<?php echo __('Bestellexport', 'wpsg'); ?>
+</label>

@@ -1,0 +1,13 @@
+<?php
+
+	/**
+	 * Template für die Integration des Produktgewichts in die Bestellzusammenfassung
+	 */
+
+?>
+<tr class="wpsg_<?php echo (($this->view['i'] % 2 == 0)?'odd':'even'); ?>">
+	<td ><?php echo __('Gewicht', 'wpsg'); ?>:</td>
+	<td colspan="<?php echo ((sizeof($this->view['basket']['mwst']) > 1 || $this->get_option('wpsg_showMwstAlways') == '1')?'2':'1'); ?>" class="wpsg_cell_weight_value">
+		<?php echo wpsg_ff($this->view['weight'], $this->get_option('wpsg_mod_weight_unit')); ?>
+	</td>
+</tr>

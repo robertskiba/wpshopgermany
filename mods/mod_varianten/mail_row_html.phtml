@@ -1,0 +1,22 @@
+<?php
+	
+	/**
+	 * Mit diesem Template kann die Zeile eines Produktes im Mailtemplate HTML erweitert werden
+	 */
+
+?>
+<tr class="productrow productrow2 <?php echo ((($this->view['i'] % 2) == 0)?'productrow_odd':'productrow_even'); ?>">
+	<td class="col_pos">&nbsp;</td>
+	<td class="col_name"><?php echo __('Variante', 'wpsg'); ?>:</td>
+	<td class="col_variant_value" colspan="<?php echo ((sizeof($this->view['basket']['mwst']) > 1 || $this->get_option('wpsg_showMwstAlways') == '1')?'4':'3'); ?>">
+		<?php if (get_option('wpsg_vp_detailview') == 1) { ?>
+			<?php foreach ($this->view['variante'] as $vari => $value) { ?>
+			<?php if (is_numeric($vari)) { ?>
+				<?php echo wpsg_pad_left($p['menge'], 8); ?> <?php echo '- '.$value['name'] ?>: <?php echo $value['value'] ?>; <?php echo __('Art. Nr.', 'wpsg').': '.$value['artnr'] ?>; <?php echo $value['preis'] ?> <?php echo $this->get_option('wpsg_currency'); ?><br />
+			<?php } ?>
+			<?php } ?>						
+		<?php } else { ?>
+			<?php echo $this->view['variante']['key']; ?>
+		<?php } ?>
+	</td> 
+</tr> 

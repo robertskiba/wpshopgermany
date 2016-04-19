@@ -1,0 +1,17 @@
+<?php
+
+	/**
+	 * Template für den Adminbereich des Füllmengenmoduls innerhalb des Produktes
+	 */
+
+?>
+<div id="wpsg_fuellmenge" class="postbox">
+	<h3 class="wpsg_handlediv">
+		<span title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>" class="handlediv"><br /></span>	
+		<span><?php echo __('Füllmenge', 'wpsg'); ?> </span>
+	</h3>
+	<div class="inside">
+		<?php echo wpsg_drawForm_Select('feinheit', __('Einheit', 'wpsg'), $this->view['data']['arFeinheiten'], $this->view['data']['feinheit']); ?>
+		<?php echo wpsg_drawForm_Input('fmenge', __('Füllmenge', 'wpsg'), wpsg_tf($this->view['data']['fmenge'])); ?>
+	</div>
+</div>

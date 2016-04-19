@@ -1,0 +1,165 @@
+<?php
+
+	/**
+	 * Template für die Liste von Zahlungsarten 
+	 */
+
+?>
+<?php if (!is_array($this->view['wpsg_mod_userpayment']['data']) || sizeof($this->view['wpsg_mod_userpayment']['data']) <= 0) { ?>
+<?php echo __('Bisher keine Zahlvarianten angelegt.', 'wpsg'); ?>
+<?php } else { ?>
+	<table class="zv_table">
+		<colgroup>
+	    	<col class="wpsg_label" />
+	    	<col class="wpsg_value" /> 
+	    	<col class="wpsg_delcol" />
+	  	</colgroup> 
+		<?php $i = 0; foreach ($this->view['wpsg_mod_userpayment']['data'] as $zv) { $i ++; ?>
+		<tr>
+			<td class="wpsg_label"><?php echo __('ID', 'wpsg'); ?>:</td>
+			<td class="wpsg_value"><?php echo $zv['id']; ?></td>
+			<td class="wpsg_delcol">
+				<a class="wpsg_icon wpsg_icon_remove" href="#" title="<?php echo __('Zahlvariante löschen', 'wpsg'); ?>" onclick="return wpsg_removeZV(<?php echo $zv['id']; ?>);"></a>
+				
+				<script type="text/javascript">
+
+					jQuery(document).ready(function() {
+						
+						jQuery('#zv_<?php echo $zv['id']; ?>_name').editable('<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_userpayment&do=inlinedit&noheader=1', {
+							submitdata: { 
+					    		field: 'name',
+					    		zv_id: '<?php echo $zv['id']; ?>'
+							}, 					
+							submit: '<?php echo __('Speichern', 'wpsg'); ?>',
+							placeholder: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+							indicator: '<?php echo __('Speicher ...', 'wpsg'); ?>',
+					    	tooltip: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>'
+						} );
+
+						jQuery('#zv_<?php echo $zv['id']; ?>_hint').editable('<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_userpayment&do=inlinedit&noheader=1', {
+							submitdata: { 
+					    		field: 'hint',
+					    		zv_id: '<?php echo $zv['id']; ?>'
+							}, 					
+							submit: '<?php echo __('Speichern', 'wpsg'); ?>',
+							placeholder: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+							indicator: '<?php echo __('Speicher ...', 'wpsg'); ?>',
+					    	tooltip: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>'
+						} );
+
+						jQuery('#zv_<?php echo $zv['id']; ?>_rabgeb').editable('<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_userpayment&do=inlinedit&noheader=1', {
+							submitdata: {
+								field: 'rabgeb',
+								zv_id: '<?php echo $zv['id']; ?>'
+							},
+							submit: '<?php echo __('Speichern', 'wpsg'); ?>',
+							placeholder: '<?php echo __('Definieren ...', 'wpsg'); ?>',
+							indicator: '<?php echo __('Speicher ...', 'wpsg'); ?>',
+							tooltip: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>'
+						} );
+
+						jQuery('#zv_<?php echo $zv['id']; ?>_mwst').editable('<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_userpayment&do=inlinedit&noheader=1', { 
+							submitdata: {
+								field: 'mwst_key',
+								zv_id: '<?php echo $zv['id']; ?>'
+							},
+							submit: '<?php echo __('Speichern', 'wpsg'); ?>',
+							data: '<?php echo json_encode(wpsg_tax_groups()); ?>',
+							type: 'select',
+							placeholder: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+							indicator: '<?php echo __('Speicher ...', 'wpsg'); ?>',
+					    	tooltip: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>'
+						});	
+
+						jQuery('#zv_<?php echo $zv['id']; ?>_aktiv').bind('change', function() {
+
+							var value = 0;
+							if (jQuery(this).attr("checked") == "checked") value = 1;
+
+							jQuery.ajax( {
+								url: '<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_userpayment&do=inlinedit&noheader=1',
+								data: {
+									field: 'aktiv',
+									zv_id: '<?php echo $zv['id']; ?>',
+									value: value
+								}	
+							} );
+								 
+						} );
+
+					} );
+				
+				</script>
+				
+			</td>
+		</tr>
+		<tr>
+			<td class="wpsg_label"><?php echo __('Bezeichnung', 'wpsg'); ?>:</td>
+			<td class="wpsg_value" id="zv_<?php echo $zv['id']; ?>_name"><?php echo wpsg_hspc($zv['name']); ?></td>	
+			<td class="wpsg_delcol">
+				<a class="wpsg_form_help" rel="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_name" href="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_name"></a>
+			</td>				
+		</tr>
+		<tr>
+			<td class="wpsg_label"><?php echo __('Aktiv', 'wpsg'); ?>:</td>
+			<td class="wpsg_value">
+				<input type="checkbox" value="1" <?php echo (($zv['aktiv'] == '1')?'checked="checked"':''); ?> id="zv_<?php echo $zv['id']; ?>_aktiv" />
+			</td>
+			<td class="wpsg_delcol">
+				<a class="wpsg_form_help" rel="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_activ" href="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_activ"></a>
+			</td>
+		</tr>
+		<tr>
+			<td class="wpsg_label"><?php echo __('Hinweistext', 'wpsg'); ?>:</td>
+			<td class="wpsg_value" id="zv_<?php echo $zv['id']; ?>_hint"><?php echo wpsg_hspc($zv['hint']); ?></td>
+			<td class="wpsg_delcol">
+				<a class="wpsg_form_help" rel="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_hint" href="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_hint"></a>
+			</td>
+		</tr>		
+		<tr>
+			<td class="wpsg_label"><?php echo __('Gebühr/Rabatt', 'wpsg'); ?>:</td>
+			<td class="wpsg_value">
+				<div style="float:left; width:70%" id="zv_<?php echo $zv['id']; ?>_rabgeb" class="editable"><?php echo wpsg_hspc(wpsg_ff($zv['rabgeb'], true)); ?></div>
+				<div style="float:right;"><?php echo $this->get_option('wpsg_currency'); ?> / %</div>
+			</td>
+			<td class="wpsg_delcol">				
+				<a class="wpsg_form_help" rel="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_gebuehr" href="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_gebuehr"></a>
+			</td>
+		</tr>		
+		<tr>
+			<td class="wpsg_label"><?php echo __('Steuersatz', 'wpsg'); ?>:</td>
+			<td id="zv_<?php echo $zv['id']; ?>_mwst" class="wpsg_value wpsg_editable"><?php 
+			
+				$tax_groups = wpsg_tax_groups();
+				echo wpsg_hspc($tax_groups[$zv['mwst_key']]); 
+			
+			?></td>
+			<td class="wpsg_delcol">
+				<a class="wpsg_form_help" rel="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_gebuehr" href="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_gebuehr"></a>
+			</td>
+		</tr>
+		<tr>
+			<td class="wpsg_label"><?php echo __('Keine MwSt. wenn Land steuerfrei', 'wpsg'); ?>:</td>
+			<td class="wpsg_value">
+				<input onchange="wpsg_saveZVMwSt(this, <?php echo $zv['id']; ?>);" <?php echo (($zv['mwst_laender'] == '1')?'checked="checked"':''); ?> type="checkbox" value="1" />
+			</td>
+			<td class="wpsg_delcol">
+				<a class="wpsg_form_help" rel="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_mwstland" href="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_mwstland"></a>
+			</td>
+		</tr>
+		<?php if ($i < sizeof($this->view['wpsg_mod_userpayment']['data'])) { ?>
+		<tr class="wpsg_spacer"><td colspan="3"><hr /></td></tr>
+		<?php } ?>				
+		<?php } ?>
+	</table>
+<?php } ?>
+
+<script type="text/javascript">/* <![CDATA[ */
+
+	jQuery(document).ready(function() {
+		 
+		jQuery('.wpsg_form_help').tipTip();
+		
+	} );
+		
+/* ]]> */</script>

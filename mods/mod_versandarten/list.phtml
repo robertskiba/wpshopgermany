@@ -1,0 +1,248 @@
+<?php
+
+	/**
+	 * Template für die Liste der Versandarten 
+	 */
+
+?>
+<?php if (!is_array($this->view['data']) || sizeof($this->view['data']) <= 0) { ?>
+<?php echo __('Bisher keine Versandarten angelegt.', 'wpsg'); ?>
+<?php } else { ?>
+<table class="va_table">
+	 <colgroup>
+    	<col class="wpsg_label" />
+    	<col class="wpsg_value" /> 
+    	<col class="wpsg_delcol" />
+  	</colgroup>
+	<?php $i = 0; foreach ($this->view['data'] as $va) { $i ++; ?>
+	<tr>
+		<td class="wpsg_label"><?php echo __('ID', 'wpsg'); ?>:</td>
+		<td class="wpsg_value"><?php echo $va['id']; ?></td>	
+		<td class="wpsg_delcol">
+			<a class="wpsg_icon wpsg_icon_remove" href="#" title="<?php echo __('Versandart löschen', 'wpsg'); ?>" onclick="return wpsg_removeVA(<?php echo $va['id']; ?>);"></a>
+			<?php foreach ($this->view['arVZ'] as $k=>$vz) { $arVzNamen[$k] = $vz['name']; } ?>
+			<script type="text/javascript">
+
+				jQuery(document).ready(function() {
+
+					jQuery('#va_<?php echo $va['id']; ?>_name').editable('<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_versandarten&do=inlinedit&noheader=1', {
+						submitdata: { 
+				    		field: 'name',
+				    		va_id: '<?php echo $va['id']; ?>'
+						}, 					
+						submit  : '<?php echo __('Speichern', 'wpsg'); ?>',
+						placeholder: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+						indicator: '<?php echo __('Speicher ...', 'wpsg'); ?>',
+				    	tooltip: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>'
+					});
+
+					jQuery('#va_<?php echo $va['id']; ?>_kosten').editable('<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_versandarten&do=inlinedit&noheader=1', {
+						submitdata: { 
+				    		field: 'kosten',
+				    		va_id: '<?php echo $va['id']; ?>'
+						}, 					
+						submit  : '<?php echo __('Speichern', 'wpsg'); ?>',
+						placeholder: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+						indicator: '<?php echo __('Speicher ...', 'wpsg'); ?>',
+				    	tooltip: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>'
+					});
+
+					jQuery('#va_<?php echo $va['id']; ?>_hint').editable('<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_versandarten&do=inlinedit&noheader=1', {
+						submitdata: { 
+				    		field: 'hint',
+				    		va_id: '<?php echo $va['id']; ?>'
+						}, 					
+						submit  : '<?php echo __('Speichern', 'wpsg'); ?>',
+						placeholder: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+						indicator: '<?php echo __('Speicher ...', 'wpsg'); ?>',
+				    	tooltip: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>'
+					});
+ 					
+					jQuery('#va_<?php echo $va['id']; ?>_typ').editable('<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_versandarten&do=inlinedit&noheader=1', { 
+						submitdata: {
+							field: 'typ',
+							va_id: '<?php echo $va['id']; ?>'
+						},
+						submit  : '<?php echo __('Speichern', 'wpsg'); ?>',
+						data   : '<?php echo json_encode($this->view['arTypen']); ?>',
+						type   : 'select',
+						placeholder: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+						indicator: '<?php echo __('Speicher ...', 'wpsg'); ?>',
+				    	tooltip: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>'
+					});		
+
+					jQuery('#va_<?php echo $va['id']; ?>_vz').editable('<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_versandarten&do=inlinedit&noheader=1', {
+						submitdata: {
+							field: 'vz',
+							va_id: '<?php echo $va['id']; ?>'
+						},
+						submit: '<?php echo __('Speichern', 'wpsg'); ?>',
+						data   : '<?php echo json_encode($arVzNamen) ?>',
+						type   : 'select',
+						placeholder: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+						indicator: '<?php echo __('Speicher ...', 'wpsg'); ?>',
+				    	tooltip: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+				    	callback: function(data)
+				    	{
+							location.reload();
+				    	}
+
+					} );		
+
+					jQuery('#va_<?php echo $va['id']; ?>_mwst').editable('<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_versandarten&do=inlinedit&noheader=1', { 
+						submitdata: {
+							field: 'mwst_key',
+							va_id: '<?php echo $va['id']; ?>'
+						},
+						submit: '<?php echo __('Speichern', 'wpsg'); ?>',
+						data: '<?php echo json_encode(wpsg_tax_groups()); ?>',
+						type: 'select',
+						placeholder: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+						indicator: '<?php echo __('Speicher ...', 'wpsg'); ?>',
+				    	tooltip: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>'
+					});	
+
+					jQuery('#va_<?php echo $va['id']; ?>_aktiv').bind('change', function() {
+
+						var value = 0;
+						 
+						if (jQuery(this).attr("checked") == "checked") value = 1;
+
+						jQuery.ajax( {
+							url: '<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_versandarten&do=inlinedit&noheader=1',
+							data: {
+								field: 'aktiv',
+								va_id: '<?php echo $va['id']; ?>',
+								value: value
+							}	
+						} );
+						 
+					} );
+					
+				} );
+			
+			</script>
+			
+		</td>
+	</tr>
+	<tr>
+		<td class="wpsg_label"><?php echo __('Bezeichnung', 'wpsg'); ?>:</td>
+		<td class="wpsg_value wpsg_editable" id="va_<?php echo $va['id']; ?>_name"><?php echo wpsg_hspc($va['name']); ?></td>
+		<td class="wpsg_delcol">
+			<a class="wpsg_form_help" rel="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_name" href="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_name"></a>
+		</td>
+	</tr>
+	<tr>
+		<td class="wpsg_label"><label for="va_<?php echo $va['id']; ?>_aktiv"><?php echo __('Aktiv', 'wpsg'); ?>:</label></td>
+		<td class="wpsg_value">
+			<input type="checkbox" value="1" <?php echo (($va['aktiv'] === '1')?'checked="checked"':''); ?> id="va_<?php echo $va['id']; ?>_aktiv" />
+		</td>
+		<td class="wpsg_delcol">
+			<a class="wpsg_form_help" rel="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_activ" href="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_activ"></a>
+		</td> 
+	</tr>
+	<tr>
+		<td class="wpsg_label"><?php echo __('Hinweistext', 'wpsg'); ?>:</td>
+		<td class="wpsg_value wpsg_editable" id="va_<?php echo $va['id']; ?>_hint" ><?php echo wpsg_hspc($va['hint']); ?></td>
+		<td class="wpsg_delcol">
+			<a class="wpsg_form_help" rel="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_hint" href="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_hint"></a>
+		</td>
+	</tr>
+	<tr>
+		<td class="wpsg_label"><?php echo __('Grundlage', 'wpsg'); ?>:</td>
+		<td id="va_<?php echo $va['id']; ?>_typ" class="wpsg_value wpsg_editable"><?php echo wpsg_hspc($this->view['arTypen'][$va['typ']]); ?></td>
+		<td class="wpsg_delcol">
+			<a class="wpsg_form_help" rel="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_grundlage" href="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_grundlage"></a>
+		</td>
+	</tr>   
+	<tr>
+		<td class="wpsg_label"><?php echo __('Versandzone', 'wpsg'); ?>:</td>
+		<td id="va_<?php echo $va['id']; ?>_vz" class="wpsg_value wpsg_editable">
+			<?php if ($va['vz'] > 0) { ?>
+			<?php echo wpsg_hspc($this->view['arVZ'][$va['vz']]['name']); ?>
+			<?php } else { ?>
+			<?php echo __('Alle Versandzonen', 'wpsg'); ?>
+			<?php } ?>
+		</td>
+		<td class="wpsg_delcol">
+			<a class="wpsg_form_help" rel="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_versandzone" href="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_versandzone"></a>
+		</td>
+	</tr>
+	<tr>
+		<td class="wpsg_label"><?php echo __('Kostenschlüssel', 'wpsg'); ?>:</td>
+		<td class="wpsg_value wpsg_editable" id="va_<?php echo $va['id']; ?>_kosten"><?php echo wpsg_hspc($va['kosten']); ?></td>
+		<td class="wpsg_delcol">
+			<a class="wpsg_form_help" rel="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_kostenschluessel" href="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_kostenschluessel"></a>
+		</td>
+	</tr>
+	<?php if (wpsg_isSizedArray($this->view['arVZ'][$va['vz']]['arPLZ'])) { ?>
+	<?php $index = 1; foreach ((array)$this->view['arVZ'][$va['vz']]['arPLZ'] as $plz_key => $plz) { ?>
+	<tr>
+		<td class="wpsg_label"><?php echo __('Kostenschlüssel PLZ', 'wpsg'); ?> [ <?php echo $plz ?> ]:</td>
+		<td class="wpsg_value wpsg_editable" id="va_<?php echo $va['id'] ?>_plz_<?php echo $index ?>"><?php echo wpsg_hspc($va['kosten_plz'][$plz_key]); ?></td>
+		<td class="wpsg_delcol">			
+			<script type="text/javascript">
+
+				jQuery(document).ready(function() {
+	
+					jQuery('#va_<?php echo $va['id']; ?>_plz_<?php echo $index ?>').editable('<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_versandarten&do=inlinedit&noheader=1', {
+						submitdata: { 
+				    		field: 'kosten_plz',
+				    		va_id: '<?php echo $va['id']; ?>',
+				    		key: '<?php echo $index; ?>'
+						}, 					
+						submit  : '<?php echo __('Speichern', 'wpsg'); ?>',
+						placeholder: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+						indicator: '<?php echo __('Speicher ...', 'wpsg'); ?>',
+				    	tooltip: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+				    	callback: function(data)
+				    	{
+				    		//location.reload();
+				    	}
+					} );
+	
+				} );
+				
+			</script>
+		</td>		
+	</tr>
+	<?php $index++; } ?>
+	<?php } ?>	
+	<tr>
+		<td class="wpsg_label"><?php echo __('Steuersatz', 'wpsg'); ?>:</td>				
+		<td id="va_<?php echo $va['id']; ?>_mwst" class="wpsg_value wpsg_editable"><?php 
+		
+			$tax_groups = wpsg_tax_groups();
+			echo wpsg_hspc($tax_groups[$va['mwst_key']]);
+			
+		?></td>
+		<td class="wpsg_delcol">
+			<a class="wpsg_form_help" rel="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_mwst" href="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_mwst"></a>
+		</td>
+	</tr> 
+	<tr>
+		<td class="wpsg_label"><?php echo __('Keine MwSt. wenn Land steuerfrei', 'wpsg'); ?>:</td>
+		<td class="wpsg_value">
+			<input onchange="wpsg_saveVAMwSt(this, <?php echo $va['id']; ?>);" <?php echo (($va['mwst_laender'] == '1')?'checked="checked"':''); ?> type="checkbox" value="1" />
+		</td>
+		<td class="wpsg_delcol">
+			<a class="wpsg_form_help" rel="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_mwstland" href="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=wpsg_shippay_mwstland"></a>
+		</td>
+	</tr>
+	<?php $this->callMods('wpsg_mod_versandarten_listrow', array(&$va)); ?>
+	<?php if ($i < sizeof($this->view['data'])) { ?>
+	<tr class="wpsg_spacer"><td colspan="3"><hr /></td></tr>
+	<?php } ?>
+	<?php } ?>
+</table>
+<?php } ?>
+
+<script type="text/javascript">/* <![CDATA[ */
+
+	jQuery(document).ready(function() {
+		 
+		jQuery('.wpsg_form_help').tipTip();
+		
+	} );
+		
+/* ]]> */</script>

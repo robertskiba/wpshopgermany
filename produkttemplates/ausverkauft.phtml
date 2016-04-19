@@ -1,0 +1,127 @@
+<?php
+
+	/*
+	 * Template für das Produkt im Frontend
+	 */
+
+	//Ausgabe der verfügbaren Variablen
+	//wpsg_debug($_SESSION);
+	//wpsg_debug($this->view['data']['stock']);
+
+	// Damit keine Zubehörprodukte ausgegeben werden
+	//$this->noReleatedProducts = true; 
+
+?>
+<div class="wpsg_produkt_wrapper">
+	<div itemscope itemtype="http://schema.org/Product" class="wpsg_produkt wpsg_produkt_<?php echo $this->view['data']['id']; ?>">
+	
+		<?php /* Block für die Produktbilder START */ ?>
+		<?php if ($this->hasMod('wpsg_mod_produktbilder')) { ?>	
+		<div class="wpsg_produkt_produktbilder">
+			<?php if (sizeof($this->callMod('wpsg_mod_produktbilder', 'getProduktBilder', array($this->view['data']['id'])))) { ?>
+			<?php $i = 0; foreach ($this->callMod('wpsg_mod_produktbilder', 'getProduktBilder', array($this->view['data']['id'])) as $b) { $i ++; ?>
+			<?php if ($i == 1) { ?>
+			<div class="wpsg_produkt_preview wpsg_pb_pic">		
+				<?php echo $this->callMod('wpsg_mod_produktbilder', 'genBild', array($this->view['data']['id'], $i, $this->get_option('wpsg_mod_produktbilder_width'), $this->get_option('wpsg_mod_produktbilder_height'), $this->get_option('wpsg_mod_produktbilder_mode'), 'pimage')); ?>
+				<?php /*<img itemprop="image" id="wpsg_mainimage_<?php echo $this->getTemplateIndex(); ?>" src="<?php echo $this->callMod('wpsg_mod_produktbilder', 'makeTn', array($this->view['data']['id'], $b, $this->get_option('wpsg_mod_produktbilder_width'), $this->get_option('wpsg_mod_produktbilder_height'), $this->get_option('wpsg_mod_produktbilder_mode'))); ?>" alt="" />*/?>				
+			</div>
+			<?php } else { ?>
+			<div class="wpsg_pb_pic" style="display:none;">
+				<?php echo $this->callMod('wpsg_mod_produktbilder', 'genBild', array($this->view['data']['id'], $i, $this->get_option('wpsg_mod_produktbilder_width'), $this->get_option('wpsg_mod_produktbilder_height'), $this->get_option('wpsg_mod_produktbilder_mode'), 'pimage')); ?>
+			</div>
+			<?php } ?>
+			<?php } ?>
+			<?php } ?>
+			<div class="wpsg_clear"></div>
+		</div>
+		<?php } ?>
+		<?php /* Block für die Produktbilder ENDE */ ?>
+	
+		<div class="wpsg_product_afterimage">
+	
+			<h2 itemprop="name" class="wpsg_producttitle"><?php echo wpsg_hspc($this->view['data']['name']); ?></h2>
+		
+			<?php if ($this->get_option('wpsg_showArticelnumber') == '1') { ?>
+			<div class="wpsg_artikelnummer"> 
+				<?php echo __('Artikelnummer', 'wpsg'); ?>: <span class="wpsg_anr"><?php echo wpsg_hspc($this->view['data']['anr']); ?></span>
+			</div>
+			<?php } ?>
+		
+			<div itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="wpsg_produkt_preis">
+				<?php echo __('Stückpreis:', 'wpsg'); ?>
+				<meta itemprop="priceCurrency" content="<?php echo $this->get_option('wpsg_currency'); ?>" />
+				<span itemprop="price" class="preis_<?php echo $this->view['data']['id']; ?>" id="preis_<?php echo $this->view['data']['id']; ?>"><?php echo wpsg_ff($this->view['data']['preis']); ?></span> <?php echo $this->get_option('wpsg_currency'); ?><?php if (wpsg_isSizedString($this->view['data']['price_info'])) { echo '<div class="wpsg_priceinfo">'.wpsg_hspc($this->view['data']['price_info']).'</div>'; } ?>
+			</div>		
+			
+			<?php if ($this->get_option('wpsg_kleinunternehmer')) { /* Kleinunternehmerregelung aktiviert START */ ?>		
+			
+				<div class="wpsg_produkt_preishinweis">
+					<?php echo wpsg_translate(__('Preise zzgl. #1#', 'wpsg'), '<a href="'.$this->getURL(wpsg_ShopController::URL_VERSANDKOSTEN).'">'.__('Versandkosten', 'wpsg').'</a>'); ?>
+				</div>
+			
+			<?php } else { /* Kleinunternehmerregelung aktiviert ENDE */ ?>	
+	
+				<div class="wpsg_produkt_preishinweis">		
+					<?php if ($this->getFrontendTaxview() == WPSG_NETTO) { /* Frontend = NETTO Preise */ ?>
+					<?php echo wpsg_translate(__('(zzgl. #1#% MwSt. und zzgl. #2#)', 'wpsg'), wpsg_ff($this->view['data']['mwst_value']), '<a href="'.$this->getURL(wpsg_ShopController::URL_VERSANDKOSTEN).'">'.__('Versandkosten', 'wpsg').'</a>'); ?>
+					<?php } else { /* Frontend = BRUTTO Preise */ ?>
+					<?php echo wpsg_translate(__('(inkl. #1#% MwSt. und zzgl. #2#)', 'wpsg'), wpsg_ff($this->view['data']['mwst_value']), '<a href="'.$this->getURL(wpsg_ShopController::URL_VERSANDKOSTEN).'">'.__('Versandkosten', 'wpsg').'</a>'); ?>
+					<?php } ?>
+				</div>
+				
+			<?php } ?>
+			
+			<?php /* Füllmengenanzeige START */ ?>
+			<?php if ($this->hasMod('wpsg_mod_fuellmenge')) { ?>
+			
+				<div class="wpsg_produkt_fuellmenge">
+				<?php echo wpsg_translate(__('Füllmenge: #1# (#2# / #3#)', 'wpsg'), 
+					wpsg_ff($this->view['data']['fmenge'], $this->view['data']['feinheit'], true),
+					wpsg_ff($this->view['data']['fmenge_preis'], $this->get_option('wpsg_currency')),
+					wpsg_ff($this->get_option('wpsg_mod_fuellmenge_bezug'), $this->view['data']['feinheit'])
+				); ?>
+				</div>
+			<?php } ?>		
+			<?php /* Füllmengenanzeige ENDE */ ?>
+			
+			<?php /* Gewichtsanzeige START */ ?>
+			<?php if ($this->hasMod('wpsg_mod_weight') && $this->get_option('wpsg_mod_weight_showProduct') === '1') { ?>
+			<div class="wpsg_mod_weight_produkt">
+				<?php echo wpsg_translate(__('Gewicht: #1# #2#', 'wpsg'), '<span id="weight_'.$this->view['data']['id'].'">'.wpsg_ff($this->view['data']['weight']).'</span>', $this->get_option('wpsg_mod_weight_unit')); ?>
+			</div>
+			<?php } ?>
+			<?php /* Gewichtsanzeige ENDE */ ?>
+			
+			<?php /* Varianten START */ ?>
+			<div class="wpsg_produkt_varianten">
+			<?php echo $this->callMod('wpsg_mod_varianten', 'renderTemplate', array($this->view['data']['id'])); ?>
+			</div>
+			<?php /* Varianten ENDE */ ?>
+										
+			<div class="wpsg_produkt_soldout">	
+			<?php echo __('Produkt ausverkauft', 'wpsg'); ?>				
+			</div>
+			
+			<div class="wpsg_clear"></div>
+					 	
+			<?php /* Facebook und Co Integration aus dem Produktartikel Modul */ ?>
+			<?php echo $this->callMod('wpsg_mod_produktartikel', 'socialIntegration', array($this->view['data']['id'])); ?>
+			<?php /* Facebook und Co Integration ENDE */ ?>
+			
+		</div> 
+		
+	</div>
+	
+	<?php if (strlen(trim($this->view['data']['beschreibung'])) > 0) { ?>
+	<div class="wpsg_produkt_additional_information">
+	
+		<div itemprop="description" class="wpsg_produkt_beschreibung">
+			<?php echo $this->view['data']['beschreibung']; ?>
+		</div>
+				
+	</div>
+	<?php } ?>
+	
+	<?php $this->callMods('product_bottom', array(&$this->view['data']['id'], $this->getTemplateIndex())); ?>
+	
+</div> 

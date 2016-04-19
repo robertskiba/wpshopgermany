@@ -1,0 +1,23 @@
+<?php
+
+	/**
+	 * Template für die Integration der Versandadresse in die Bestellansicht
+	 */
+	//wpsg_debug($this->view);
+?>
+<div class="wpsg_form_field">
+	<div class="wpsg_form_left">
+		<?php echo __('Lieferadresse', 'wpsg'); ?>:
+	</div>
+	<div class="wpsg_form_right">
+		<p>		
+			<?php if (trim($this->view['wpsg_mod_shippingadress']['shipping_firma']) != '') { ?>			
+			<?php echo wpsg_hspc($this->view['wpsg_mod_shippingadress']['shipping_firma']); ?><br />
+			<?php } ?>	
+			<?php echo wpsg_hspc($this->view['wpsg_mod_shippingadress']['shipping_title']); ?> <?php echo wpsg_hspc($this->view['wpsg_mod_shippingadress']['shipping_vname']); ?> <?php echo wpsg_hspc($this->view['wpsg_mod_shippingadress']['shipping_name']); ?><br />
+			<?php echo wpsg_hspc($this->view['wpsg_mod_shippingadress']['shipping_strasse']); ?><br />
+			<?php echo wpsg_hspc($this->view['wpsg_mod_shippingadress']['shipping_plz']); ?> <?php echo wpsg_hspc($this->view['wpsg_mod_shippingadress']['shipping_ort']); ?> <?php echo wpsg_hspc($this->view['shipping_country']['kuerzel']); ?><br />
+		</p>						
+	</div>
+</div>
+<div class="wpsg_clear"></div>

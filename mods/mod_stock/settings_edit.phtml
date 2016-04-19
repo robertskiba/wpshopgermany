@@ -1,0 +1,59 @@
+<?php
+
+	/**
+	 * Template für die Einstellungen des Lagerbestandsmoduls
+	 */
+
+?>
+<div class="wpsg_form_field">
+	<div class="wpsg_form_left">
+		<label for="wpsg_mod_stock_template"><?php echo __('Template für ausverkaufte Produkte', 'wpsg'); ?>:</label>									
+	</div>
+	<div class="wpsg_form_right">
+		<?php if (!is_array($this->view['arTemplates']) || sizeof($this->view['arTemplates']) <= 0) { ?>
+		<p class="wpsg_error"><?php echo __('Keine Templatedatein gefunden!', 'wpsg'); ?></p>
+		<?php } else { ?>
+		<input type="hidden" name="wpsg_mod_stock_template" value="<?php echo $this->get_option('wpsg_mod_stock_template'); ?>" />
+		<select name="wpsg_mod_stock_template" id="wpsg_mod_stock_template">
+			<option value="-1"><?php echo __('Wie Produkttemplate', 'wpsg'); ?></option>
+			<?php foreach ($this->view['arTemplates'] as $t) { ?>
+			<option <?php echo (($t == $this->get_option('wpsg_mod_stock_template'))?'selected="selected"':''); ?> value="<?php echo wpsg_hspc($t); ?>"><?php echo wpsg_hspc($t); ?></option>
+			<?php } ?>
+		</select>
+		<?php } ?>
+	</div>
+	<div class="wpsg_clear"></div>
+</div>
+<?php echo wpsg_drawForm_Checkbox('wpsg_mod_stock_notemplateswitch', __('Template nicht wechseln', 'wpsg'), $this->get_option('wpsg_mod_stock_notemplateswitch'), array('help' => 'wpsg_mod_stock_notemplateswitch')); ?>
+<?php echo wpsg_drawForm_Checkbox('wpsg_mod_stock_allow', __('Bestellungen bei negtiven Bestand verhindern', 'wpsg'), $this->get_option('wpsg_mod_stock_allow')); ?>
+<?php echo wpsg_drawForm_Checkbox('wpsg_mod_stock_showBackendStock', __('Bestand in Produktübersicht (Backend) anzeigen', 'wpsg'), $this->get_option('wpsg_mod_stock_showBackendStock'), array('help' => 'wpsg_mod_stock_showBackendStock')); ?>
+<?php if ($this->hasMod('wpsg_mod_productindex')) { ?>
+<?php echo wpsg_drawForm_Checkbox('wpsg_mod_stock_showProductindex', __('Bestand in Produktübersicht (Frontend) anzeigen', 'wpsg'), $this->get_option('wpsg_mod_stock_showProductindex'), array('help' => 'wpsg_mod_stock_showProductindex')); ?>
+<?php } ?>
+<?php echo wpsg_drawForm_Checkbox('wpsg_mod_stock_showProduct', __('Bestand in Produkt (Frontend) anzeigen', 'wpsg'), $this->get_option('wpsg_mod_stock_showProduct'), array('help' => 'wpsg_mod_stock_showProduct')); ?>
+
+
+<script type="text/javascript">/* <![CDATA[ */
+
+	jQuery(document).ready(function() {
+
+		jQuery('#wpsg_mod_stock_notemplateswitch').bind('change', function() {
+
+			if (jQuery(this).attr("checked"))
+			{
+
+				jQuery('#wpsg_mod_stock_template').attr('disabled', true);
+				
+			}
+			else
+			{
+
+				jQuery('#wpsg_mod_stock_template').attr('disabled', false);
+
+			}
+			
+		} ).change();
+		
+	} );
+
+/* ]]> */</script>

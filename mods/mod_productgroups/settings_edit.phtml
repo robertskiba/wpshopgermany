@@ -1,0 +1,15 @@
+<?php
+
+	/**
+	 * Template für die Einstellungsseite der Produktgruppen
+	 */
+
+?>
+<?php echo wpsg_drawForm_Select('wpsg_productgroups_page', __('Produktgruppenübersichtsseite', 'wpsg'), $this->view['pages'], $this->get_option('wpsg_productgroups_page')); ?>
+<?php echo wpsg_drawForm_Select('wpsg_productgroups_order', __('Sortierung innerhalb der Gruppe', 'wpsg'), array(
+	'id' => __('Nach ID', 'wpsg'),
+	'alphabetisch' => __('Alphabetisch', 'wpsg'),
+	'buyed' => __('Anzahl Verkäufe', 'wpsg'),
+	'erstellungsdatum' => __('Erstellungsdatum', 'wpsg'),
+	'preis' => __('Preis', 'wpsg')
+), $this->get_option('wpsg_productgroups_order')); ?>

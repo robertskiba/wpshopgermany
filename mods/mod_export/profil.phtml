@@ -1,0 +1,287 @@
+<?php
+
+	/**
+	 * Template für die Einstellungen eines Profils
+	 */
+
+?>
+
+<?php echo $this->writeBackendMessage(); ?>
+
+<div class="wpsg_form_field">
+	<div class="wpsg_form_left">
+		<label for="wpsg_mod_export[name]"><?php echo __('Profilname', 'wpsg'); ?>:</label>
+	</div>
+	<div style="width:350px;" class="wpsg_form_right wpsg_editable" id="wpsg_mod_export_profilname"><?php echo $this->view['profil']['name']; ?></div>
+	<a style="float:right;" onclick="return wpsg_mod_export_removeProfil(<?php echo $this->view['profil']['id']; ?>);" title="<?php echo __('Profil löschen', 'wpsg'); ?>" href="#" class="wpsg_icon wpsg_icon_remove"></a>
+	<div class="wpsg_clear"></div>
+</div>
+<script type="text/javascript">
+
+	jQuery('#wpsg_mod_export_profilname').editable('<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_export&do=inlinedit&noheader=1', {
+		submitdata: { 
+			field: 'name',
+			profil_id: '<?php echo $this->view['profil']['id']; ?>'
+		}, 					
+		submit  : '<?php echo __('Speichern', 'wpsg'); ?>',
+		placeholder: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+		indicator: '<?php echo __('Speicher ...', 'wpsg'); ?>',
+		tooltip: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>'
+	});	
+
+</script>
+<div class="wpsg_form_field">
+	<div class="wpsg_form_left">
+		<label for="wpsg_mod_export[filename]"><?php echo __('Dateiname', 'wpsg'); ?>:</label>
+	</div>
+	<div class="wpsg_form_right wpsg_editable" id="wpsg_mod_export_filename"><?php echo @$this->view['profil']['data']['filename']; ?></div>
+	<div class="wpsg_clear"></div>
+</div>
+<script type="text/javascript">
+
+	jQuery('#wpsg_mod_export_filename').editable('<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_export&do=inlinedit&noheader=1', {
+		submitdata: { 
+			field: 'filename',
+			profil_id: '<?php echo $this->view['profil']['id']; ?>'
+		}, 					
+		submit  : '<?php echo __('Speichern', 'wpsg'); ?>',
+		placeholder: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+		indicator: '<?php echo __('Speicher ...', 'wpsg'); ?>',
+		tooltip: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>'
+	});	
+
+</script>
+<div class="wpsg_form_field">
+	<div class="wpsg_form_left">
+		<label for="wpsg_mod_export[separator]"><?php echo __('Trennzeichen', 'wpsg'); ?>:</label>
+	</div>
+	<div class="wpsg_form_right wpsg_editable" id="wpsg_mod_export_separator"><?php echo @$this->view['profil']['data']['separator']; ?></div>
+	<div class="wpsg_clear"></div>
+</div>
+<script type="text/javascript">
+
+	jQuery('#wpsg_mod_export_separator').editable('<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_export&do=inlinedit&noheader=1', {
+		submitdata: { 
+			field: 'separator',
+			profil_id: '<?php echo $this->view['profil']['id']; ?>'
+		}, 					
+		submit  : '<?php echo __('Speichern', 'wpsg'); ?>',
+		placeholder: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+		indicator: '<?php echo __('Speicher ...', 'wpsg'); ?>',
+		tooltip: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>'
+	});	
+
+</script>
+<div class="wpsg_form_field">
+	<div class="wpsg_form_left">
+		<label for="wpsg_mod_export_oneline"><?php echo __('Eine Zeile pro Bestellung', 'wpsg'); ?>:</label>
+	</div>
+	<div class="wpsg_form_right">
+		<input style="width:auto;" type="checkbox" <?php echo ((@$this->view['profil']['data']['oneline'] == '1')?'checked="checked"':''); ?> value="1" onchange="" id="wpsg_mod_export_oneline" /></div>
+	<div class="wpsg_clear"></div>
+</div>
+<script type="text/javascript">
+
+	jQuery('#wpsg_mod_export_oneline').bind('change', function() {
+		jQuery.ajax( {
+			url: '<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_export&do=inlinedit&noheader=1',
+			data: {
+				field: 'oneline',
+				value: ((jQuery('#wpsg_mod_export_oneline').attr("checked") == 'checked')?'1':'0'),
+				profil_id: '<?php echo $this->view['profil']['id']; ?>'
+			}
+		} );
+	} );
+
+</script>
+<div class="wpsg_form_field">
+	<div class="wpsg_form_left">
+		<label for="wpsg_mod_export_firstlinecolname"><?php echo __('Spaltennamen in erster Spalte', 'wpsg'); ?>:</label>
+	</div>
+	<div class="wpsg_form_right">
+		<input style="width:auto;" type="checkbox" <?php echo ((@$this->view['profil']['data']['firstlinecolname'] == '1')?'checked="checked"':''); ?> value="1" onchange="" id="wpsg_mod_export_firstlinecolname" id="wpsg_mod_export_firstlinecolname" /></div>
+	<div class="wpsg_clear"></div>
+</div>
+<script type="text/javascript">
+
+	jQuery('#wpsg_mod_export_firstlinecolname').bind('change', function() {
+		jQuery.ajax( {
+			url: '<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_export&do=inlinedit&noheader=1',
+			data: {
+				field: 'firstlinecolname',
+				value: ((jQuery('#wpsg_mod_export_firstlinecolname').attr("checked") == 'checked')?'1':'0'),
+				profil_id: '<?php echo $this->view['profil']['id']; ?>'
+			}
+		} );
+	} );
+
+</script>
+<div class="wpsg_form_field">
+	<div class="wpsg_form_left">
+		<label for="wpsg_mod_export_iso"><?php echo __('Dateiformat (Import wie Export)', 'wpsg'); ?>:</label>
+	</div>
+	<div class="wpsg_form_right">
+		<select name="wpsg_mod_export_iso" id="wpsg_mod_export_iso">
+			<option value="0" <?php echo ((@$this->view['profil']['data']['iso'] != '1')?'selected="selected"':''); ?>><?php echo __('UTF-8', 'wpsg'); ?></option>
+			<option value="1" <?php echo ((@$this->view['profil']['data']['iso'] == '1')?'selected="selected"':''); ?>><?php echo __('ISO-8859-1', 'wpsg'); ?></option>
+		</select>
+	</div>
+	<div class="wpsg_clear"></div>
+</div>
+
+<br />
+
+<script type="text/javascript">
+
+	jQuery('#wpsg_mod_export_iso').bind('change', function() {
+		jQuery.ajax( {
+			url: '<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_export&do=inlinedit&noheader=1',
+			data: {
+				field: 'iso',
+				value: jQuery('#wpsg_mod_export_iso').val(),
+				profil_id: '<?php echo $this->view['profil']['id']; ?>'
+			}
+		} );
+	} );
+
+</script>
+<div class="wpsg_form_field">
+	<div class="wpsg_form_left">
+		<label for="wpsg_mod_export_iso"><?php echo __('Muster Vorlage (csv Datei)', 'wpsg'); ?>:</label>
+	</div>
+	<div class="wpsg_form_right">
+		<iframe name="wpsg_mod_export_upload_frame" style="display:none;"></iframe>
+		<form action="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_export&do=musterupload&noheader=1&profil_id=<?php echo $this->view['profil']['id']; ?>" target="wpsg_mod_export_upload_frame" method="post" enctype="multipart/form-data">
+			<input style="float:left; width:auto;" type="file" name="wpsg_mod_export_muster" />
+			<input style="float:right; width:auto;" type="submit" value="<?php echo __('Hochladen', 'wpsg'); ?>" />
+		</form> 
+	</div>
+	<div class="wpsg_clear"></div>
+</div>
+<br />
+<table class="wpsg_mod_export_fieldlist" cellpadding="0" cellspacing="0">
+	<tr>
+		<th class="wpsg_mod_export_col_name"><?php echo __('Spaltenname', 'wpsg'); ?></th>
+		<th class="wpsg_mod_export_col_value"><?php echo __('Wert', 'wpsg'); ?></th>
+		<th class="wpsg_mod_export_col_format"><?php echo __('Format', 'wpsg'); ?></th>
+		<th class="wpsg_mod_export_col_remove"></th>
+	</tr>
+	<?php $i = 0; foreach ((array)$this->view['profil']['data']['fields'] as $f_key => $f) { $i ++; ?>
+	<tr class="wpsg_tablerow wpsg_mod_export_row1 wpsg_mod_export_fieldrow_<?php echo $f_key; ?> <?php echo (($i % 2 == 0)?'odd':'even'); ?>">
+		<td class="wpsg_mod_export_col_name wpsg_editable" id="field_name_<?php echo $f_key; ?>"><?php echo $f['name']; ?></td>
+		<td class="wpsg_mod_export_col_field wpsg_editable" id="field_typ_<?php echo $f_key; ?>"><?php
+		 
+			foreach ($this->view['fields'] as $fieldgroup)
+			{
+				
+				foreach ($fieldgroup['fields'] as $field_key => $field)
+				{
+
+					if ($field_key == $f['value'])
+					{
+						echo $field;
+					}
+					
+				}
+				
+			}			
+		
+		?></td>
+		<td class="wpsg_mod_export_col_format wpsg_editable" id="field_format_<?php echo $f_key; ?>"><?php echo $this->view['arFormats'][$f['format']]; ?></td>
+		<td>
+			<a style="float:right;" onclick="return wpsg_mod_export_removeField(<?php echo $this->view['profil']['id']; ?>, <?php echo $f_key; ?>);" title="<?php echo __('Profil löschen', 'wpsg'); ?>" href="#" class="wpsg_icon wpsg_icon_remove"></a>				
+		</td>
+	</tr>
+	<tr id="userformatrow_<?php echo $f_key; ?>" style="<?php echo (($f['format'] != 700)?'display:none;':''); ?>" class="wpsg_mod_export_row2 wpsg_tablerow wpsg_mod_export_fieldrow_<?php echo $f_key; ?> <?php echo (($i % 2 == 0)?'odd':'even'); ?>">
+		<td class="wpsg_mod_export_col_name"></td>
+		<td class="wpsg_mod_export_col_field_user"><?php echo __('Format:', 'wpsg'); ?></td>
+		<td class="wpsg_mod_export_col_format_user wpsg_editable" id="field_userformat_<?php echo $f_key; ?>"><?php echo wpsg_hspc($f['userformat']); ?></td>
+		<td style="position:relative;">
+			<a rel="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=mod_export_userformat" href="?page=wpsg-Admin&subaction=loadHelp&noheader=1&field=mod_export_userformat" class="wpsg_form_help" style="float:right; position:relative;"></a>
+			<script type="text/javascript">
+
+				jQuery('#field_userformat_<?php echo $f_key; ?>').editable('<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_export&do=inlinedit&noheader=1', {
+					submitdata: {
+						field: 'fielduserformat_<?php echo $f_key; ?>',
+						profil_id: '<?php echo $this->view['profil']['id']; ?>'
+					},
+					submit: '<?php echo __('Speichern', 'wpsg'); ?>',
+					placeholder: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+					indicator: '<?php echo __('Speicher ...', 'wpsg'); ?>',
+			    	tooltip: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>'
+				});
+			
+				jQuery('#field_format_<?php echo $f_key; ?>').editable('<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_export&do=inlinedit&noheader=1', { 
+					submitdata: {
+						field: 'fieldformat_<?php echo $f_key; ?>',
+						profil_id: '<?php echo $this->view['profil']['id']; ?>'
+					},
+					submit: '<?php echo __('Speichern', 'wpsg'); ?>',					
+					data: '<?php echo json_encode($this->view['arFormats']); ?>',
+					type: 'select',
+					placeholder: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+					indicator: '<?php echo __('Speicher ...', 'wpsg'); ?>',
+			    	tooltip: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+			    	callback: function(el) {
+				    	if (el == '<?php echo $this->view['arFormats'][700]; ?>')
+				    	{
+					    	jQuery('#userformatrow_<?php echo $f_key; ?>').show();
+				    	}	
+				    	else
+				    	{
+				    		jQuery('#userformatrow_<?php echo $f_key; ?>').hide();
+				    	}			    	
+			    	}
+				});
+			
+				jQuery('#field_name_<?php echo $f_key; ?>').editable('<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_export&do=inlinedit&noheader=1', { 
+					submitdata: {
+						field: 'fieldname_<?php echo $f_key; ?>',
+						profil_id: '<?php echo $this->view['profil']['id']; ?>'
+					},
+					submit: '<?php echo __('Speichern', 'wpsg'); ?>',
+					placeholder: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+					indicator: '<?php echo __('Speicher ...', 'wpsg'); ?>',
+			    	tooltip: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>'
+				});
+			
+				jQuery('#field_typ_<?php echo $f_key; ?>').editable('<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_export&do=inlinedit&noheader=1', { 
+					submitdata: {
+						field: 'fieldtyp_<?php echo $f_key; ?>',
+						profil_id: '<?php echo $this->view['profil']['id']; ?>'
+					},
+					submit: '<?php echo __('Speichern', 'wpsg'); ?>',
+					data: '<?php echo json_encode($this->view['fields']); ?>',
+					type: 'select',
+					placeholder: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+					indicator: '<?php echo __('Speicher ...', 'wpsg'); ?>',
+			    	tooltip: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>'
+				});
+					
+			</script>	
+		</td>
+	</tr>
+	<?php } ?>
+</table>
+
+<script type="text/javascript">
+
+	jQuery(document).ready(function() {
+		
+		jQuery('.wpsg_form_help').tipTip();
+
+		jQuery('.wpsg_mod_export_row1').bind('mouseover', function() {
+			jQuery(this).next().addClass('wpsg_tablerow_hover');
+		} ).bind('mouseout', function() {
+			jQuery(this).next().removeClass('wpsg_tablerow_hover');
+		} );
+
+		jQuery('.wpsg_mod_export_row2').bind('mouseover', function() {
+			jQuery(this).prev().addClass('wpsg_tablerow_hover');
+		} ).bind('mouseout', function() {
+			jQuery(this).prev().removeClass('wpsg_tablerow_hover');
+		} );
+		
+	} );
+
+</script>

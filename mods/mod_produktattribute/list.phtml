@@ -1,0 +1,128 @@
+<?php
+
+	/**
+	 * Template für die Liste der Produktattribute im Backend
+	 */
+
+?>
+<?php if (sizeof($this->view['data']) <= 0) { ?>
+<p><?php echo __('Keine Produktattribute hinterlegt.', 'wpsg'); ?></p>
+<?php } else { ?>
+<table class="wpsg_mod_produktattribute_table">
+	<tr>
+		<th class="col_id"><?php echo __('ID', 'wpsg'); ?></th>
+		<th class="col_name" colspan="2"><?php echo __('Bezeichnung', 'wpsg'); ?></th>
+		<th class="col_html"></th>
+		<th class="col_show"><a href="#" onclick="return false;" class="wpsg_icon wpsg_icon_lupe" title="<?php echo __('Werte direkt in jedem Template anzeigen wenn gesetzt.', 'wpsg'); ?>"></a></th>
+		<th class="col_typ"><?php echo __('Typ', 'wpsg'); ?></th>		
+		<th class="col_action"></th>
+	</tr>
+	<?php foreach ($this->view['data'] as $pa) { ?>
+	<tr>
+		<td class="col_id"><?php echo $pa['id']; ?></td>
+		<td colspan="2" id="pa_<?php echo $pa['id']; ?>_name" class="col_name wpsg_editable"><?php echo wpsg_hspc($pa['name']); ?></td>
+		<td class="col_html">
+			<a class="wpsg_icon wpsg_icon_html wpsg_icon_center" href="#" title="<?php echo __('HTML Code generieren', 'wpsg'); ?>" onclick="return wpsg_genPACode(<?php echo $pa['id']; ?>);"></a>
+		</td>
+		<td class="col_show">
+			<input title="<?php echo __('Werte direkt in jedem Template anzeigen wenn gesetzt.', 'wpsg'); ?>" id="show_<?php echo $pa['id']; ?>" <?php echo (($pa['autoshow'] == '1')?'checked="checked"':''); ?> type="checkbox" value="1" />
+		</td>
+		<td class="col_typ">
+			<select id="typ_<?php echo $pa['id']; ?>" name="pa[<?php echo $pa['id']; ?>][typ]" onchange="wpsg_mod_produktattribute_changeTyp(<?php echo $pa['id']; ?>);">
+				<option <?php echo (($pa['typ'] == '0')?'selected="selected"':''); ?> value="0"><?php echo __('Textfeld', 'wpsg'); ?></option>
+				<option <?php echo (($pa['typ'] == '1')?'selected="selected"':''); ?> value="1"><?php echo __('Textfeld (RTE)', 'wpsg'); ?></option>
+				<option <?php echo (($pa['typ'] == '2')?'selected="selected"':''); ?> value="2"><?php echo __('Auswahlfeld', 'wpsg'); ?></option>
+				<option <?php echo (($pa['typ'] == '3')?'selected="selected"':''); ?> value="3"><?php echo __('Checkbox', 'wpsg'); ?></option>
+			</select>			
+		</td>		
+		<td class="col_action">
+			
+			<a id="del_<?php echo $pa['id']; ?>" class="wpsg_icon wpsg_icon_remove" href="#" title="<?php echo __('Produktvariable löschen', 'wpsg'); ?>" onclick="return wpsg_removePV(<?php echo $pv['id']; ?>);"></a>
+			
+			<script type="text/javascript">
+
+				jQuery('#del_<?php echo $pa['id']; ?>').bind('click', function() {
+
+					if (!confirm('<?php echo __('Sind Sie sich sicher, dass Sie dieses Produktattribute löschen möchten?', 'wpsg'); ?>')) return false;
+
+					jQuery('#wpsg_pa_list').html('<img src="<?php echo WPSG_URL; ?>views/gfx/ajax-loader.gif" alt="<?php echo __('Bitte warten ...', 'wpsg'); ?>" />');
+					
+					jQuery.ajax( {
+						url: '<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&subaction=module&modul=wpsg_mod_produktattribute&do=inlinedit&noheader=1',
+						data: {
+							field: 'delete',
+							pa_id: '<?php echo $pa['id']; ?>'
+						},
+						success: function(data) {
+							jQuery('#wpsg_pa_list').html(data);		
+						}
+					} );
+					
+				} );
+			
+				jQuery('#show_<?php echo $pa['id']; ?>').bind('change', function() {
+
+					if (jQuery(this).attr("checked")) value = 1; else value = 0;
+					
+					jQuery.ajax( {
+						url: '<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&subaction=module&modul=wpsg_mod_produktattribute&do=inlinedit&noheader=1',
+						data: {
+							field: 'show',
+							value: value,
+							pa_id: '<?php echo $pa['id']; ?>'
+						},
+						success: function(data) {
+							if (data != "1") alert(data);
+						}
+					} );
+					
+				} );
+			
+				jQuery('#pa_<?php echo $pa['id']; ?>_name').editable('<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&subaction=module&modul=wpsg_mod_produktattribute&do=inlinedit&noheader=1', {
+					submitdata: { 
+			    		field: 'name',
+			    		pa_id: '<?php echo $pa['id']; ?>'
+					},
+					submit  : '<?php echo __('Speichern', 'wpsg'); ?>',
+					placeholder: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+					indicator: '<?php echo __('Speicher ...', 'wpsg'); ?>',
+			    	tooltip: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>'
+				});
+			
+			</script>
+			
+		</td>
+	</tr>
+	<tr class="auswahlrow auswahlrow_<?php echo $pa['id']; ?>">
+		<td></td>
+		<td>
+			<label>
+				<?php echo __('Auswahl (| als Trenner)', 'wpsg'); ?>:
+			</label>
+			<script type="text/javascript">
+
+				jQuery(document).ready(function() {
+					
+					jQuery('#pa_<?php echo $pa['id']; ?>_auswahl').editable('<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&subaction=module&modul=wpsg_mod_produktattribute&do=inlinedit&noheader=1', {
+						submitdata: { 
+				    		field: 'auswahl',
+				    		pa_id: '<?php echo $pa['id']; ?>'
+						},
+						data: '<?php echo $pa['auswahl']; ?>',
+						submit: '<?php echo __('Speichern', 'wpsg'); ?>',
+						placeholder: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>',
+						indicator: '<?php echo __('Speicher ...', 'wpsg'); ?>',
+				    	tooltip: '<?php echo __('Zum Bearbeiten anklicken ...', 'wpsg'); ?>'
+					});
+
+					wpsg_mod_produktattribute_changeTyp(<?php echo $pa['id']; ?>);
+					
+				} );
+			
+			</script>
+		</td>
+		<td colspan="4" class="wpsg_editable" id="pa_<?php echo $pa['id']; ?>_auswahl"><?php echo wpsg_hspc(((trim($pa['auswahl']) == '')?__('Bitte anklicken um Auswahl kommagetrennt zu definieren', 'wpsg'):$pa['auswahl'])); ?></td>
+	</tr>
+	<?php } ?>
+</table>
+<?php } ?>

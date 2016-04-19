@@ -1,0 +1,30 @@
+<?php
+
+	/**
+	 * Template für den Import der Kundendaten 
+	 */
+
+?>
+<div class="wrap">
+	<div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
+	<h2>
+		<?php echo __('Kundenimport', 'wpsg'); ?>
+		<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Customer&amp;action=index" class="add-new-h2"><?php echo __("Zurück zur Kundenverwaltung", "wpsg"); ?></a>
+	</h2>
+	
+	<?php echo $this->writeBackendMessage(); ?>
+	<br />
+	
+	<form method="POST" action="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Customer&amp;action=import&amp;noheader=1" id="import_form" enctype="multipart/form-data">
+	
+		<div class="wpsg_hinweis"><?php echo __('Laden Sie ein vorher exportiertes CSV File hoch, die Kundendaten werden dann aus dieser Datei importiert.', 'wpsg'); ?></div>
+		<br />
+	
+		<input type="file" name="wpsg_importfile" />
+		
+		<br /><br />
+		<input type="submit" value="<?php echo __('Import starten', 'wpsg'); ?>" class="button-primary" name="wpsg_import" />
+		
+	</form>
+	
+</div>

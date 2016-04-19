@@ -1,0 +1,45 @@
+<?php
+
+	/**
+	 * Template für die Produktgruppenauswahl in der Produktübersicht
+	 */
+
+?> 
+
+<script type="text/javascript">
+
+	function wpsg_goGroup(group_id)
+	{
+		
+		jQuery('#wpsg_seite').val('1');
+		jQuery('#wpsg_search_pgruppe').val(group_id);
+		jQuery('#filter_form').submit();
+
+		return false;
+		
+	}
+	
+</script>
+
+<input type="hidden" id="wpsg_search_pgruppe" name="search[pgruppe]" value="<?php echo $_REQUEST['search']['pgruppe']; ?>" />
+
+<?php if (is_array($this->view['productgroups']) && sizeof($this->view['productgroups']) > 0) { ?>
+<ul class="subsubsub wpsg_order_index_status">
+	<?php foreach ($this->view['productgroups'] as $pg) { ?>
+	<li>
+		<?php if (isset($_REQUEST['search']['pgruppe']) && $_REQUEST['search']['pgruppe'] == $pg['id']) { ?>
+		<span class="akt"><?php echo wpsg_hspc($pg['name']); ?></span> <span class="count">(<?php echo $pg['countProdukte']; ?>) | </span>
+		<?php } else { ?>
+		<a onclick="return wpsg_goGroup(<?php echo $pg['id']; ?>);" href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Produkt&search[pgruppe]=<?php echo $pg['id']; ?>"><?php echo wpsg_hspc($pg['name']); ?> <span class="count">(<?php echo $pg['countProdukte']; ?>)</span></a> |
+		<?php } ?>	
+	</li>
+	<?php } ?>
+	<li>
+		<?php if (isset($_REQUEST['search']['pgruppe']) && $_REQUEST['search']['pgruppe'] > 0) { ?>
+		<a onclick="return wpsg_goGroup(0);" href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Produkt"><?php echo __('Alle', 'wpsg'); ?> <span class="count">(<?php echo $this->view['countProducts']; ?>)</span></a>
+		<?php } else { ?>
+		<span class="akt"><?php echo __('Alle', 'wpsg'); ?></span> <span class="count">(<?php echo $this->view['countProducts']; ?>)</span>
+		<?php } ?>
+	</li>
+</ul>
+<?php } ?>

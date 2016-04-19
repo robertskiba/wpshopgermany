@@ -1,0 +1,32 @@
+<?php
+
+	/**
+	 * Template für das Bestell Log
+	 */
+
+?>
+<?php if (is_array($this->view['log']) && sizeof($this->view['log']) > 0) { ?>
+<table class="wpsg_orderlog">
+	<tr>
+		<th class="col_date"><?php echo __('Datum', 'wpsg'); ?></th>
+		<th class="col_title"><?php echo __('Titel', 'wpsg'); ?></th>
+		<th class="col_aktion"></th>
+	</tr>		
+	<?php foreach ($this->view['log'] as $l) { ?>
+	<tr>
+		<td class="col_date"><?php echo date('d.m.Y H:i:s', strtotime($l['cdate'])); ?></td>
+		<td class="col_title"><?php echo $l['title']; ?></td>
+		<td class="col_aktion">
+			<a href="#" onclick="jQuery('#wpsg_mailtext_<?php echo $l['id']; ?>').toggle(); return false"><?php echo __('Anzeigen/Verbergen', 'wpsg'); ?></a>
+		</td>
+	</tr>
+	<tr id="wpsg_mailtext_<?php echo $l['id']; ?>" style="display:none;">							
+		<td colspan="3" class="col_mailtext">
+			<textarea readonly="readonly"><?php echo wpsg_xss($l['mailtext']); ?></textarea>
+		</td>
+	</tr>
+	<?php } ?>							
+</table>
+<?php } else { ?>
+<?php echo __('Noch keine Einträge', 'wpsg'); ?>
+<?php } ?>

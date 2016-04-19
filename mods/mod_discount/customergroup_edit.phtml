@@ -1,0 +1,16 @@
+<?php
+
+	/**
+	 * Template für die Integration des Rabatts in die Kundengruppenverwaltung
+	 */
+
+?>
+<div id="wpsg_customerpasswd" class="postbox">
+	<div class="handlediv" title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>"><br /></div>
+	<h3 class="wpsg_handlediv">
+		<span><?php echo __('Kundengruppenrabatt', 'wpsg'); ?></span>
+	</h3>
+	<div class="inside">
+		<?php echo wpsg_drawForm_Input('wpsg_mod_discount[discount]', __('Rabatt', 'wpsg'), wpsg_ff($this->view['wpsg_mod_discount']['discount'])); ?>
+	</div>
+</div>

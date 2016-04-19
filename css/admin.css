@@ -1,0 +1,664 @@
+/*
+ * Diese Datei wird immer im Backend geladen. Hier sollten die Admin CSS Einstellungen rein, die nichts mit den Themes zu tun haben
+ */
+
+/*
+ * Allgemein
+ */ 
+.wpsg_error { color:#FF0000; font-weight:bold; }
+.wpsg_developer { color:#FF0000; }
+.wpsg_change_error { background-color:#EE3B3B !important; }
+.wpsg_erfolg { color:green; }
+.wpsg_hinweis { font-style:italic; }
+.wpsg_table .odd td { background-color:#DEDEDE; }
+.wpsg_table .even td { }
+.wpsg_message img { float:right; }
+#wikipage h1 { line-height:100%; font-size:13px; }
+.wpsg_placeholder { border-style: dashed; border-width: 1px; height: 26px; margin: 0 auto 20px; }
+#icon-wpsg-Admin { background-image:url("../../../../../wp-admin/images/icons32.png"); background-position: -370px -5px; }
+/*.tablenav-pages-wrap { width:300px !important; }*/
+.tooltip { text-decoration:none; color:inherit; cursor:inherit; }
+.tooltip:hover { color:inherit; }
+.sortable_handler { cursor:move; }
+
+/*
+ * Datepicker
+ */
+.ui-datepicker { width: 17em; padding:0; display: none; border:1px solid #444444; background-color:#F1F1F1; }
+.ui-datepicker-header { color:#FFFFFF; background-color:#444444; }
+.ui-datepicker .ui-datepicker-header { position:relative; padding:.2em 0; }
+.ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next { position:absolute; top: 2px; width: 1.8em; height: 1.8em; }
+.ui-datepicker .ui-icon { width: 16px; height: 16px; background-image: url('../../lib/ui/smoothness/images/ui-icons_888888_256x240.png'); }
+.ui-datepicker .ui-icon-circle-triangle-w { background-position: -80px -192px; }
+.ui-datepicker .ui-icon-circle-triangle-e { background-position: -48px -192px; }
+.ui-datepicker .ui-datepicker-prev-hover, .ui-datepicker .ui-datepicker-next-hover { top: 1px; }
+.ui-datepicker .ui-datepicker-prev { left:2px; }
+.ui-datepicker .ui-datepicker-next { right:2px; }
+.ui-datepicker .ui-datepicker-prev-hover { left:1px; }
+.ui-datepicker .ui-datepicker-next-hover { right:1px; }
+.ui-datepicker .ui-datepicker-prev span, .ui-datepicker .ui-datepicker-next span { display: block; position: absolute; left: 50%; margin-left: -8px; top: 50%; margin-top: -8px;  }
+.ui-datepicker .ui-datepicker-title { margin: 0 2.3em; line-height: 1.8em; text-align: center; }
+.ui-datepicker .ui-datepicker-title select { font-size:1em; margin:1px 0; }
+.ui-datepicker select.ui-datepicker-month-year {width: 100%;}
+.ui-datepicker select.ui-datepicker-month, 
+.ui-datepicker select.ui-datepicker-year { width: 49%;}
+.ui-datepicker table {width: 100%; font-size: .9em; border-collapse: collapse; margin:0 0 .4em; }
+.ui-datepicker th { padding: .7em .3em; text-align: center; font-weight: bold; border: 0;  }
+.ui-datepicker td { border: 0; padding: 1px; }
+.ui-datepicker td span, .ui-datepicker td a { display: block; padding: .2em; text-align: right; text-decoration: none; }
+.ui-datepicker .ui-datepicker-buttonpane { background-image: none; margin: .7em 0 0 0; padding:0 .2em; border-left: 0; border-right: 0; border-bottom: 0; }
+.ui-datepicker .ui-datepicker-buttonpane button { float: right; margin: .5em .2em .4em; cursor: pointer; padding: .2em .6em .3em .6em; width:auto; overflow:visible; }
+.ui-datepicker .ui-datepicker-buttonpane button.ui-datepicker-current { float:left; }
+
+/* with multiple calendars */
+.ui-datepicker.ui-datepicker-multi { width:auto; }
+.ui-datepicker-multi .ui-datepicker-group { float:left; }
+.ui-datepicker-multi .ui-datepicker-group table { width:95%; margin:0 auto .4em; }
+.ui-datepicker-multi-2 .ui-datepicker-group { width:50%; }
+.ui-datepicker-multi-3 .ui-datepicker-group { width:33.3%; }
+.ui-datepicker-multi-4 .ui-datepicker-group { width:25%; }
+.ui-datepicker-multi .ui-datepicker-group-last .ui-datepicker-header { border-left-width:0; }
+.ui-datepicker-multi .ui-datepicker-group-middle .ui-datepicker-header { border-left-width:0; }
+.ui-datepicker-multi .ui-datepicker-buttonpane { clear:left; }
+.ui-datepicker-row-break { clear:both; width:100%; font-size:0em; }
+
+/* RTL support */
+.ui-datepicker-rtl { direction: rtl; }
+.ui-datepicker-rtl .ui-datepicker-prev { right: 2px; left: auto; }
+.ui-datepicker-rtl .ui-datepicker-next { left: 2px; right: auto; }
+.ui-datepicker-rtl .ui-datepicker-prev:hover { right: 1px; left: auto; }
+.ui-datepicker-rtl .ui-datepicker-next:hover { left: 1px; right: auto; }
+.ui-datepicker-rtl .ui-datepicker-buttonpane { clear:right; }
+.ui-datepicker-rtl .ui-datepicker-buttonpane button { float: left; }
+.ui-datepicker-rtl .ui-datepicker-buttonpane button.ui-datepicker-current { float:right; }
+.ui-datepicker-rtl .ui-datepicker-group { float:right; }
+.ui-datepicker-rtl .ui-datepicker-group-last .ui-datepicker-header { border-right-width:0; border-left-width:1px; }
+.ui-datepicker-rtl .ui-datepicker-group-middle .ui-datepicker-header { border-right-width:0; border-left-width:1px; }
+
+/*
+ * Allgemein Icons ...
+ */
+ .branch-3-8 #adminmenu .toplevel_page_wpsg-Admin .wp-menu-image:before { content: "\f174"; }
+ .branch-3-8 #adminmenu .toplevel_page_wpsg-Admin .wp-menu-image img { position:absolute; left:-100px; top:-100px; height:1px; width:1px; }
+ 
+.wpsg_icon { display:block; width:16px; height:16px; float:left; margin-right:4px; background-repeat:no-repeat; background-position:50% 50%; }
+.wpsg_icon_center { margin:auto; }
+.wpsg_icon_right { float:right; }
+.wpsg_icon_add { background-image:url('../gfx/add.png'); }
+.wpsg_icon_edit { background-image:url('../gfx/edit.png'); }
+.wpsg_icon_html { background-image:url('../gfx/html.png'); }
+.wpsg_icon_remove { background-image:url('../gfx/delete.png'); }
+.wpsg_icon_plzedit { background-image:url('../gfx/edit.png'); width:32px; margin-right:5px; }
+.wpsg_form_language img { margin-left:2px; margin-top:5px; margin-right:5px; }
+.wpsg_form_language a { text-decoration:none; }
+.cluetip-inner img { max-width:100%; }
+
+/* Link Klassen */
+.wpsg_link_add { background-image:url('../gfx/add.png'); padding-left:20px; background-repeat:no-repeat; line-height:20px; background-position:left 50%; height:20px; display:block; }
+
+/*
+ * Admin 
+ */
+.wpsg_admin_theme { width:600px; border: 1px solid #AAAAAA; border-bottom-left-radius:6px; border-bottom-right-radius:6px; border-top-left-radius: 6px; border-top-right-radius: 6px; padding:10px; margin-bottom:10px; }
+.wpsg_admin_theme_akt { background-color:#FFFFFF !important; }
+.wpsg_admin_theme_image { width:75px; height:75px; border:1px solid #AAAAAA; float:left; }
+.wpsg_admin_theme_content { float:left; margin-left:10px; }
+.wpsg_admin_theme_name { font-weight:bold; font-size:14px; }
+.wpsg_admin_theme_info { color:#555555; }
+.wpsg_admin_theme_new { width:600px; border: 1px solid #AAAAAA; border-bottom-left-radius:6px; border-bottom-right-radius:6px; border-top-left-radius: 6px; border-top-right-radius: 6px; padding:10px; margin-bottom:10px; }
+.wpsg_admin_theme_new .button { float:right; }
+.wpsg_admin, .wpsg_admin_wrap { width:970px; }
+.wpsg_admin_topmenu { border-top: 1px solid #AAAAAA; }
+.wpsg_admin_topmenu ul { margin-top: -1px; list-style: none; width: 100%; margin-bottom: 10px; }
+.wpsg_admin_topmenu li { padding: 0px; margin: 0px; display: inline; }
+.wpsg_admin_topmenu li a { display: block; float: left; padding-left: 12px; padding-right: 12px; font: 11px/ 18px "Lucida Grande", Verdana, Arial, "Bitstream Vera Sans", sans-serif; color: #21759B; line-height: 30px; text-decoration: none !important; }
+.wpsg_admin_topmenu li.current a { background-image: url("../gfx/tab_top.gif"); background-repeat: no-repeat; background-position: top center; }
+.wpsg_admin_topmenu li a:hover { }
+.wpsg_admin_submenu { float:left; width:200px; }
+.wpsg_admin_submenu .head { cursor:pointer; margin-left:0px; width:180px; line-height:18px;   border-style: solid solid none; border-top-left-radius: 6px; border-top-right-radius: 6px; border-width: 1px 1px 0; border-color:#AAAAAA; color: #21759B; cursor:pointer !important; background-color:#F1F1F1; }
+.wpsg_admin_submenu .title { float:left; padding:5px; padding-left:12px; }
+.wpsg_admin_submenu .toggle { clear: right; cursor: default; float: right; height:26px; margin: 1px 0 0; padding: 1px 2px 0 0; width: 22px; cursor:pointer !important; }
+.wpsg_admin_submenu ul { border-bottom:1px solid #AAAAAA; border-right: 1px solid #AAAAAA; width: 181px; float: left; padding: 0px; margin: 0px; margin-left:0px; }
+.wpsg_admin_submenu ul li { border-left: 1px solid #AAAAAA; margin: 0px; }
+.wpsg_admin_submenu ul li.current { background-color: #F5F5F5; border-left: 0px; border-left:1px solid #AAAAAA; }
+.wpsg_admin_submenu ul li a { display: block; padding-left: 12px; font: 11px/ 18px "Lucida Grande", Verdana, Arial, "Bitstream Vera Sans", sans-serif; color: #21759B; line-height: 20px; text-decoration: none !important; }
+.wpsg_admin_submenu ul li a:hover { background-color: #EAF2FA; } 
+.wpsg_admin_submenu ul li.modul_akt a { background-image: url("../gfx/tick.png"); background-position: right center; background-repeat: no-repeat; font-weight: bold !important; width: 165px; }
+.wpsg_admin_content { float:left; }
+.wpsg_admin_box { width:770px; }
+.wpsg_admin_box .title { line-height:18px; padding:0px; border-style: solid solid none; border-top-left-radius: 6px; border-top-right-radius: 6px; border-width: 1px 1px 0; border-color:#AAAAAA; color: #21759B; cursor:pointer !important; background-color:#F1F1F1; }
+.wpsg_admin_box .content { border-bottom:1px solid #AAAAAA; border-right:1px solid #AAAAAA; border-left:1px solid #AAAAAA; min-height:18px; padding:5px; padding-left:12px; }
+.wpsg_admin_box .head .title { cursor:default !important; }
+.wpsg_admin_box .head .title .tab { cursor:pointer; float:left; padding-left:12px; padding-right:15px; border-right:1px solid #AAAAAA; padding-top:5px; padding-bottom:5px; }
+.wpsg_admin_box .head .title .tabright { float:right; border-left:1px solid #AAAAAA; border-right:0px; }
+.wpsg_admin_box .head .title .tab:first-child { border-top-left-radius:6px; }
+.wpsg_admin_box .head .title .tabright-last { border-top-right-radius:6px !important; }
+.wpsg_admin_box .head .title .tab:hover, .wpsg_admin_box .head .title .akttab { background-color:#FFFFFF; }
+.wpsg_admin_box .head .title .fulltab { cursor:pointer; padding:5px 5px 5px 12px; }
+.wpsg_admin_box .head .title .tablink { padding:5px; float:right; }
+.wpsg_admin_date_from { margin-right:4px;}
+.wpsg_admin_date_to { margin-right:4px; margin-left:25px; }
+.wpsg_clear { clear:both; }
+.wpsg_form_field { width:770px; margin-bottom:5px; }
+.wpsg_form_field_fullrow { position:relative; }
+.wpsg_form_field_fullrow label { font-weight:bold; line-height:25px; }
+.wpsg_form_field .wpsg_form_left { line-height:24px; font-weight:bold; width:350px; float:left; }
+.wpsg_form_field .wpsg_form_right { width:420px; float:left; position:relative; }
+.wpsg_form_field .wpsg_form_right select, .wpsg_form_field .wpsg_form_right input, .wpsg_form_field .wpsg_form_right textarea { width:95%; }
+.wpsg_form_field .wpsg_form_right input.button { width:auto; }
+.wpsg_form_field .wpsg_form_right label { line-height:25px; }
+.wpsg_form_field_max select { width:100%; }
+.postbox .wpsg_form_field .wpsg_form_left  { width:330px; } /* z.B. Bestellverwaltung Bankalignment Modul */ 
+.wpsg_admin_box .wpsg_form_field { margin-bottom:0px; }
+.wpsg_admin_box .wpsg_form_field .wpsg_form_right { width:401px ; }
+.wpsg_form_field .wpsg_form_right_unit select, .wpsg_form_field .wpsg_form_right_unit input, .wpsg_form_field .wpsg_form_right_unit textarea { width:80%; float:left; }
+.wpsg_form_field .wpsg_form_right_unit p.wpsg_unit { width:15%; float:left; }
+.wpsg_form_field .wpsg_form_right textarea { height:100px; }
+.wpsg_form_field .wpsg_form_right input.checkbox { width:auto !important; float:left; margin-left:2px; margin-top:5px; }
+.wpsg_form_field .wpsg_form_right p { padding:4px 0px 4px 6px; margin:0px; }
+.wpsg_formfield_small .wpsg_form_left { line-height:12px; }
+.wpsg_formfield_small .wpsg_form_right p { line-height:12px; padding-top:0px; padding-bottom:0px; }
+.widget-inside .wpsg_form_field { width:100%; }
+.widget-inside .wpsg_form_left { width:100%; }
+.widget-inside .wpsg_form_right { width:100%; }
+.widget-inside .wpsg_form_field .wpsg_form_right select, 
+.widget-inside .wpsg_form_field .wpsg_form_right input,
+.widget-inside .wpsg_form_field .wpsg_form_right textarea { width:100%; }  
+.timestamp-wrap input, .timestamp-wrap select { width:auto !important; }
+.produktwrap .wpsg_form_field { width:780px; }
+.produktwrap .wpsg_form_left { width:380px; }
+.produktwrap .wpsg_form_right { width:400px; }
+.wpsg_form_help { right:0px; top:4px; position:absolute; display:block; width:16px; height:16px; background-image:url('../gfx/help.png'); }
+.widget-content .wpsg_form_help { position:relative; float:right; margin-top:-2px; }
+.wpsg_form_help_notip { right:0px; top:4px; position:absolute; display:block; width:16px; height:16px; background-image:url('../gfx/help.png'); }
+.wpsg_admin_content { padding:0px; margin:0px; float:left; width:750px; }
+.wpsg_admin_content h3 { position:relative; }
+.wpsg_admin_table { width:100%; }
+.wpsg_admin_box .wpsg_admin_table { margin-left:-3px; } 
+.wpsg_admin_table th { font-weight:bold; text-align:left; padding:3px; }
+.wpsg_admin_table td { padding:3px; } 
+.wpsg_admin_wpsg_list .col_name { }
+.wpsg_admin_wpsg_list .col_value { width:100px; }
+.wpsg_admin_wpsg_list .col_aktion { width:50px; }
+.wpsg_editable { border-bottom:1px dotted #666666; cursor:pointer; }
+.wpsg_editable input, .wpsg_editable select { height:24px !important; font-size:12px; }
+.wpsg_editable input { width:100%; }
+.wpsg_pflichtfelder { border-spacing:0px; width:100%; }
+.wpsg_pflichtfelder td { padding:0px; }
+.wpsg_pflichtfelder tr th { text-align:left; }
+.wpsg_pflichtfelder td.col1 select, 
+.wpsg_pflichtfelder td.col1 input { width:100%; }
+.wpsg_customfields { border-spacing:0px; width:100%; }
+.wpsg_customfields td { padding:0px; }
+.wpsg_customfields tr th { text-align:left; }
+.wpsg_customfields td select { width:100%; }
+.wpsg_customfields .col0 { width:45px; }
+.wpsg_customfields .col1 { width:305px; }
+.wpsg_customfields .col4 { width:25px; }
+.wpsg_customfields .col5 { text-align:center; }
+.wpsg_customfields .col2345 input { width:100%; }
+table.wpsg_admin_laender_list { font-size:12px; }
+table.wpsg_admin_laender_list tr.odd td { background-color:#DEDEDE; }
+table.wpsg_admin_laender_list tr.even td {}
+.wpsg_admin_laender_list .col_vz { width:100px; } 
+.wpsg_admin_laender_list .col_default { width:75px; text-align:center; }
+.wpsg_admin_laender_list .col_mwst { width:55px; }
+.wpsg_admin_laender_list .col_mwstsetting { width:100px; } 
+.wpsg_admin_laender_list .col_action { width:40px; }
+.wpsg_mod_produktattribute_table { width:100%; table-layout:fixed; }
+.wpsg_mod_produktattribute_table .col_id { width:25px; text-align:left; }
+.wpsg_mod_produktattribute_table .col_name { text-align:left; }
+.wpsg_mod_produktattribute_table .col_typ { width:100px; text-align:left; }
+.wpsg_mod_produktattribute_table .col_typ select { width:100%; }
+.wpsg_mod_produktattribute_table .col_html { width:35px; }
+.wpsg_mod_produktattribute_table .col_aktion { width:50px; text-align:center; }
+.wpsg_dialog { padding:10px; }
+.wpsg_code { background-color:#EFEFEF; border:1px solid #000000; padding:3px; margin-top:5px; margin-bottom:5px; font-family:monospace; font-size:12px; }
+.wpsg_tablerow td { padding:2px 0px 2px 0px; }
+.wpsg_odd:hover, .wpsg_even:hover, .wpsg_tablerow:hover, .wpsg_tablerow:hover td, .wpsg_tablerow_hover, .wpsg_tablerow_hover td { background-color:#EFEFEF !important; }
+.wpsg_odd td {  }
+.wpsg_even td {  }
+.wpsg_widerrufstext .wpsg_form_field .wpsg_form_left { width:270px; }
+.wpsg_widerrufstext .wpsg_form_field .wpsg_form_right { width:500px; }
+.wpsg_widerrufstext .wpsg_form_field .wpsg_form_right textarea { height:200px; }
+.tabcontent .wpsg_form_right { width:400px; }
+.tabcontent .wpsg_form_right input, .tabcontent .wpsg_form_right select { width:94%; } 
+.wpsg_mail_head { border-bottom:1px solid #AAAAAA; }
+.wpsg_mail_content, wpsg_admin_box_content { display:none; }
+.wpsg_handlediv .handlediv { position:absolute; right:0px; top:0px; }
+.wpsg_handlediv span a.wpsg_form_help { float:left; display:block; position:relative; top:0px; margin-right:5px; }
+.wpsg_register_modullist { width:100%; }
+.wpsg_register_modullist th { text-align:left; }
+.wpsg_register_modullist .wpsg_col_aktion { text-align:right; }
+.wpsg_modultable { width:100%; }
+.wpsg_modultable tr th { text-align:left; }
+.wpsg_modultable tr .wpsg_col_name { padding-right:25px; }
+.wpsg_modultable tr .wpsg_col_instversion { padding-right:25px; }
+.wpsg_modultable tr .wpsg_col_licence { padding-right:25px; }
+.wpsg_modultable tr .wpsg_col_availableversion { padding-right:25px; }
+.wpsg_admin_vz_list .col_aktion .wpsg_icon_remove { float:right; }
+.wpsg_admin_vz_list .col_aktion { width:75px; }
+.wpsg_admin_vz_list .col_innereu { text-align:center; width:75px; }
+
+/*
+ * Dialog im Backend
+ */
+.wpsg_dialog { }
+.wpsg_dialog_content { margin:10px; }
+.wpsg_dialog .wpsg_form_field { width:100%; }
+.wpsg_dialog .wpsg_form_field .wpsg_form_left { width:50%; }
+.wpsg_dialog .wpsg_form_field .wpsg_form_right { width:50%; }
+
+/*
+ * Produktverwaltung
+ */
+.wpsg_produktindex .wpsg_pic_col { width:50px; }
+.wpsg_produktindex #wpsg_product_search_button { background-position:50% 50%; background-repeat:no-repeat; background-image:url('../gfx/lupe.png'); }
+.wpsg_produkt_addedit .wpsg_form_field { width:100%; }
+.wpsg_produkt_addedit .wpsg_form_field .wpsg_form_left { width:20%; font-weight:bold; line-height:24px; }
+.wpsg_produkt_addedit .wpsg_form_field .wpsg_form_right { width:80%; float:left; }
+.wpsg_produkt_addedit .wpsg_form_field .wpsg_form_right input { width:100%; }
+.wpsg_produkt_addedit .wpsg_form_field .wpsg_form_right textarea { width:100%; }
+.wpsg_produkt_addedit .wpsg_form_field .wpsg_form_right_unit input { width:95%; }
+.wpsg_produkt_addedit .wpsg_form_field .wpsg_form_right .wp-editor-wrap input { width:auto !important; }
+.wpsg_produkt_addedit .wpsg_form_field .wpsg_form_right_unit p.wpsg_unit { width:4%; float:right; }
+.wpsg_produkt_addedit .wpsg_form_field .wpsg_form_right input.wpsg-datepicker { width:85%; }
+.wpsg_produkt_addedit .wpsg_form_field .wpsg_form_right .ui-datepicker-trigger { margin-left:3px; margin-top:5px; }
+.wpsg_produkt_addedit .wpsg_form_field .wpsg_form_right select { width:100%; }
+.wpsg_produkt_addedit .wpsg_form_field .wpsg_form_right_help select { width:95%; }
+.wpsg_produkt_addedit .wpsg_form_field .wpsg_form_right input.wpsg_preis { width:60%; }
+.wpsg_produkt_addedit .wpsg_form_field .wpsg_form_right .waehrung { float:right; }
+.wpsg_produkt_addedit #side-info-column .wpsg_form_field .wpsg_form_left { width:50%; }
+.wpsg_produkt_addedit #side-info-column .wpsg_form_field .wpsg_form_right { width:50%; }
+.wpsg_posturl { margin-bottom:5px; }
+
+/*
+ * Bestellverwaltung
+ */
+.wpsg_order_datum { color:#999999; }
+.wpsg_order_adress { color:#999999; }
+.wpsg_order_view .inner-sidebar .wpsg_form_field { width:100%; }
+.wpsg_order_view .inner-sidebar .wpsg_form_field .wpsg_form_left { width:100%; }
+.wpsg_order_view .inner-sidebar .wpsg_form_field .wpsg_form_right { width:100%; margin-top:-5px; }
+.wpsg_order_view #post-body-content .wpsg_form_field { width:100%; }
+.wpsg_order_view #post-body-content .wpsg_form_field .wpsg_form_left { width:20%; min-width:200px; }
+.wpsg_order_view #post-body-content .wpsg_form_field .wpsg_form_right { width:auto; }
+.wpsg_order_view .wpsg_produkte { width:100%; }
+.wpsg_order_view tr.wpsg_kopf th { text-align:left; }
+.wpsg_order_view .wpsg_cell_preis { width:100px; text-align:right !important; padding-right:10px; }
+.wpsg_order_view .wpsg_cell_mwst { width:100px; text-align:right !important; padding-right:10px; }
+.wpsg_order_view .wpsg_cell_menge { width:100px; text-align:center !important; padding-right:10px; }
+.wpsg_order_view .wpsg_cell_gesamtpreis { width:100px; text-align:right !important; }
+.wpsg_order_view .wpsg_cell_summe_value { text-align:right !important; text-decoration:underline; }
+.wpsg_order_view .wpsg_cell_shipping_value { text-align:right !important; }
+.wpsg_order_view .wpsg_cell_payment_value { text-align:right !important; }
+.wpsg_order_view .wpsg_cell_payment_value { text-align:right !important; }
+.wpsg_order_view .wpsg_cell_rabatt_value { text-align:right !important; }
+.wpsg_order_view .wpsg_cell_mwst_value { text-align:right !important; }
+.wpsg_order_view .wpsg_cell_mwst_value, .wpsg_order_view  .wpsg_cell_mwst_label { font-size: 10px; line-height: 18px; }
+.wpsg_order_view .wpsg_cell_gesamt_value { text-align:right !important; font-weight:bold; text-decoration:underline; }
+.wpsg_order_view .wpsg_order_admincomment { width:100%; height:100px; }
+.wpsg_order_view .wpsg_order_admincomment_submit { margin-top:5px; margin-bottom:5px; }
+.wpsg_order_view #wpsg_generally .wpsg_form_left { width:200px; }
+.wpsg_orderlog { width:100%; }
+.wpsg_orderlog .col_date { width:135px; text-align:left; }
+.wpsg_orderlog .col_aktion { width:100px; text-align:right; }
+.wpsg_orderlog .col_title { text-align:left; }
+.wpsg_orderlog .col_mailtext { background-color:#FFFFFF; font-family:monospace; }
+.wpsg_orderlog .col_mailtext textarea { width:100%; height:250px; overflow:scroll; border:0px; background-color:#DSDSDS; border:1px solid #C4C4C4; overflow:auto; max-width:100%; }
+.wpsg_order_index_status { float:none !important; margin:0px 300px 0px 0px; }
+.wpsg_order_index_status .akt { font-weight:bold; color:#000000; }
+.wpsg_order_index_status li { float:left !important; }
+.wpsg_order_index_status li span { line-height:2; padding:0.2em; }
+.wpsg_tablenav { clear:right; float:right; }
+.wpsg-search-box { margin-top:-6px !important; }
+	
+/* 
+ * Produktbilder
+ */
+.wpsg_mod_produktbilder_admin_bild { float:left; margin-right:5px; }
+
+/*
+ * Downloadprodukte
+ */
+.wpsg_mod_downloadprodukte_admin_delete { height:16px; width:16px; float:right; background-image:url('../gfx/delete.png'); cursor:pointer; }
+
+/*
+ * Kundenverwaltung
+ */
+#wpsg_customercomment textarea, #postbox_kunde_kommentar textarea { width:100%; height:150px; }
+.wpsg_mod_kundenverwaltung_customeramount .wpsg_storno { color:#000000; }
+.wpsg_mod_kundenverwaltung_customeramount .wpsg_open { color:#FF0000; }
+.wpsg_mod_kundenverwaltung_customeramount .wpsg_payed { color:#008000; }
+.wpsg_customer_index .wpsg-row-actions > div { visibility:hidden; }
+.wpsg_customer_index .wpsg-row-actions:hover > div { visibility:visible; } /* Bug:? Chrome */
+
+/* Kundengruppenverwaltung */
+.wpsg_mod_kundenverwaltung_customergroup_index .col-id { width:55px; }
+.wpsg_mod_kundenverwaltung_customergroup_index .col-name { }
+.wpsg_mod_kundenverwaltung_customergroup_index .col-customercount { width:150px; }
+.wpsg_mod_kundenverwaltung_customergroup_index .col-calculation { width:150px; }
+.wpsg_mod_kundenverwaltung_customergroup_addedit .wpsg_form_field .wpsg_form_left  { width:100%; }
+.wpsg_mod_kundenverwaltung_customergroup_addedit .wpsg_form_field .wpsg_form_right  { width:100%; }
+
+/*
+ * Versandarten
+ */
+.va_table { width:100%; table-layout:fixed; border-collapse: collapse; }
+.va_table .wpsg_label { font-weight:bold; width:250px; padding:2px; }
+.va_table .wpsg_value { padding:2px; }
+.va_table .wpsg_delcol { position:relative; width:25px; text-align:right; padding:2px 0px 2px 2px; }
+.va_table .wpsg_delcol .wpsg_form_help { position:relative; }
+.va_table .wpsg_delcol a { float:right; }
+.va_table .wpsg_mwst_checkbox { width:20px; }
+
+/*
+ * Rechnungsmoudl
+ */
+.wpsg_mod_rechnungen_fieldtable { width:100%; } 
+.wpsg_mod_rechnungen_fieldtable th { text-align:left; }
+.wpsg_mod_rechnungen_fieldtable th.col_x, .wpsg_mod_rechnungen_fieldtable th.col_y { text-align:center; }
+.wpsg_mod_rechnungen_fieldtable .col_bezeichnung { width:100px; }
+.wpsg_mod_rechnungen_fieldtable .col_freitext { }
+.wpsg_mod_rechnungen_fieldtable .col_x { width:50px; }
+.wpsg_mod_rechnungen_fieldtable .col_y { width:50px; }
+.wpsg_mod_rechnungen_fieldtable .col_color { width:50px; }
+.wpsg_mod_rechnungen_fieldtable .col_groesse { width:50px; }
+.wpsg_mod_rechnungen_fieldtable .col_action { width:50px; }
+.wpsg_foottextlist { width:100%; }
+.wpsg_foottextlist th { text-align:left; }
+.col_standard { text-align:center; width:50px; } 
+
+/* Lieferscheinmodul (wpsg_mod_deliverynote) */
+.wpsg_mod_deliverynote_fieldtable { width:100%; } 
+.wpsg_mod_deliverynote_fieldtable th { text-align:left; }
+.wpsg_mod_deliverynote_fieldtable th.col_x, .wpsg_mod_rechnungen_fieldtable th.col_y { text-align:center; }
+.wpsg_mod_deliverynote_fieldtable .col_bezeichnung { width:100px; }
+.wpsg_mod_deliverynote_fieldtable .col_freitext { }
+.wpsg_mod_deliverynote_fieldtable .col_x { width:50px; }
+.wpsg_mod_deliverynote_fieldtable .col_y { width:50px; }
+.wpsg_mod_deliverynote_fieldtable .col_color { width:50px; }
+.wpsg_mod_deliverynote_fieldtable .col_groesse { width:50px; }
+.wpsg_mod_deliverynote_fieldtable .col_action { width:50px; }
+
+/*
+ * Videodownload Modul
+ */
+.wpsg_mod_videodownload_fieldtable { width:100%; } 
+.wpsg_mod_videodownload_fieldtable th { text-align:left; }
+.wpsg_mod_videodownload_fieldtable .col_bezeichnung { width:25px; }
+.wpsg_mod_videodownload_fieldtable .col_freitext_label { font-weight:bold; }
+.wpsg_mod_videodownload_fieldtable .col_freitext { }
+.wpsg_mod_videodownload_fieldtable .col_x { width:35px; }
+.wpsg_mod_videodownload_fieldtable .col_y { width:35px; }
+.wpsg_mod_videodownload_fieldtable .col_color { width:50px; }
+.wpsg_mod_videodownload_fieldtable .col_alpha { width:35px; }
+.wpsg_mod_videodownload_fieldtable .col_align { width:35px; text-align:center; }
+.wpsg_mod_videodownload_fieldtable .col_angle { width:50px; }
+.wpsg_mod_videodownload_fieldtable .col_groesse { width:50px; }
+.wpsg_mod_videodownload_fieldtable .col_font { width:150px; }
+.wpsg_mod_videodownload_fieldtable .col_font select { width:100%; }
+.wpsg_mod_videodownload_fieldtable .col_action { width:75px; }
+.wpsg_mod_videodownload_admin_delete { height:16px; width:16px; float:right; background-image:url('../gfx/delete.png'); cursor:pointer; }
+.wpsg_mod_videodownload_order_view_filelist { width:100%; }
+.wpsg_mod_videodownload_order_view_filelist .col_file { text-align:left; }
+.wpsg_mod_videodownload_order_view_filelist .col_status { text-align:left; }
+.wpsg_mod_videodownload_order_view_filelist .col_action { text-align:left; }
+.wpsg_mod_videodownload_order_view_filelist .row_raid td { color:red; }
+
+/*
+ * PDFdownload Modul
+ */
+.wpsg_mod_downloadplus_fieldtable { width:100%; } 
+.wpsg_mod_downloadplus_fieldtable th { text-align:left; }
+.wpsg_mod_downloadplus_fieldtable .col_bezeichnung { width:25px; }
+.wpsg_mod_downloadplus_fieldtable .col_freitext_label { font-weight:bold; }
+.wpsg_mod_downloadplus_fieldtable .col_freitext { }
+.wpsg_mod_downloadplus_fieldtable .col_x { width:35px; }
+.wpsg_mod_downloadplus_fieldtable .col_y { width:35px; }
+.wpsg_mod_downloadplus_fieldtable .col_color { width:50px; }
+.wpsg_mod_downloadplus_fieldtable .col_alpha { width:35px; }
+.wpsg_mod_downloadplus_fieldtable .col_align { width:35px; text-align:center; }
+.wpsg_mod_downloadplus_fieldtable .col_bg { width:35px; text-align:center; }
+.wpsg_mod_downloadplus_fieldtable .col_angle { width:50px; }
+.wpsg_mod_downloadplus_fieldtable .col_groesse { width:50px; }
+.wpsg_mod_downloadplus_fieldtable .col_font { width:150px; }
+.wpsg_mod_downloadplus_fieldtable .col_font select { width:100%; }
+.wpsg_mod_downloadplus_fieldtable .col_action { width:75px; }
+.wpsg_mod_downloadplus_admin_delete { height:16px; width:16px; float:right; background-image:url('../gfx/delete.png'); cursor:pointer; }
+.wpsg_mod_downloadplus_order_view_filelist { width:100%; }
+.wpsg_mod_downloadplus_order_view_filelist .col_file { text-align:left; }
+.wpsg_mod_downloadplus_order_view_filelist .col_status { text-align:left; }
+.wpsg_mod_downloadplus_order_view_filelist .col_action { text-align:left; }
+.wpsg_mod_downloadplus_order_view_filelist .row_raid td { color:red; } 
+.wpsg_mod_downloadplus_security input { float:left; width:auto !important; }
+.wpsg_mod_downloadplus .wpsg_border_bottom td { border-top:1px solid #DEDEDE; height:1	px; }
+
+/*
+ * Variantenverwaltung
+ */
+#wpsg_vp_drawVarianten div.wpsg_editable { width:auto; display:inline-block; }
+#wpsg_vp_drawVarianten .col_preis { width:150px; text-align:left; }
+#wpsg_vp_drawVarianten .col_fmenge { width:100px; text-align:left; }
+#wpsg_vp_drawVarianten .col_variname { width:350px; }
+#wpsg_vp_drawVarianten .col_variartnr { width:200px; text-align:left; }
+#wpsg_vp_drawVarianten .col_stock { width:100px; text-align:left; }
+#wpsg_vp_drawVarianten .wpsg_mod_varianten_productimage_row .pic { display:block; float:left; margin-right:5px; padding:5px; height:25px; width:25px; }
+#wpsg_vp_drawVarianten .wpsg_mod_varianten_productimage_row .mark { background-color:rgb(174, 174, 174); }
+#wpsg_vp_drawVarianten .wpsg_mod_varianten_orderwrap_image .wpsg_mod_varianten_productimage_row .mark:first-of-type { background-color:black; }
+#wpsg_vp_drawVarianten .wpsg_mod_varianten_ajaxloading { width:100%; height:100%; position:absolute; left:0px; top:0px; background-color:rgba(125, 125, 125, 0.5); margin-top:-10px; padding-bottom:21px; }
+#wpsg_vp_drawVarianten .wpsg_mod_varianten_ajaxloading img { position:absolute; left:50%; top:50%;  margin-left:-8px; margin-top:-5.5px; }
+
+/*
+ * Gutscheinmodul
+ */
+.wpsg_mod_gutschein .vouchertable { width:100%; }
+.wpsg_mod_gutschein .column-checkbox { width:25px; text-align:center; }
+.wpsg_mod_gutschein .column-nr { width:50px; text-align:left; }
+
+/*
+ * Related Products
+ */
+.wpsg_productselect { padding:15px; }
+.wpsg_productselect .wpsg_form_field { width:100%; }
+.wpsg_productselect .wpsg_form_left { width:50%; }
+.wpsg_productselect .wpsg_form_right { width:50%; }
+.wpsg_productselect .wpsg_form_right select { float:right; }
+#relatedproducts_list select { width:105px !important; }
+#relatedproducts_list .wpsg_icon { margin-top:5px; }
+
+/* Export Profile */
+#profil_content .wpsg_form_field { width:745px; }
+#profil_content .wpsg_form_field .wpsg_form_right { width:395px; min-height:24px; line-height:24px; }
+#profil_content #message { margin-left:0px; }
+#profil_content .wpsg_mod_export_fieldlist { width:100%; }
+#profil_content .wpsg_mod_export_fieldlist th { text-align:left; padding:2px 5px 2px 0px; }
+#profil_content .wpsg_mod_export_fieldlist td { text-align:left; padding:2px 5px 2px 0px; }
+#profil_content .wpsg_mod_export_fieldlist .odd td { background-color:#DEDEDE; }
+#profil_content .wpsg_mod_export_fieldlist .even { }
+#profil_content .wpsg_mod_export_col_field_user { font-weight:bold; }
+#wpsg_modexport .wpsg_mod_export_profillabel { margin-right:15px; display:block; float:left; }
+
+/* Produktvariablen */ 
+.wpsg_pv_table { width:100%; }
+.wpsg_pv_table tr td { vertical-align:top; }
+.wpsg_pv_table .wpsg_id { width:20px; text-align:left; cursor:move; }
+.wpsg_pv_table .wpsg_delcol { width:24px; text-align:center; }
+.wpsg_pv_table .wpsg_typ { width:100px; text-align:left; }
+.wpsg_pv_table .wpsg_pflicht { width:100px; text-align:center; }
+.wpsg_pv_table .wpsg_label { text-align:left; }
+
+/* Bestellvariablen */
+.wpsg_ov_table { width:100%; }
+.wpsg_ov_table .wpsg_id { width:20px; text-align:left; }
+.wpsg_ov_table .wpsg_delcol { width:24px; text-align:center; }
+.wpsg_ov_table .wpsg_typ { width:100px; text-align:left; }
+.wpsg_ov_table .wpsg_pflicht { width:100px; text-align:center; }
+.wpsg_ov_table .wpsg_label { text-align:left; }
+
+/* Statistikmodul */
+.wpsg_mod_statistics_totals_row { width:100%; }
+.wpsg_mod_statistics_totals_block { float:left; width:auto; text-align:center; font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif; }
+.wpsg_mod_statistics_totals_block .number { font-size:18px; color:#21759B; display:block; padding-bottom:10px; padding-top:5px; }
+.wpsg_mod_statistics_totals_block .label { font-size:16px; color:#8F8F8F; display:block; padding-bottom:5px; }
+.wpsg_mod_statistics_totals_block .label a { color:#8F8F8F; border-bottom:1px solid #ECECEC; padding-left:10px; padding-right:15px; padding-bottom:5px; }
+.subsubsub #table-data .th-right span { float:right; }
+.subsubsub #table-data .td-right { text-align:right; }
+
+/* Zahlvarianten */
+.zv_table { width:100%; table-layout:fixed; border-collapse: collapse; }
+.zv_table .wpsg_label { font-weight:bold; width:250px; padding:2px; }
+.zv_table .wpsg_value { padding:2px; }
+.zv_table .wpsg_delcol { width:25px; position:relative; text-align:right; padding:2px 0px 2px 2px; }
+.zv_table .wpsg_delcol .wpsg_form_help { position:relative; top:0px; }
+.zv_table .wpsg_delcol a { float:right; }
+.zv_table .wpsg_mwst_checkbox { width:20px; }
+
+/* Auftragsbest�tigung */
+.wpsg_order_view_auftragsbestaetigung { width:100%; }
+.wpsg_order_view_auftragsbestaetigung_submit { margin-top:5px; margin-bottom:5px; }
+
+/* Rabattmodul */
+.wpsg_mod_discount_generalcol { float:left; width:33%; }
+.wpsg_mod_discount_seriescol { float:left; width:50%; line-height:25px; vertical-align:middle; }
+.wpsg_mod_discount_seriescol input[type=text] { width:70% !important; }
+.wpsg_mod_discount_seriescol input[type=checkbox] { width:auto !important; margin-right:5px; }
+.wpsg_mod_discount_settings #wpsg_mod_discount_hierarchie ul { margin-top:0px; }
+.wpsg_mod_discount_settings #wpsg_mod_discount_hierarchie input[type="checkbox"] { width:auto; }
+.wpsg_mod_discount_settings #wpsg_mod_discount_hierarchie ul li { padding-left:5px; width:96%; line-height:25px; height:25px; background-color:#DDDDDD; cursor:move; }
+.wpsg_mod_discount_settings #wpsg_mod_discount_hierarchie ul li input { display:none; }
+
+/* Registrierung */
+.wpsg_registerform { padding:10px; }
+.wpsg_registersuccess { color:green; }
+.wpsg_registerfailure { color:red; }
+
+/* Berechtigungsverwaltung */
+.wpsg_access_table { width:100%; table-layout:fixed; margin-top:50px; }
+.wpsg_access_table .wpsg_col_capname { width:150px; padding-right:25px; }
+.wpsg_access_table th.wpsg_col_cap { -webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg); height:40px; text-align:center; width:25px; }
+.wpsg_access_table td.wpsg_col_cap { text-align:center; }
+
+/* Gutscheinproduktmodul */
+.wpsg_mod_voucherproduct_list .wpsg_mod_voucherproduct_code { float:left; }
+.wpsg_mod_voucherproduct_list .wpsg_mod_voucherproduct_status { width:auto; float:right; text-align:right; }
+#wpsg_voucherproduct_target .wpsg_button { float:left; }
+
+/* Statistimodul */
+#wpsg_statistics_form .wpsg_form_field .wpsg_form_left { width:70px; }
+.wpsg-table-data-wrapper { float:left; margin-right:15px; }
+td.jqplot-table-legend { vertical-align:middle !important; white-space:no-wrap !important; }
+.orderdown .sorting-indicator { background-image: url("../../../../../wp-admin/images/sort.gif"); background-position:0% 50%; display:inline-block; height:10px; width:7px; }
+.orderup .sorting-indicator { background-image: url("../../../../../wp-admin/images/sort.gif"); background-position:100% 50%; display:inline-block; height:10px; width:7px; }
+.orderdown span, .orderup span { cursor: pointer; float:none !important; }
+
+/* Bankabgleichsmodul (mod_bankalignment) */
+.wpsg_mod_bankalignment_order_ajax .row-details { font-family:monospace; display:none; }
+
+/* E-Bay Schnittstelle (mod_ebay) */
+#wpsg_mod_ebay_categorieselect_dialog { padding:10px; }
+#wpsg_mod_ebay_categorieselect_dialog select { width:100%; }
+#wpsg_mod_ebay_categorietext { float:left; }
+.wpsg_mod_ebay_cattarget img { margin-top:5px; }
+
+/* Staffelpreismodul (mod_scaleprice) */
+.wpsg_mod_scaleprice_label_scale { float:left; width:25%; font-weight:normal; }
+.wpsg_mod_scaleprice_label_value { float:right; width:25%; text-align:center; font-weight:normal; }
+.wpsg_mod_scaleprice_value { width:48% !important; float:left !important; }
+.wpsg_mod_scaleprice_scale { width:48%; float:left; }
+.wpsg_mod_scaleprice_row .wpsg_form_left .wpsg_editable { width:48%; float:left; text-align:right; font-weight:normal; }
+.wpsg_mod_scaleprice_row .wpsg_form_right .wpsg_editable { line-height: 24px; text-align:right; width:48%; float:left; font-weight:normal; }
+#wpsg_mod_scaleprice_target p.waehrung { width:25%; float:left; padding-top:3px; }
+#wpsg_mod_scaleprice_target .wpsg_icon_add { margin-top:3px; }
+#wpsg_mod_scaleprice_target .wpsg_icon_remove { margin-top:3px; }
+
+/* H�ndlerbund (mod_haendlerbund) */
+.wpsg_mod_haendlerbund_settings .wpsg_mod_haendlerbund_date { float:right; line-height:25px; margin-right:25px; }
+
+/* Rechtstexte */
+.wpsg_ps_update input[type="checkbox"] { width:auto !important; margin-top:5px; margin-right:5px; float:left; }
+
+/* Micropayment (mod_micropayment) */
+#wpsg_mod_micropayment_handypay_infolayer, #wpsg_mod_micropayment_call2pay_infolayer { line-height:0.65rem; padding-top:0.5rem; padding-bottom:0.5rem; }
+#wpsg_mod_micropayment_handypay_infolayer ul, #wpsg_mod_micropayment_call2pay_infolayer ul { list-style:circle; margin-left:15px; }
+
+.wpsg_mod_test_table table { width:100%; }
+.wpsg_mod_test_table table th { text-align:left; font-size:12px; line-height:16px; }
+.wpsg_mod_test_table table td { test-align:left; font-size:12px; line-height:16px; }
+
+/* Hilfetooltip */
+.cluetip-title { background-color:#767676 !important; color:#FFFFFF !important; }
+.cluetip-title a { color:#FFFFFF !important; }
+.cluetip-inner { background-color: #F7F7F7; }
+.clue-left-default .cluetip-arrows { background-image:url('../gfx/darrowright.gif') !important; margin-top:5px !important; }
+.clue-right-default .cluetip-arrows { background-image:url('../gfx/darrowleft.gif') !important; margin-top:5px !important; }
+
+/* Bankeinzug (wpsg_mod_autodebit) */
+input.wpsg_mod_autodebit_button { width:100% !important; }
+
+/* 3.8 Kompatibilit�t */
+.version-3-8 .wpsg_order_view .inner-sidebar .wpsg_form_field .wpsg_form_left { width:40%; }
+.version-3-8 .wpsg_order_view .inner-sidebar .wpsg_form_field .wpsg_form_right { width:60%; }
+
+/* Modul "Wirecard" */
+.wpsg_mod_wirecard_paymenttypeselect input[type="checkbox"] { width:auto; margin-left:5px; margin-top:-3px; }
+.wpsg_mod_wirecard_paymenttypeselect li { padding-left:5px; width:100%; line-height:25px; height:25px; background-color:#DDDDDD; cursor:move; }
+
+/* Modul "Bestellbedingungen" */
+.wpsg_mod_ordercondition_text { width:100%; height:300px; }
+
+/* Modul "Kundenkontakt" */
+#kk_text { font-family:"Courier New"; }
+
+/* Rechtstexte */
+.wpsg_mod_legaltexts_protectedshops_table { width:100%; }
+.wpsg_mod_legaltexts_protectedshops_table th { text-align:left; width:343px; }
+.wpsg_ps_update { float:right; }
+.wpsg_ps_status { float:left; }
+select.wpsg_ps_page { width:73%; }
+select.wpsg_ps_format { float:right; width:23%; }
+#wpshopgermany_ts_shopid { width:100%; }
+#wpsgitrecht_message { margin-left:5px; }
+.wpsgitrecht_clear { clear:both; }
+.wpsgitrecht_form_field { width:770px; margin-bottom:5px; }
+.wpsgitrecht_form_field .wpsgitrecht_form_left { line-height:24px; font-weight:bold; width:350px; float:left; }
+.wpsgitrecht_form_field .wpsgitrecht_form_right { width:420px; float:left; position:relative; line-height:28px; }
+.wpsgitrecht_form_field .wpsgitrecht_form_right select, .wpsgitrecht_form_field .wpsgitrecht_form_right input { width:95%; }
+.wpsgitrecht_form_field .wpsgitrecht_form_right input.checkbox { width:auto !important; float:left; margin-left:2px; margin-top:5px; }
+.wpsgitrecht_form_field .wpsgitrecht_form_right p { padding:4px 0px 4px 6px; margin:0px; }
+.wpsgitrecht_form { padding:10px; }
+.wpsgitrecht_date { float:right; padding-right:5%; }
+.wpsgitrecht_hinweis { font-style:italic; }
+.wpsgitrecht_table { border-spacing:0px; border-collapse:collapse; }
+.wpsgitrecht_table .col0 { width:347px; }
+.wpsgitrecht_table .col1 { width:400px; }
+.wpsgitrecht_table .col1 p { padding:2px 0px 2px 10px; display:inline-block; margin:0px; }
+.wpsgitrecht_table .col1 select { width:100%; }
+.wpsg_itrecht_generatebutton { width:16px; height:16px; background-image:url('../gfx/arrow_refresh_small.png'); ?>); display:inline-block; float:right; margin-top:6px; }
+
+/* Modul "Paketverfolgung" */
+.wpsg_mod_packagetracking_settings_edit_list .trackingprovider_table { width:100%; table-layout:fixed; border-collapse: collapse; }
+.wpsg_mod_packagetracking_settings_edit_list .trackingprovider_table .wpsg_label { font-weight:bold; width:150px; padding:2px; }
+.wpsg_mod_packagetracking_settings_edit_list .trackingprovider_table .wpsg_value { padding:2px; }
+.wpsg_mod_packagetracking_settings_edit_list .trackingprovider_table .wpsg_delcol { position:relative; width:25px; text-align:right; padding:2px 0px 2px 2px; }
+.wpsg_mod_packagetracking_settings_edit_list .trackingprovider_table .wpsg_delcol .wpsg_form_help { position:relative; }
+.wpsg_mod_packagetracking_settings_edit_list .trackingprovider_table .wpsg_delcol a { float:right; }
+.wpsg_mod_versandarten_packagetracking .wpsg_mod_packagetracking_provider { width:100%; }
+
+/* Modul CrefoPay */
+.wpsg_mod_crefopay_order_sidebar .button { margin-right:5px; margin-top:5px; float:left; }
+.wpsg_mod_crefopay_mnsstatemapping { display:none; }
+.wpsg_mod_crefopay_mnsstatemapping .wpsg_form_field { margin-bottom:0px; }
+
+/* Modul TrustedShops */
+.wpsg_mod_protectedshops #wpsg_mod_trustedshops_reminderDays { width:50px; float:left; margin-right:5px; }
+.wpsg_mod_protectedshops .wpsg_form_field .wpsg_form_trustedshops_reminderDays p { float:left; padding-right:5px; padding-left:2px; } 
+ 
+/* News Bereich */
+.wpsg_news_wrap {}
+.wpsg_news_wrap .wpsg_news .markRead { text-align:right; width:100px; display:none; position:absolute; right:15px; top:15px; }
+.wpsg_news_wrap .wpsg_news_read .markRead img { float:right; margin-left:5px; }
+.wpsg_news_wrap .wpsg_news { width:100%; box-sizing:border-box; position:relative; padding:5px 10px 10px 10px; margin-bottom:15px; background-color:#FFFFFF; }
+.wpsg_news_wrap .wpsg_news_read {  }
+.wpsg_news_wrap .wpsg_news_read .markRead { display:block; }
+.wpsg_news_unreadhint { color:#FFFFFF; background-color:#FF0000; padding:0px 4px; line-height:16px; font-size:8px; display:inline-block; font-weight:bold; border-radius:15px; width:8px; text-align:center; vertical-align:top; margin-top:4px; margin-left:0px; }

@@ -1,0 +1,15 @@
+<?php
+
+	/**
+	 * Einstellungen für das Zahlungsmodul "Rechnung"
+	 */
+			
+?>
+<?php echo wpsg_drawForm_Input('wpsg_mod_invoice_type_bezeichnung', __('Bezeichnung', 'wpsg'), $this->get_option('wpsg_mod_invoice_type_bezeichnung'), array('help' => 'wpsg_mod_invoice_type_bezeichnung')); ?>
+<?php echo wpsg_drawForm_Checkbox('wpsg_mod_invoide_type_aktiv', __('Aktiv', 'wpsg'), $this->get_option('wpsg_mod_invoide_type_aktiv'), array('help' => 'wpsg_mod_invoice_type_aktiv')); ?>
+<?php echo wpsg_drawForm_Textarea('wpsg_mod_invoice_type_hint', __('Hinweistext', 'wpsg'), $this->get_option('wpsg_mod_invoice_type_hint'), array('help' => 'wpsg_mod_invoice_type_hint')); ?>
+
+<br />
+<?php echo wpsg_drawForm_Input('wpsg_mod_invoice_type_gebuehr', __('Gebühr/ Rabatt', 'wpsg'), wpsg_ff($this->get_option('wpsg_mod_invoice_type_gebuehr'), true), array('help' => 'wpsg_mod_invoice_type_gebuehr','unit' => $this->get_option('wpsg_currency').' / %')); ?>
+<?php echo wpsg_drawForm_Select('wpsg_mod_invoice_type_mwst', __('Mehrwertsteuersatz', 'wpsg'), wpsg_tax_groups(), $this->get_option('wpsg_mod_invoice_type_mwst'), array('help' => 'wpsg_mod_invoice_type_mwst')); ?>
+<?php echo wpsg_drawForm_Checkbox('wpsg_mod_invoice_type_mwstland', __('Keine MwSt. wenn Land steuerfrei', 'wpsg'), $this->get_option('wpsg_mod_invoice_type_mwstland'), array('help' => 'wpsg_mod_invoice_type_mwstland')); ?>

@@ -1,0 +1,180 @@
+<?php
+	
+	/**
+	 * Template für die Eingabe der Zahlungs- und Versandinformationen
+	 */
+
+	//wpsg_debug($this->view['basket']['checkout']);
+	//die();
+	
+?>
+<div class="wpsg wpsg_checkout2">
+
+	<?php echo $this->writeFrontendMessage(); ?>
+	
+	<form method="post" action="<?php echo $this->getURL(wpsg_ShopController::URL_BASKET); ?>">
+
+		<input type="hidden" value="1" name="wpsg[checkout][send]" />
+	
+		<div class="wpsg_shipping"> 
+  
+ 			<h2><?php echo __('Versandarten', 'wpsg'); ?></h2>
+ 			
+ 			<div class="wpsg_spacer"></div>
+ 
+ 			<div class="shippay_wrap">
+				<?php foreach ($this->view['arShipping'] as $s) { ?>
+				<div class="shipping shippay">
+					<div class="checkbox">
+						<?php if (sizeof($this->view['arShipping']) == 1) { ?>
+						<input type="radio" checked="checked" name="wpsg[checkout][shipping]" id="shipping_<?php echo $s['id']; ?>" value="<?php echo $s['id']; ?>" />
+						<?php } else { ?>
+						<input <?php echo (($this->view['basket']['checkout']['shipping'] == $s['id'])?'checked="checked"':''); ?> onclick="wpsg_showShippingHint();" type="radio" value="<?php echo $s['id']; ?>" name="wpsg[checkout][shipping]" id="shipping_<?php echo $s['id']; ?>" />
+						<?php } ?>			
+					</div>
+					<div class="info">
+						<label for="shipping_<?php echo $s['id']; ?>">
+							<?php if (wpsg_isSizedString($s['logo'])) { ?>
+							<img class="wpsg_payship_logo" src="<?php echo $s['logo']; ?>" alt="<?php echo $s['name']; ?>" />
+							<?php } else { ?>
+							<span class="wpsg_payship_name"><?php echo __($s['name'], 'wpsg'); ?></span>				
+							<?php } ?> 
+						</label>
+						<?php if ((isset($s['hint']) && trim($s['hint']) != '') || $s['price'] > 0) { ?>					
+						<span id="shipping_<?php echo $s['id']; ?>_hint" style="display:none;" class="shipping_hint shippay_hint">
+							<?php if ($s['price'] > 0) { ?>
+							<?php echo __('Gebühr', 'wpsg'); ?>: <?php echo wpsg_ff($s['price'], $this->get_option('wpsg_currency')); ?><br />
+							<?php } ?>
+							<?php echo $this->replaceUniversalPlatzhalter(__($s['hint'], 'wpsg')); ?>
+						</span>
+						<?php } ?>
+					</div>
+					<div class="wpsg_clear"></div>
+				</div>
+				<?php } ?>
+			</div>
+			
+			<script type="text/javascript">/* <![CDATA[ */
+
+				function wpsg_showShippingHint()
+				{
+
+					if (jQuery('#wpsg_shipping_one').length > 0) return;
+					
+					jQuery('.shipping_hint').hide();
+					jQuery('#shipping_' + jQuery('.wpsg_shipping input[name="wpsg[checkout][shipping]"]:checked').val() + '_hint').show();
+										
+				}
+
+				jQuery(document).ready(function() { wpsg_showShippingHint(); } );
+			
+			/* ]]> */</script>
+		
+		</div>
+		
+		<?php if (!$this->hasMod('wpsg_mod_crefopay')) { ?>
+		<div class="wpsg_payment">
+		
+			<h2><?php echo __('Zahlungsarten', 'wpsg'); ?></h2>
+			
+			<div class="wpsg_spacer"></div>
+		
+			<div class="shippay_wrap">
+				<?php foreach ($this->view['arPayment'] as $p) { ?>
+				<div class="shippay payment">
+					<div class="checkbox">
+						<?php if (sizeof($this->view['arPayment']) == 1) { ?>
+						<input type="radio" checked="checked" value="<?php echo $p['id']; ?>" name="wpsg[checkout][payment]" id="payment_<?php echo $p['id']; ?>" />
+						<?php } else { ?>
+						<input <?php echo (($this->view['basket']['checkout']['payment'] == $p['id'])?'checked="checked"':''); ?> onclick="wpsg_showPaymentHint();" type="radio" value="<?php echo $p['id']; ?>" name="wpsg[checkout][payment]" id="payment_<?php echo $p['id']; ?>" />
+						<?php } ?>								
+					</div>
+					<div class="info">
+						<label for="payment_<?php echo $p['id']; ?>">
+							<?php if (wpsg_isSizedString($p['logo'])) { ?>
+							<img class="wpsg_payship_logo" src="<?php echo $p['logo']; ?>" alt="<?php echo $p['name']; ?>" />
+							<?php } else { ?>						
+							<span class="wpsg_payship_name"><?php echo __($p['name'], 'wpsg'); ?></span>				
+							<?php } ?> 
+						</label>
+						<?php if ((isset($p['hint']) && trim($p['hint']) != '') || $p['price'] > 0) { ?>					
+						<span id="payment_<?php echo $p['id']; ?>_hint" style="display:none;" class="payment_hint shippay_hint">
+							<?php if ($p['price'] > 0) { ?>
+							<?php echo __('Gebühr', 'wpsg'); ?>: <?php echo wpsg_ff($p['price'], $this->get_option('wpsg_currency')); ?><br />
+							<?php } ?>
+							<?php echo $this->replaceUniversalPlatzhalter(__($p['hint'], 'wpsg')); ?>
+						</span>
+						<?php } ?>
+					</div>
+					<div class="wpsg_clear"></div>
+				</div>
+				<?php } ?>
+			</div>
+						
+			<script type="text/javascript">/* <![CDATA[ */
+
+				function wpsg_showPaymentHint()
+				{
+
+					if (jQuery('#wpsg_payment_one').length > 0) return;
+					
+					jQuery('.payment_hint').hide();
+					jQuery('#payment_' + jQuery('.wpsg_payment input[name="wpsg[checkout][payment]"]:checked').val() + '_hint').show();
+										
+				}
+
+				jQuery(document).ready(function() { wpsg_showPaymentHint(); } );
+			
+			/* ]]> */</script> 
+		
+		</div>
+		<?php } ?>
+		
+		<div class="wpsg_clear"></div>
+		
+		<br />
+
+		<?php $this->callMods('checkout2_inner_prebutton', array(&$this->view)); ?>
+		
+		<input type="submit" class="wpsg_button wpsg_checkoutbutton" value="<?php echo __('zurück', 'wpsg'); ?>" name="wpsg_redirect_checkout" />
+		<input type="submit" class="wpsg_button wpsg_overviewbutton" value="<?php echo __('weiter', 'wpsg'); ?>" name="wpsg_checkout2" />
+	
+		<div class="wpsg_clear"></div>
+	
+	</form>
+	
+	<script type="text/javascript">/* <![CDATA[ */
+    
+		jQuery(document).ready(function() {
+
+			jQuery('.shippay input[type="radio"]').bind('change', function() {
+
+				jQuery(this).parents('.shippay_wrap').find('.shippay').removeClass('wpsg_hover');
+				
+				if (jQuery(this).prop("checked"))
+				{
+
+					jQuery(this).parents('.shippay').addClass('wpsg_hover');
+				 				
+				} 
+
+				wpsg_showPaymentHint();
+				wpsg_showShippingHint();
+				
+			} );
+
+			jQuery('.shippay input[type="radio"]:checked').change();
+			jQuery('.shippay').bind('click', function(e) {				
+
+				if (jQuery(this).hasClass('wpsg_hover')) return true;
+				
+				jQuery(this).find('input[type="radio"]').attr("checked", "checked");
+				jQuery(this).find('input[type="radio"]').change();
+				 
+			} );
+		 	
+		} );
+			
+	/* ]]> */</script>
+
+</div>

@@ -1,0 +1,72 @@
+<?php
+
+	/**
+	 * Template für die Maske eines neuen Gutscheins
+	 */
+
+?>
+<div class="wrap columns-2">
+	<div class="icon32 icon32-posts-post" id="icon-edit"><br /></div>
+	<h2><?php echo __('Neuer Gutschein', 'wpsg'); ?></h2>
+	<br />
+	
+	<?php echo $this->writeBackendMessage(); ?>
+	
+ 	<form method="POST" action="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Voucher&amp;action=save&amp;noheader=1" enctype="multipart/form-data">
+
+		<?php echo wpsg_drawForm_Input('wpsg_mod_gutschein_value', __('Wert', 'wpsg'), $this->view['mod_gutschein']['value']); ?>
+		<?php echo wpsg_drawForm_Select('wpsg_mod_gutschein_calc', __('Berechnung', 'wpsg'), array(
+			'w' => __('Absoluter Betrag', 'wpsg'),
+			'p' => __('Prozentual', 'wpsg')
+		), $this->view['mod_gutschein']['calc']); ?>		
+		<?php echo wpsg_drawForm_Date('wpsg_mod_gutschein_start', __('Gültig ab', 'wpsg'), $this->view['mod_gutschein']['start']); ?>
+		<?php echo wpsg_drawForm_Date('wpsg_mod_gutschein_end', __('Gültig bis', 'wpsg'), $this->view['mod_gutschein']['end']); ?>
+		<?php echo wpsg_drawForm_Select('wpsg_mod_gutschein_gen', __('Code Generierung', 'wpsg'), array(
+			'0' => __('Automatisch', 'wpsg'),
+			'1' => __('Manuell', 'wpsg')
+		), wpsg_getStr($this->view['mod_gutschein']['gen']), array('help' => 'wpsg_mod_gutschein_gen')); ?>		
+		<div id="wpsg_mod_gutschein_layercode">
+			<?php echo wpsg_drawForm_Input('wpsg_mod_gutschein_code', __('Code', 'wpsg'), wpsg_getStr($this->view['mod_gutschein']['code']), array('help' => 'wpsg_mod_gutschein_code')); ?>
+		</div>
+		<?php echo wpsg_drawForm_Input('wpsg_mod_gutschein_minvalue', __('Minimaler Warenwert', 'wpsg'), wpsg_getStr($this->view['mod_gutschein']['minvalue']), array('help' => 'wpsg_mod_gutschein_minvalue')); ?>
+		<?php echo wpsg_drawForm_Input('wpsg_mod_gutschein_count', __('Menge', 'wpsg'), $this->view['mod_gutschein']['count']); ?>		
+		<?php echo wpsg_drawForm_Checkbox('wpsg_mod_gutschein_multi', __('Mehrfach verwendbar', 'wpsg'), $this->view['mod_gutschein']['multi']); ?>
+		<?php echo wpsg_drawForm_Textarea('wpsg_mod_gutschein_comment', __('Kommentar', 'wpsg'), $this->view['mod_gutschein']['comment']); ?>
+		<?php if ($this->hasMod('wpsg_mod_productgroups') && wpsg_isSizedArray($this->view['wpsg_mod_gutschein']['arProductGroups'])) { ?>
+		<?php echo wpsg_drawForm_Select('wpsg_mod_gutschein_productgroups', __('Beschränkung auf Produktgruppen', 'wpsg'), $this->view['wpsg_mod_gutschein']['arProductGroups'], $this->view['mod_gutschein']['productgroups'], array('multiple' => ((sizeof($this->view['wpsg_mod_gutschein']['arProductGroups']) > 5)?5:sizeof($this->view['wpsg_mod_gutschein']['arProductGroups'])), 'help' => 'wpsg_mod_gutschein_productgroups')); ?>
+		<?php } ?>
+		<?php echo wpsg_drawForm_Select('wpsg_mod_gutschein_products', __('Beschränkung auf Produkte', 'wpsg'), $this->view['wpsg_mod_gutschein']['arProducts'], $this->view['mod_gutschein']['products'], array('multiple' => ((sizeof($this->view['wpsg_mod_gutschein']['arProducts']) > 5)?5:sizeof($this->view['wpsg_mod_gutschein']['arProducts'])), 'help' => 'wpsg_mod_gutschein_products')); ?>
+		
+		<p class="submit">
+			<input type="submit" value="<?php echo __('Gutschein anlegen', 'wpsg'); ?>" class="button-primary" id="submit" name="submit" />
+		</p>
+		
+		<script type="text/javascript">/* <![CDATA[ */
+
+			jQuery(document).ready(function() {
+ 
+				jQuery('.wpsg_form_help').tipTip();
+
+				jQuery('#wpsg_mod_gutschein_gen').bind('change', function() {
+
+					if (jQuery(this).val() == '1')
+					{
+
+						jQuery('#wpsg_mod_gutschein_layercode').show();
+						
+					}
+					else
+					{
+
+						jQuery('#wpsg_mod_gutschein_layercode').hide();
+						
+					}
+					
+				} ).change();
+				
+			} );
+		
+		/* ]]> */</script>
+
+	</form>
+</div>

@@ -1,0 +1,11 @@
+<?php
+
+	/**
+	 * Anzeige der Grundpreisinformationen im Produkttemplate
+	 */
+
+?><div class="wpsg_mod_fuellmenge_info"><?php echo wpsg_translate(
+	__('(#1# / #2#)', 'wpsg'),
+	wpsg_ff($this->view['wpsg_mod_fuellmenge']['fmenge_preis'], $this->get_option('wpsg_currency')),
+	wpsg_ff($this->get_option('wpsg_mod_fuellmenge_bezug'), $this->view['wpsg_mod_fuellmenge']['feinheit'])
+); ?></div>

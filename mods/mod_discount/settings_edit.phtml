@@ -1,0 +1,171 @@
+<?php
+
+	/**
+	 * Template für die Einstellungen des Rabatt Moduls
+	 */
+
+?>
+
+<br />
+<div class="wpsg_mod_discount_settings">
+	<div class="wpsg_admin_box" id="wpsg_tab">	
+		<div class="head">
+			<div class="title">			
+				<div class="tab" id="tab1"><?php echo __('Produktrabatt', 'wpsg'); ?></div>
+				<div class="tab" id="tab2"><?php echo __('Warenkorbrabatt', 'wpsg'); ?></div>  
+				<div class="wpsg_clear"></div>
+			</div>
+		</div>
+		<div class="content" id="wpsg_mwst_list">
+					
+			<div id="tabcontent1" class="tabcontent">
+			
+				<?php echo wpsg_drawForm_Checkbox('wpsg_mod_discount_productdiscount', __('Rabatt auf Produkte', 'wpsg'), $this->get_option('wpsg_mod_discount_productdiscount'), array('help' =>'wpsg_mod_discount_productdiscount')); ?>
+									
+				<?php echo wpsg_drawForm_Checkbox('wpsg_mod_discount_universal', __('Rabatt auf alle Produkte', 'wpsg'), $this->get_option('wpsg_mod_discount_universal'), array('help' => 'wpsg_mod_discount_universal')); ?>
+			
+				<div class="wpsg_form_field" id="wpsg_mod_discount_universal_layer">
+					<div class="wpsg_form_left">&nbsp;</div>
+					<div class="wpsg_form_right">
+						<div class="wpsg_mod_discount_generalcol">
+							<strong><?php echo __('Von (tt.mm.jjjj)', 'wpsg'); ?></strong><br />
+							<input name="wpsg_mod_discount_universal_from" type="text" value="<?php echo $this->get_option('wpsg_mod_discount_universal_from'); ?>" id="wpsg_mod_discount_universal_from" /> 	
+						</div>
+						<div class="wpsg_mod_discount_generalcol">
+							<strong><?php echo __('Bis (tt.mm.jjjj)', 'wpsg'); ?></strong><br />
+							<input name="wpsg_mod_discount_universal_to" type="text" value="<?php echo $this->get_option('wpsg_mod_discount_universal_to'); ?>" id="wpsg_mod_discount_universal_to" /> 	
+						</div>
+						<div class="wpsg_mod_discount_generalcol">
+							<strong><?php echo __('Rabatt', 'wpsg'); ?></strong><br />
+							<input name="wpsg_mod_discount_universal_value" type="text" value="<?php echo $this->get_option('wpsg_mod_discount_universal_value'); ?>" id="wpsg_mod_discount_universal_value" />
+						</div>
+					</div>
+					<div class="wpsg_clear"></div><br />
+				</div>
+					 
+				<?php if ($this->hasMod('wpsg_mod_productgroups')) { ?>
+					<?php echo wpsg_drawForm_Checkbox('wpsg_mod_discount_productgroupdiscount', __('Rabatt auf Produktgruppen', 'wpsg'), $this->get_option('wpsg_mod_discount_productgroupdiscount'), array('help' => 'wpsg_mod_discount_productgroupdiscount')); ?>
+				<?php } ?>
+				 
+				<?php if ($this->hasMod('wpsg_mod_customergroup')) { ?>
+					<?php echo wpsg_drawForm_Checkbox('wpsg_mod_discount_customergroup', __('Rabatt auf Kundengruppen', 'wpsg'), $this->get_option('wpsg_mod_discount_customergroup'), array('help' => 'wpsg_mod_discount_customergroup')); ?>
+				<?php } ?>
+				
+				<?php echo wpsg_drawForm_Checkbox('wpsg_mod_discount_show', __('Originalpreis im Produkttemplate anzeigen', 'wpsg'), $this->get_option('wpsg_mod_discount_show')); ?>
+									
+				<div class="wpsg_form_field" id="wpsg_mod_discount_hierarchie">
+					<div class="wpsg_form_left">
+						<?php echo __('Rabattreihenfolge (für Berechnung):', 'wpsg')?><br />
+						<a href="#" onclick="return wpsg_mod_discount_restoredefaulthierarchie();"><?php echo __('Standard wiederherstellen', 'wpsg'); ?></a>					
+					</div>
+					<div class="wpsg_form_right">
+					
+						<ul>
+							<?php foreach ($this->view['wpsg_mod_discount']['hierarchie'] as $discount_typ) { ?>
+							<li class="<?php echo $discount_typ; ?>">
+								<input type="hidden" name="wpsg_mod_discount_hierarchie[]" value="<?php echo $discount_typ; ?>" />
+		 						<input type="checkbox" value="<?php echo $discount_typ; ?>" <?php echo ((in_array($discount_typ, (array)explode(',', $this->get_option('wpsg_mod_discount_hierarchie'))))?'checked="checked"':''); ?> name="wpsg_mod_discount_hierarchie[]" />&nbsp;
+		 						<?php echo $this->callMod('wpsg_mod_discount', 'getNameFromType', array($discount_typ)); ?>
+							</li>
+							<?php } ?> 						
+						</ul>
+						
+						<p class="wpsg_hinweis"><?php echo __('Reihenfolge kann mittels Drag&Drop verändert werden.', 'wpsg'); ?></p>
+					
+						<input type="hidden" name="wpsg_mod_discount_stopRabatt" value="0" />
+						<label>
+							<input type="checkbox" name="wpsg_mod_discount_stopRabatt" value="1" <?php echo (($this->get_option('wpsg_mod_discount_stopRabatt') == '1')?'checked="checked"':''); ?> />
+							<?php echo __('Nur ersten Rabatt berücksichtigen', 'wpsg'); ?>							
+						</label>
+					
+					</div>
+					<div class="wpsg_clear"></div>
+				</div>
+									
+			</div> 
+			
+			<div id="tabcontent2" class="tabcontent">
+			
+				<div class="wpsg_form_field">
+					<div class="wpsg_form_left"><?php echo __('Staffelung:', 'wpsg'); ?></div>
+					<div class="wpsg_form_right">
+						
+						<div class="wpsg_mod_discount_seriescol"><strong><?php echo __('Bestellwert', 'wpsg'); ?></strong></div>
+						<div class="wpsg_mod_discount_seriescol"><strong><?php echo __('Rabatt', 'wpsg'); ?></strong></div>
+						<div class="wpsg_clear"></div>
+						
+						<div class="wpsg_mod_discount_seriescol"><?php echo __('ab', 'wpsg').' '.wpsg_ff(0, $this->get_option('wpsg_currency')); ?></div>
+						<div class="wpsg_mod_discount_seriescol"><input type="text" name="value[0][rabatt]" value="<?php echo wpsg_ff($this->view['data'][0]['rabatt']); ?>" /></div>
+						<div class="wpsg_clear"></div>
+						
+						<?php foreach ($this->view['data'] as $k => $v) { if ($k > 0) { ?>
+						<div class="wpsg_mod_discount_seriescol"><?php echo __('ab', 'wpsg').' '.wpsg_ff($v['value'], $this->get_option('wpsg_currency')); ?></div>
+						<div class="wpsg_mod_discount_seriescol"><input type="text" name="value[<?php echo $k; ?>][rabatt]" value="<?php echo wpsg_ff($v['rabatt']); ?>" /></div>
+						<div class="wpsg_mod_discount_seriescol"><label><input type="checkbox" name="value[<?php echo $k; ?>][del]" value="1" /> <?php echo __('löschen', 'wpsg'); ?></label></div>
+						<input type="hidden" name="value[<?php echo $k; ?>][value]" value="<?php echo $v['value']; ?>" /><div class="wpsg_clear"></div>
+						<?php } } ?>
+						
+						<div class="wpsg_mod_discount_seriescol"><?php echo __('ab', 'wpsg'); ?> <input type="text" name="neu[value]" value="" /> <?php echo $this->get_option('wpsg_currency'); ?></div>
+						<div class="wpsg_mod_discount_seriescol"><input type="text" name="neu[rabatt]" value="" /></div>
+						<div class="wpsg_clear"></div>
+						
+					</div>
+				</div>
+				<div class="wpsg_clear"></div>
+				
+			</div>  
+			
+		</div>
+		 
+	</div>
+
+</div>
+
+<script type="text/javascript">/* <![CDATA[ */
+
+	jQuery(document).ready(function() {
+
+		jQuery("#wpsg_mod_discount_hierarchie ul").sortable().disableSelection();
+		
+		jQuery('#wpsg_tab').wpsg_tab( { 
+			'cookiename': 'wpsg_mod_discount_tab',
+			'tab1': function() {
+				jQuery('.tablink').show();
+			}
+		} );
+
+		jQuery('#wpsg_mod_discount_universal').bind('change', function() {
+			wpsg_switchUniversalDiscount();
+		} );
+
+		wpsg_switchUniversalDiscount();
+		
+	} );
+
+	function wpsg_mod_discount_restoredefaulthierarchie()
+	{
+
+		jQuery('#wpsg_mod_discount_hierarchie ul').append(jQuery('#wpsg_mod_discount_hierarchie .general'));
+		jQuery('#wpsg_mod_discount_hierarchie ul').append(jQuery('#wpsg_mod_discount_hierarchie .product'));
+		jQuery('#wpsg_mod_discount_hierarchie ul').append(jQuery('#wpsg_mod_discount_hierarchie .productgroup'));
+		jQuery('#wpsg_mod_discount_hierarchie ul').append(jQuery('#wpsg_mod_discount_hierarchie .customer'));
+		
+		return false;
+		
+	}
+	 
+	function wpsg_switchUniversalDiscount()
+	{
+
+		if (jQuery('#wpsg_mod_discount_universal').attr("checked") == "checked")
+		{
+			jQuery('#wpsg_mod_discount_universal_layer').show();
+		}
+		else
+		{
+			jQuery('#wpsg_mod_discount_universal_layer').hide();
+		}
+		
+	}
+
+/* ]]> */</script>

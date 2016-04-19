@@ -1,0 +1,17 @@
+<?php
+
+	/**
+	 * Template welches bei der Zahlungsart "Vorkasse" nach Abschluß einer Bestellung angezeigt wird
+	 */
+	
+	//wpsg_debug($this->view['wpsg_mod_prepayment']['subject']);
+
+?>
+<?php echo wpsg_translate(__('Sie haben die Zahlungsart "Vorkasse" gewählt. Überweisen Sie daher den Rechnungsbetrag von #1# auf folgendes Konto:', 'wpsg'), wpsg_ff($this->view['basket']['sum']['preis_gesamt_brutto'], $this->get_option('wpsg_currency'))); ?>
+<br /><br />
+<?php echo wpsg_translate(__('Kontoinhaber: #1#', 'wpsg'), $this->replaceUniversalPlatzhalter($this->get_option('wpsg_mod_prepayment_kinhaber'))); ?><br /> 
+<?php echo wpsg_translate(__('IBAN: #1#', 'wpsg'), $this->replaceUniversalPlatzhalter($this->get_option('wpsg_mod_prepayment_iban'))); ?><br /> 
+<?php echo wpsg_translate(__('Bank: #1#', 'wpsg'), $this->replaceUniversalPlatzhalter($this->get_option('wpsg_mod_prepayment_bank'))); ?><br />
+<?php echo wpsg_translate(__('BIC-/SWIFT-Code: #1#', 'wpsg'), $this->replaceUniversalPlatzhalter($this->get_option('wpsg_mod_prepayment_swift'))); ?> 
+<br /><br />
+<?php echo wpsg_translate(__('Bitte als Betreff angeben: "#1#"', 'wpsg'), $this->view['wpsg_mod_prepayment']['subject']); ?>

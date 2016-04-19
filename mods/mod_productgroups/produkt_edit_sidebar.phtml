@@ -1,0 +1,25 @@
+<?php
+
+	/**
+	 * Template für die Konfiguration der Produktvariablen innerhalb der Produktverwaltung
+	 */
+ 
+?>
+<div id="wpsg_productgroups" class="postbox">
+	<h3 class="wpsg_handlediv">
+		<span title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>" class="handlediv"><br /></span>
+		<span><?php echo __('Produktgruppen', 'wpsg'); ?> </span>
+	</h3>
+	<div class="inside">
+		
+		<?php if (sizeof($this->view['wpsg_mod_productgroups']['data']) <= 0) { ?>
+		<p><?php echo __('Bisher wurden keine Produktgruppen angelegt.', 'wpsg'); ?></p>
+		<?php } else { ?>
+		<?php echo wpsg_drawForm_Select('wpsg_productgroup', __('Produktgruppe', 'wpsg'), $this->view['wpsg_mod_productgroups']['data'], $this->view['wpsg_mod_productgroups']['produkt_data']['pgruppe']); ?>
+		<?php echo wpsg_drawForm_Input('wpsg_productgroup_sticky_von', __('Sticky von', 'wpsg'), $this->view['wpsg_mod_productgroups']['sticky_von']); ?>
+		<?php echo wpsg_drawForm_Input('wpsg_productgroup_sticky_bis', __('Sticky bis', 'wpsg'), $this->view['wpsg_mod_productgroups']['sticky_bis']); ?>
+		<?php } ?>
+		
+		<a href="<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&amp;page=wpsg-Productgroups"><?php echo __('Produktgruppenverwaltung', 'wpsg'); ?></a>
+	</div>
+</div>
