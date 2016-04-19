@@ -20,14 +20,17 @@
 		<div class="wpsg_produkt_produktbilder">
 			<?php if (sizeof($this->callMod('wpsg_mod_produktbilder', 'getProduktBilder', array($this->view['data']['id'])))) { ?>
 			<?php $i = 0; foreach ($this->callMod('wpsg_mod_produktbilder', 'getProduktBilder', array($this->view['data']['id'])) as $b) { $i ++; ?>
-			<?php if ($i == 1) { ?>
-			<div class="wpsg_produkt_preview wpsg_pb_pic">		
-				<?php echo $this->callMod('wpsg_mod_produktbilder', 'genBild', array($this->view['data']['id'], $i, $this->get_option('wpsg_mod_produktbilder_width'), $this->get_option('wpsg_mod_produktbilder_height'), $this->get_option('wpsg_mod_produktbilder_mode'), 'pimage')); ?>
-				<?php /*<img itemprop="image" id="wpsg_mainimage_<?php echo $this->getTemplateIndex(); ?>" src="<?php echo $this->callMod('wpsg_mod_produktbilder', 'makeTn', array($this->view['data']['id'], $b, $this->get_option('wpsg_mod_produktbilder_width'), $this->get_option('wpsg_mod_produktbilder_height'), $this->get_option('wpsg_mod_produktbilder_mode'))); ?>" alt="" />*/?>				
+			<?php if ($i == 1 && !wpsg_isSizedString($this->view['data']['varianten_image']) || $b == $this->view['data']['varianten_image']) { ?>
+			<div class="wpsg_produkt_preview wpsg_pb_pic">	
+				<a class="wpsg_imagelink thickbox" rel="<?php echo $this->view['product_index']; ?>-<?php echo $this->view['data']['id']; ?>" href="<?php echo $this->callMod('wpsg_mod_produktbilder', 'makeTn', array($this->view['data']['id'], $b, 800, 600, $this->get_option('wpsg_mod_produktbilder_mode'))); ?>">
+					<img src="<?php echo $this->callMod('wpsg_mod_produktbilder', 'makeTn', array($this->view['data']['id'], $b, $this->get_option('wpsg_mod_produktbilder_width'), $this->get_option('wpsg_mod_produktbilder_height'), $this->get_option('wpsg_mod_produktbilder_mode'))); ?>" alt="<?php echo wpsg_hspc($this->view['data']['name']); ?>" />
+				</a>
 			</div>
 			<?php } else { ?>
 			<div class="wpsg_pb_pic" style="display:none;">
-				<?php echo $this->callMod('wpsg_mod_produktbilder', 'genBild', array($this->view['data']['id'], $i, $this->get_option('wpsg_mod_produktbilder_width'), $this->get_option('wpsg_mod_produktbilder_height'), $this->get_option('wpsg_mod_produktbilder_mode'), 'pimage')); ?>
+				<a class="wpsg_imagelink thickbox" rel="<?php echo $this->view['product_index']; ?>-<?php echo $this->view['data']['id']; ?>" href="<?php echo $this->callMod('wpsg_mod_produktbilder', 'makeTn', array($this->view['data']['id'], $b, 800, 600, $this->get_option('wpsg_mod_produktbilder_mode'))); ?>">
+					<img src="<?php echo $this->callMod('wpsg_mod_produktbilder', 'makeTn', array($this->view['data']['id'], $b, $this->get_option('wpsg_mod_produktbilder_width'), $this->get_option('wpsg_mod_produktbilder_height'), $this->get_option('wpsg_mod_produktbilder_mode'))); ?>" alt="<?php echo wpsg_hspc($this->view['data']['name']); ?>" />
+				</a>
 			</div>
 			<?php } ?>
 			<?php } ?>
@@ -56,7 +59,7 @@
 			<?php if ($this->get_option('wpsg_kleinunternehmer')) { /* Kleinunternehmerregelung aktiviert START */ ?>		
 			
 				<div class="wpsg_produkt_preishinweis">
-					<?php echo wpsg_translate(__('Preise zzgl. #1#', 'wpsg'), '<a href="'.$this->getURL(wpsg_ShopController::URL_VERSANDKOSTEN).'">'.__('Versandkosten', 'wpsg').'</a>'); ?>
+					<?php echo wpsg_translate(__('#2# zzgl. #1#', 'wpsg'), '<a href="'.$this->getURL(wpsg_ShopController::URL_VERSANDKOSTEN).'">'.__('Versandkosten', 'wpsg').'</a>', '<a href="#kkhint" title="'.wpsg_hspc($this->get_option('wpsg_kleinunternehmer_text')).'">Endpreis</a>'); ?>
 				</div>
 			
 			<?php } else { /* Kleinunternehmerregelung aktiviert ENDE */ ?>	

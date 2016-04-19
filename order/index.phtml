@@ -382,12 +382,12 @@
 						<?php echo (($o['onr'] == "")?$o['id']:$o['onr']); ?> <span class="wpsg_order_datum"><?php echo wpsg_hspc(date('d.m.Y H:i:s', strtotime($o['cdate']))); ?></span><br />
 						<?php if (trim($o['order_comment']) != '') { ?>
 						<a title="<?php echo wpsg_translate(__('Kommentar (Kunde): #1#', 'wpsg'), wpsg_hspc($o['order_comment'])); ?>" onclick="return false" href="">
-							<img alt="" src="<?php echo WPSG_URL_CONTENT; ?>plugins/wpshopgermany/views/gfx/comment.png" />
+							<img alt="" src="<?php echo WPSG_URL_CONTENT; ?>plugins/<?php echo WPSG_FOLDERNAME; ?>/views/gfx/comment.png" />
 						</a>
 						<?php } ?>
 						<?php if (trim($o['admincomment']) != "") { ?>
 						<a title="<?php echo __("Kommentar (Admin): ", "wpsg").htmlspecialchars($o['admincomment']); ?>" onclick="return false;" href="">
-							<img alt="" src="<?php echo WPSG_URL_CONTENT; ?>plugins/wpshopgermany/views/gfx/comment_admin.png" />
+							<img alt="" src="<?php echo WPSG_URL_CONTENT; ?>plugins/<?php echo WPSG_FOLDERNAME; ?>/views/gfx/comment_admin.png" />
 						</a>
 						<?php } ?>
 						<div class="row-actions">

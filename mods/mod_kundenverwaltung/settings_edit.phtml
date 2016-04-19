@@ -9,7 +9,7 @@
 <?php echo wpsg_drawForm_Checkbox('wpsg_mod_kundenverwaltung_showCheckoutLogin', __('Login in Checkout integrieren', 'wpsg'), $this->get_option('wpsg_mod_kundenverwaltung_showCheckoutLogin'), array('help' => 'wpsg_mod_kundenverwaltung_showCheckoutLogin')); ?>
 <?php echo wpsg_drawForm_Checkbox('wpsg_mod_kundenverwaltung_showCheckoutRegister', __('Registrierung im Checkout', 'wpsg'), $this->get_option('wpsg_mod_kundenverwaltung_showCheckoutRegister'), array('help' => 'wpsg_mod_kundenverwaltung_showCheckoutRegister')); ?>
 <?php echo wpsg_drawForm_Checkbox('wpsg_mod_kundenverwaltung_showCheckoutRegisterzwand', __('Registrierungzwang im Checkout', 'wpsg'), $this->get_option('wpsg_mod_kundenverwaltung_showCheckoutRegisterzwand'), array('help' => 'wpsg_mod_kundenverwaltung_showCheckoutRegisterzwand')); ?>
-<?php echo wpsg_drawForm_Checkbox('wpsg_mod_kundenverwaltung_loginZwang', __('Loginzwang im Checkout', 'wpsg'), $this->get_option('wpsg_mod_kundenverwaltung_loginZwang'), array('help' => 'wpsg_mod_kundenverwaltung_loginZwang')); ?>
+<?php echo wpsg_drawForm_Checkbox('wpsg_mod_kundenverwaltung_loginZwang', __('Loginzwang im Checkout (für Neukunden)', 'wpsg'), $this->get_option('wpsg_mod_kundenverwaltung_loginZwang'), array('help' => 'wpsg_mod_kundenverwaltung_loginZwang')); ?>
 <?php echo wpsg_drawForm_Select('wpsg_mod_kundenverwaltung_redirectlogin', __('Weiterleitung nach Login', 'wpsg'), array(
 	'0' => __('Auf Profilseite leiten', 'wpsg'),
 	'1' => __('Auf aktueller Seite bleiben', 'wpsg')		
@@ -31,10 +31,10 @@
 </div>
 
 <br />
-<?php echo wpsg_drawForm_Select('wpsg_page_mod_kundenverwaltung_profil', __('Profilseite', 'wpsg'), $this->view['pages'], $this->get_option('wpsg_page_mod_kundenverwaltung_profil')); ?>
-<?php echo wpsg_drawForm_Select('wpsg_page_mod_kundenverwaltung_registrierung', __('Registrierungsseite', 'wpsg'), $this->view['pages'], $this->get_option('wpsg_page_mod_kundenverwaltung_registrierung')); ?>
-<?php echo wpsg_drawForm_Select('wpsg_page_mod_kundenverwaltung_weiterleitung_nach_registrierung', __('Weiterleitung nach Registrierung', 'wpsg'), $this->view['pages'], $this->get_option('wpsg_page_mod_kundenverwaltung_weiterleitung_nach_registrierung')); ?>
-<?php echo wpsg_drawForm_Select('wpsg_page_mod_kundenverwaltung_order', __('Bestellübersichtsseite', 'wpsg'), $this->view['pages'], $this->get_option('wpsg_page_mod_kundenverwaltung_order')); ?>
+<?php echo wpsg_drawForm_Select('wpsg_page_mod_kundenverwaltung_profil', __('Profilseite', 'wpsg'), $this->view['pages'], $this->get_option('wpsg_page_mod_kundenverwaltung_profil'), array('help' => 'wpsg_page_mod_kundenverwaltung_profil')); ?>
+<?php echo wpsg_drawForm_Select('wpsg_page_mod_kundenverwaltung_registrierung', __('Registrierungsseite', 'wpsg'), $this->view['pages'], $this->get_option('wpsg_page_mod_kundenverwaltung_registrierung'), array('help' => 'wpsg_page_mod_kundenverwaltung_registrierung')); ?>
+<?php echo wpsg_drawForm_Select('wpsg_page_mod_kundenverwaltung_weiterleitung_nach_registrierung', __('Weiterleitung nach Registrierung', 'wpsg'), $this->view['pages'], $this->get_option('wpsg_page_mod_kundenverwaltung_weiterleitung_nach_registrierung'), array('help' => 'wpsg_page_mod_kundenverwaltung_weiterleitung_nach_registrierung')); ?>
+<?php echo wpsg_drawForm_Select('wpsg_page_mod_kundenverwaltung_order', __('Bestellübersichtsseite', 'wpsg'), $this->view['pages'], $this->get_option('wpsg_page_mod_kundenverwaltung_order'), array('help' => 'wpsg_mod_kundenverwaltung_order')); ?>
 <?php echo wpsg_drawForm_Checkbox('wpsg_mod_kundenverwaltung_onlylogin', __('Bestellungen nur für registrierte Kunden zulassen', 'wpsg'), $this->get_option('wpsg_mod_kundenverwaltung_onlylogin'), array('help' => 'wpsg_mod_kundenverwaltung_onlylogin')); ?>
 <br />
 

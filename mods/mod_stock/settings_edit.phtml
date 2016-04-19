@@ -25,7 +25,7 @@
 	<div class="wpsg_clear"></div>
 </div>
 <?php echo wpsg_drawForm_Checkbox('wpsg_mod_stock_notemplateswitch', __('Template nicht wechseln', 'wpsg'), $this->get_option('wpsg_mod_stock_notemplateswitch'), array('help' => 'wpsg_mod_stock_notemplateswitch')); ?>
-<?php echo wpsg_drawForm_Checkbox('wpsg_mod_stock_allow', __('Bestellungen bei negtiven Bestand verhindern', 'wpsg'), $this->get_option('wpsg_mod_stock_allow')); ?>
+<?php echo wpsg_drawForm_Checkbox('wpsg_mod_stock_allow', __('Bestellungen bei negtiven Bestand verhindern', 'wpsg'), $this->get_option('wpsg_mod_stock_allow'), array('help' => 'wpsg_mod_stock_allow')); ?>
 <?php echo wpsg_drawForm_Checkbox('wpsg_mod_stock_showBackendStock', __('Bestand in Produktübersicht (Backend) anzeigen', 'wpsg'), $this->get_option('wpsg_mod_stock_showBackendStock'), array('help' => 'wpsg_mod_stock_showBackendStock')); ?>
 <?php if ($this->hasMod('wpsg_mod_productindex')) { ?>
 <?php echo wpsg_drawForm_Checkbox('wpsg_mod_stock_showProductindex', __('Bestand in Produktübersicht (Frontend) anzeigen', 'wpsg'), $this->get_option('wpsg_mod_stock_showProductindex'), array('help' => 'wpsg_mod_stock_showProductindex')); ?>

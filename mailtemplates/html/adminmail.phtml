@@ -13,7 +13,7 @@
 
 <br />
 
-<h2><?php echo __('Warenkorb', 'wpsg'); ?>:</h2>
+<h2><?php echo __('Warenkorb', 'wpsg'); ?> <a href="<?php echo WPSG_URL_WP.'wp-admin/admin.php?page=wpsg-Order&action=view&edit_id='.$this->view['o_id']; ?>"><?php echo __('Bestellverwaltung', 'wpsg'); ?></a>:</h2>
 
 <?php $this->render(WPSG_PATH_VIEW.'/mailtemplates/html/order.phtml'); ?> 
 

@@ -1,0 +1,78 @@
+<?php
+
+	/**
+	 * Startseite der Module
+	 */
+
+?>
+<div class="wpsg_admin_content">
+	
+	<h3><?php echo __('Modulverwaltung', 'wpsg'); ?></h3>
+	<p><?php echo __('Aktivieren/Installieren Sie weitere Module oder halten Sie externe Module aktuell.', 'wpsg'); ?></p>
+	
+	<div class="wpsg_admin_box">
+		<div class="head">
+			<div class="title">
+				<div class="fulltab">
+					<?php echo __('Hier sehen sie verfügbare externe Module', 'wpsg'); ?>					
+				</div>
+			</div>
+		</div>
+		<div class="content">
+			<?php if (wpsg_isSizedArray($this->view['arOnlineModule'])) { ?>
+			<table class="wpsg_modultable">
+				<tr>
+					<th class="wpsg_col_name"><?php echo __('Modulname', 'wpsg'); ?></th>
+					<th class="wpsg_col_instversion"><?php echo __('installierte Version', 'wpsg'); ?></th>
+					<th class="wpsg_col_licence"><?php echo __('Lizenz', 'wpsg'); ?></th>
+					<th class="wpsg_col_availableversion"><?php echo __('verfügbare Version', 'wpsg'); ?></th>			
+				</tr>	
+				<?php foreach ($this->view['arOnlineModule'] as $modul) { ?>
+				<tr>
+					<td class="wpsg_col_name"><?php echo $modul['name']; ?></td>
+					<td class="wpsg_col_instversion">
+						
+						<?php echo $modul['version_local']; ?>
+										
+					</td>
+					<td class="wpsg_col_licence">
+						
+						<?php if ($modul['free'] == '1') { ?>
+						<?php echo __('kostenlos', 'wpsg'); ?>
+						<?php } else { ?>
+						 
+						 <?php if (@in_array($modul['key'], $this->arLizenz['mods'])) { ?>
+						 <?php echo __('aktiv', 'wpsg'); ?>
+						 <?php } else { ?>
+						 
+						 <?php echo __('Demo', 'wpsg'); ?>
+						 
+						 <?php } ?>
+						
+						<?php } ?>
+						
+					</td>
+					<td class="wpsg_col_availableversion">
+					
+						<?php //wpsg_debug($modul); ?>
+						<?php if ($modul['version'] == $modul['version_local']) { ?>
+						<?php echo $modul['version']; ?> (aktuell)
+						<?php } else if (version_compare($modul['shop_version'], WPSG_VERSION) > 0) { ?>
+						<?php echo wpsg_translate(__('neue Version verfügbar (<a href="#1#">wpShopGermany Update</a> notwendig)', 'wpsg'), WPSG_URL_WP.'wp-admin/plugins.php'); ?>
+						<?php } else if (version_compare($modul['version'], $modul['version_local']) > 0) { ?>
+						<?php echo wpsg_translate(__('neue Version verfügbar: <a href="#1#">installiere #2#</a>', 'wpsg'), WPSG_URL_WP.'wp-admin/admin.php?page=wpsg-Admin&action=registrierung&noheader=1&do=installModul&modul='.$modul['key'], $modul['version']); ?>
+						<?php } else { ?>
+						<?php echo $modul['version']; ?>
+						<?php } ?>
+					
+					</td>
+				</tr>
+				<?php } ?>
+			</table>
+			<?php } else { ?>
+			<?php echo __('Module konnten aufgrund fehlender SOAP Unterstützung nicht geladen werden.', 'wpsg'); ?>
+			<?php } ?>
+		</div>
+	</div>
+	
+</div>

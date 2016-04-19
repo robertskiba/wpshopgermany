@@ -73,7 +73,7 @@
 <?php echo wpsg_pad_right(__('Zahlungsart', 'wpsg').':', 35); ?><?php echo $this->arPayment[$this->view['basket']['checkout']['payment']]['name']; ?>  
 <?php $this->callMods('mail_payment'); ?>
     
-<?php echo __('Bestellung', 'wpsg'); ?>:   
+<?php echo wpsg_pad_right(__('Bestellung', 'wpsg').':', 35); ?><?php echo WPSG_URL_WP.'wp-admin/admin.php?page=wpsg-Order&action=view&edit_id='.$this->view['o_id']; ?>    
 <?php echo $this->render(WPSG_PATH_VIEW.'/mailtemplates/order.phtml'); ?>
 
 <?php if ($this->view['basket']['checkout']['comment'] != '') { ?>

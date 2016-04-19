@@ -8,7 +8,7 @@
 <p><?php echo __('Um den Betrag mit Sofortüberweisung zu bezahlen klicken Sie bitte auf folgendes Logo.', 'wpsg'); ?></p>
 <p>
 	<a title="<?php echo __('Mit Sofortüberweisung bezahlen', 'wpsg'); ?>" href="<?php echo $this->view['suLink']; ?>">
-		<img src="<?php echo WPSG_URL_CONTENT.'plugins/wpshopgermany/views/gfx/'; ?>banner_300x100.png" align="left" alt="<?php echo __('Mit Sofortüberweisung bezahlen', 'wpsg'); ?>" style="margin-right:7px;">
+		<img src="<?php echo WPSG_URL_CONTENT.'plugins/'.WPSG_FOLDERNAME.'/views/gfx/'; ?>banner_300x100.png" align="left" alt="<?php echo __('Mit Sofortüberweisung bezahlen', 'wpsg'); ?>" style="margin-right:7px;">
 	</a>
 </p>
 <?php if ($this->get_option('wpsg_mod_su_autostart') == '1') { ?>

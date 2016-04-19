@@ -94,6 +94,9 @@
 	<?php } ?>
 	
 	<ul>
+		<?php if ($this->view['wpsg_widgetsettings']['wpsg_requestpage'] == 1) { ?>
+		<li class="page_item"><a href="<?php echo $this->getURL(wpsg_ShopController::URL_REQUEST); ?>"><?php echo get_the_title($this->get_option('wpsg_page_request')); ?></a></li>
+		<?php } ?>
 		<?php if ($this->view['wpsg_widgetsettings']['wpsg_agbpage'] == 1) { ?>
 		<li class="page_item"><a href="<?php echo $this->getURL(wpsg_ShopController::URL_AGB); ?>"><?php echo get_the_title($this->get_option('wpsg_page_agb')); ?></a></li>
 		<?php } ?>
@@ -103,8 +106,12 @@
 		<?php if ($this->view['wpsg_widgetsettings']['wpsg_dspage'] == 1) { ?>
 		<li class="page_item"><a href="<?php echo $this->getURL(wpsg_ShopController::URL_DATENSCHUTZ); ?>"><?php echo get_the_title($this->get_option('wpsg_page_datenschutz')); ?></a></li>
 		<?php } ?>
+		
 		<?php if ($this->view['wpsg_widgetsettings']['wpsg_vkpage'] == 1) { ?>
 		<li class="page_item"><a href="<?php echo $this->getURL(wpsg_ShopController::URL_VERSANDKOSTEN); ?>"><?php echo get_the_title($this->get_option('wpsg_page_versand')); ?></a></li>
+		<?php } ?>
+		<?php if ($this->view['wpsg_widgetsettings']['wpsg_odrpage'] == 1) { ?>
+		<li class="page_item"><a href="<?php echo $this->getURL(wpsg_ShopController::URL_ONLINE_DISPUTE_RESOLUTION); ?>"><?php echo __('Online Streitbeilegung', 'wpsg'); ?></a></li>
 		<?php } ?>
 		<?php if ($this->view['wpsg_widgetsettings']['wpsg_imppage'] == 1) { ?>
 		<li class="page_item"><a href="<?php echo $this->getURL(wpsg_ShopController::URL_IMPRESSUM); ?>"><?php echo get_the_title($this->get_option('wpsg_page_impressum')); ?></a></li>

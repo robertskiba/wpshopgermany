@@ -1,0 +1,100 @@
+<?php
+
+	/**
+	 * Templatedatei für das Registrierungsinterface
+	 * Sollte nicht verändert werden
+	 */
+
+?>
+<div class="wpsg_admin_submenu">
+	
+	<div class="head">
+		<div class="title"><?php echo __("Lizenzverwaltung", "wpsg"); ?></div>			
+		<div style="clear:both;"></div>
+	</div>
+
+	<ul>		
+		<li class="<?php echo ((!isset($_REQUEST['subaction']))?'current':''); ?>"><a href="<?php echo wpsg_url(WPSG_URL_WP.'wp-admin/admin.php?page=wpsg-Admin&action=registrierung'); ?>"><?php echo __('Registrierungsdaten', 'wpsg'); ?></a></li>
+		<li class="<?php echo ((isset($_REQUEST['subaction']) && $_REQUEST['subaction'] == 'domains')?'current':''); ?>"><a href="<?php echo wpsg_url(WPSG_URL_WP.'wp-admin/admin.php?page=wpsg-Admin&action=registrierung&subaction=domains'); ?>"><?php echo __('Domainverwaltung', 'wpsg'); ?></a></li>		
+		<li class="<?php echo ((isset($_REQUEST['subaction']) && $_REQUEST['subaction'] == 'module')?'current':''); ?>"><a href="<?php echo wpsg_url(WPSG_URL_WP.'wp-admin/admin.php?page=wpsg-Admin&action=registrierung&subaction=module'); ?>"><?php echo __('Modulaktivierung', 'wpsg'); ?></a></li>
+	</ul>
+			
+</div>
+ 
+<div class="wpsg_admin_content">
+	
+	<?php if (!isset($_REQUEST['subaction'])) { ?>
+		<h2><?php echo __('Registrierungsdaten', 'wpsg'); ?></h2>
+		 
+		<?php echo wpsg_drawForm_Input('register_lizenz', __('Lizenzart', 'wpsg'), $this->view['typ'], array('readonly' => true, 'disabled' => true)); ?>
+		 				
+		<br />
+		<form enctype="multipart/form-data" method="post" action="<?php echo wpsg_url(WPSG_URL_WP.'wp-admin/admin.php?page=wpsg-Admin&action=registrierung&noheader=1'); ?>" name="form1">
+		
+			<?php echo wpsg_drawForm_Input('register_vname', __('Vorname', 'wpsg'), $this->view['data']['vname']); ?>
+			<?php echo wpsg_drawForm_Input('register_name', __('Name', 'wpsg'), $this->view['data']['name']); ?>
+			<?php echo wpsg_drawForm_Input('register_plz', __('PLZ', 'wpsg'), $this->view['data']['plz']); ?>
+			<?php echo wpsg_drawForm_Input('register_ort', __('Ort', 'wpsg'), $this->view['data']['ort']); ?>
+			<?php echo wpsg_drawForm_Input('register_strasse', __('Straße', 'wpsg'), $this->view['data']['strasse']); ?>
+			<?php echo wpsg_drawForm_Select('register_land', __('Land', 'wpsg'), $this->view['data']['lander'], $this->view['data']['land']); ?>
+			<?php echo wpsg_drawForm_Input('register_email', __('E-Mail', 'wpsg'), $this->view['data']['email']); ?>
+			
+			<br />
+			<input id="submit" name="registerdata-submit" type="submit" class="button-primary" value="<?php echo __('Änderungen übermitteln', 'wpsg'); ?>" />
+			
+		</form>
+	<?php } ?>
+	
+	<?php if (isset($_REQUEST['subaction']) && $_REQUEST['subaction'] == 'domains') { ?>	
+		<h2><?php echo __('Registrierte Domains', 'wpsg'); ?></h2>
+			
+		<?php if (sizeof($this->view['data']['domains']) <= 0) { ?>
+		<p><?php echo __('Noch keine Domains registriert.', 'wpsg'); ?>
+		<?php } else { ?>
+		<b><?php echo __('Bereits auf diesen Key registrierte Domains', 'wpsg')?>:</b><br /><br />
+		<?php foreach ($this->view['data']['domains'] as $d) { ?>
+		<div class="wpsg_domainrow">
+			<?php echo wpsg_hspc($d['url']); ?>&nbsp;[<a href="<?php echo wpsg_url(WPSG_URL_WP.'wp-admin/admin.php?page=wpsg-Admin&action=registrierung&noheader=1&do=remove&url='.rawurlencode($d['url'])); ?>"><?php echo __('Registrierung aufheben', 'wpsg'); ?></a>]
+		</div>
+		<?php } ?>
+		<?php } ?>
+		
+		<br />
+		<?php if ($this->view['data']['registred'] === true) { ?>
+		<p class="wpsg_registersuccess"><?php echo __('Diese Domain ist bereits auf diesen Schlüssel registriert.', 'wpsg'); ?></p>
+		<?php } else { ?>
+		
+			<p class="wpsg_registerfailure"><?php echo __('Diese Domain ist noch nicht auf diesen Schlüssel registriert.', 'wpsg'); ?></p>
+			
+			<?php if (sizeof($this->view['data']['domains']) > 0 && $this->arLizenz['l'] != 3) { ?>
+			<p class="wpsg_registerfailure">
+				<?php echo __('Sie dürfen mit dieser Lizenz den Shop nur auf einer Domain laufen lassen. Löschen sie die bereits registrierte Domain und registrieren Sie diese Domain neu.', 'wpsg'); ?>
+			</p>
+			<?php } else { ?>
+			<br />
+			<form method="post" action="<?php echo wpsg_url(WPSG_URL_WP.'wp-admin/admin.php?page=wpsg-Admin&action=registrierung&noheader=1&do=register'); ?>">
+				<input type="submit" value="<?php echo __('Diese Domain registrieren', 'wpsg'); ?>" class="button-primary" />
+			</form>
+			<?php } ?>		
+		
+		<?php } ?>
+	<?php } ?>
+	
+	<?php if (isset($_REQUEST['subaction']) && $_REQUEST['subaction'] == 'module') { ?>	
+		<h2><?php echo __('Weitere Module', 'wpsg'); ?></h2>
+		
+		<p><?php echo wpsg_translate(__('Erweitern Sie Ihre wpShopGermany-Lizenz um weitere Funktionen, indem Sie <a href="#1#">weitere Module installieren</a> und ihrer bestehenden wpShopGermany-Lizenz hinzufügen.', 'wpsg'), WPSG_URL_WP.'wp-admin/admin.php?page=wpsg-Admin&action=module'); ?></p>
+		
+		<br />
+		<form method="post" action="<?php echo wpsg_url(WPSG_URL_WP.'wp-admin/admin.php?page=wpsg-Admin&action=registrierung&noheader=1&do=aktivateModul'); ?>">
+			
+			<?php echo wpsg_drawForm_Input('wpsg_modulkey', __('Modulschlüssel', 'wpsg'), $this->get_option('wpsg_modulkey')); ?>
+			
+			<br />
+			<input type="submit" value="<?php echo __('wpShopGermany Lizenz erweitern', 'wpsg'); ?>" class="button-primary" />
+			
+		</form>		
+		 
+	<?php } ?>
+	
+</div>

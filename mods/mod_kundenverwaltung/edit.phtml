@@ -93,7 +93,73 @@
 			
 		}
 		
-	} );
+// Visualisierung der Passwortstärke 
+
+	jQuery('input[type=password]').keyup(function(){
+
+			var password = jQuery(this).val();
+			
+			if (password.length < 6) {
+				
+				jQuery('#wpsg_pwd_length').removeClass('valid').addClass('invalid');
+
+			}else{
+
+				jQuery('#wpsg_pwd_length').removeClass('invalid').addClass('valid');
+	
+			}
+
+			if (password.match(/([a-z])/)) {
+				
+				jQuery('#wpsg_pwd_letter').removeClass('invalid').addClass('valid');
+
+			}else{
+
+				jQuery('#wpsg_pwd_letter').removeClass('valid').addClass('invalid');
+	
+			}
+
+			if (password.match(/([A-Z])/)) {
+				
+				jQuery('#wpsg_pwd_capital').removeClass('invalid').addClass('valid');
+
+			}else{
+
+				jQuery('#wpsg_pwd_capital').removeClass('valid').addClass('invalid');
+	
+			}
+			
+			if (password.match(/([0-9])/)) {
+				
+				jQuery('#wpsg_pwd_number').removeClass('invalid').addClass('valid');
+
+			}else{
+
+				jQuery('#wpsg_pwd_number').removeClass('valid').addClass('invalid');
+	
+			}
+
+			if (password.match(/([~,!,%,@,&,#,°,^,$,?,_,*,§])/)) {
+				
+				jQuery('#wpsg_pwd_speziell').removeClass('invalid').addClass('valid');
+
+			}else{
+
+				jQuery('#wpsg_pwd_speziell').removeClass('valid').addClass('invalid');
+	
+			}
+			
+
+			jQuery('#wpsg_pwd_info').show(); 
+
+			jQuery(this).blur(function(){
+
+				jQuery('#wpsg_pwd_info').hide(); 
+				
+			});
+		});	
+	});		
+		
 
 /* ]]> */
 </script>
@@ -121,7 +187,19 @@
 						</h3>
 						<div class="inside">
 							<?php echo wpsg_drawForm_Input('password1', __('Passwort', 'wpsg'), ''); ?>
+							<span id="wpsg_customerpassword_result"></span>	
 							<?php echo wpsg_drawForm_Input('password2', __('Wiederholung', 'wpsg'), ''); ?>
+							<div id="wpsg_pwd_info"> 
+							<h4><?php echo __('Passwort sollte folgende Regeln befolgen:','wpsg') ?></h4>
+							<ul>
+									<li id="wpsg_pwd_length" class="invalid"><?php echo __('Das Passwort ist zu kurz!','wpsg')?></li>
+									<li id="wpsg_pwd_letter" class="invalid"><?php echo __('Mindestens ein Kleinbuchstabe','wpsg') ?></li>
+									<li id="wpsg_pwd_capital" class="invalid"><?php echo __('Mindestens ein Großbuchstabe','wpsg') ?></li>
+									<li id="wpsg_pwd_number" class="invalid"><?php echo __('Mindestens eine Zahl','wpsg') ?></li>
+									<li id="wpsg_pwd_speziell" class="invalid"><?php echo __('Mindestens ein Sonderzeichen','wpsg') ?></li>
+								</ul>
+							</div>
+							<div class="wpsg_clear"></div>	
 						</div>
 					</div>
 					

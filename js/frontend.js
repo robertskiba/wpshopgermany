@@ -16,6 +16,31 @@
 		
 	} // wpsg_mod_basketteaser_add(produkt_id)
 
+	/**
+	 * Aktualisiert ein eventuell eingebundenes Warenkorbwidget
+	 */
+	function wpsg_refreshBasketWidget()
+	{
+		
+		if (jQuery('.wpsg_basket_widget').length <= 0) return;
+		
+		jQuery('.wpsg_basket_widget').html('<img class="loading" src="' + wpsg_ajax.img_ajaxloading + '" alt="' + wpsg_ajax.label_pleasewait + '" />');
+		
+		jQuery.ajax( {
+			url: wpsg_ajax.url_basket,
+			data: {
+				'wpsg[ajax]': 1,
+				'wpsg[action]': 'widget'
+			},
+			success: function(data) {
+			
+				jQuery('.wpsg_basket_widget').html(data);
+				
+			}
+		} );
+		
+	} // function wpsg_refreshBasketWidget()
+	
 	function wpsg_customerquestion(url_redirect)
 	{
 	
@@ -118,3 +143,4 @@
 		}
 	  
 	};
+	

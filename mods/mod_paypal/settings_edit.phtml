@@ -88,8 +88,8 @@
 <?php echo wpsg_drawForm_Checkbox('wpsg_mod_paypal_mwstland', __('Keine MwSt. wenn Land steuerfrei', 'wpsg'), $this->get_option('wpsg_mod_paypal_mwstland'), array('help' => 'wpsg_shippay_mwstland')); ?>
 
 <br />
-<?php echo wpsg_drawForm_Input('wpsg_mod_paypal_currency', __('Währungscode (Standard: EUR)', 'wpsg'), $this->get_option('wpsg_mod_paypal_currency')); ?>
-<?php echo wpsg_drawForm_Select('wpsg_mod_paypal_language', __('Sprache im PayPal Interface', 'wpsg'), array('DE' => __('Deutsch', 'wpsg'), 'US' => __('Englisch', 'wpsg'), 'FR' => __('Französisch', 'wpsg')), $this->get_option('wpsg_mod_paypal_language')); ?>
+<?php echo wpsg_drawForm_Input('wpsg_mod_paypal_currency', __('Währungscode (Standard: EUR)', 'wpsg'), $this->get_option('wpsg_mod_paypal_currency'), array('help' => 'wpsg_mod_paypal_currency')); ?>
+<?php echo wpsg_drawForm_Select('wpsg_mod_paypal_language', __('Sprache im PayPal Interface', 'wpsg'), array('DE' => __('Deutsch', 'wpsg'), 'US' => __('Englisch', 'wpsg'), 'FR' => __('Französisch', 'wpsg')), $this->get_option('wpsg_mod_paypal_language'), array('help' => 'wpsg_mod_paypal_language')); ?>
 <?php echo wpsg_drawForm_Checkbox('wpsg_mod_paypal_autostart', __('Zahlung sofort starten', 'wpsg'), $this->get_option('wpsg_mod_paypal_autostart'), array('help' => 'wpsg_shippay_paystart')); ?>
 <?php echo wpsg_drawForm_Select('wpsg_page_mod_paypal_success', __('Erfolgsseite', 'wpsg'), $this->view['pages'], $this->get_option('wpsg_page_mod_paypal_success'), array('help' => 'wpsg_page_mod_paypal_success')); ?>
 <?php echo wpsg_drawForm_Select('wpsg_page_mod_paypal_error', __('Fehlerseite', 'wpsg'), $this->view['pages'], $this->get_option('wpsg_page_mod_paypal_error'), array('help' => 'wpsg_page_mod_paypal_error')); ?>

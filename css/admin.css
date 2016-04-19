@@ -4,7 +4,8 @@
 
 /*
  * Allgemein
- */ 
+ */
+.msg_wrap img { margin-bottom:1rem; margin-top:1rem; max-width:100%; height:auto; } 
 .wpsg_error { color:#FF0000; font-weight:bold; }
 .wpsg_developer { color:#FF0000; }
 .wpsg_change_error { background-color:#EE3B3B !important; }
@@ -148,7 +149,12 @@
 .wpsg_form_field .wpsg_form_right input.button { width:auto; }
 .wpsg_form_field .wpsg_form_right label { line-height:25px; }
 .wpsg_form_field_max select { width:100%; }
-.postbox .wpsg_form_field .wpsg_form_left  { width:330px; } /* z.B. Bestellverwaltung Bankalignment Modul */ 
+.postbox .wpsg_form_field .wpsg_form_left  { width:330px; } /* z.B. Bestellverwaltung Bankalignment Modul */
+.wpsg_order_top { }
+.wpsg_order_top .wpsg_form_field { width:100%; }
+.wpsg_order_top .wpsg_form_field .wpsg_form_left { max-width:200px; width:50% !important; }
+.wpsg_order_top .wpsg_form_field .wpsg_form_right { width:50% !important; }
+.wpsg_order_top .wpsg_form_field .wpsg_form_right select { width:50%; float:left; }  
 .wpsg_admin_box .wpsg_form_field { margin-bottom:0px; }
 .wpsg_admin_box .wpsg_form_field .wpsg_form_right { width:401px ; }
 .wpsg_form_field .wpsg_form_right_unit select, .wpsg_form_field .wpsg_form_right_unit input, .wpsg_form_field .wpsg_form_right_unit textarea { width:80%; float:left; }
@@ -207,6 +213,7 @@ table.wpsg_admin_laender_list tr.even td {}
 .wpsg_admin_laender_list .col_action { width:40px; }
 .wpsg_mod_produktattribute_table { width:100%; table-layout:fixed; }
 .wpsg_mod_produktattribute_table .col_id { width:25px; text-align:left; }
+.wpsg_mod_produktattribute_table .wpsg_id { cursor:move; }
 .wpsg_mod_produktattribute_table .col_name { text-align:left; }
 .wpsg_mod_produktattribute_table .col_typ { width:100px; text-align:left; }
 .wpsg_mod_produktattribute_table .col_typ select { width:100%; }
@@ -242,12 +249,21 @@ table.wpsg_admin_laender_list tr.even td {}
 
 /*
  * Dialog im Backend
+ * z.B. Änderung der Adresse in Bestellverwaltung
  */
 .wpsg_dialog { }
 .wpsg_dialog_content { margin:10px; }
-.wpsg_dialog .wpsg_form_field { width:100%; }
+.wpsg_dialog .wpsg_form_field { box-sizing:border-box; padding-left:5px; padding-right:5px; width:100%; }
+.wpsg_dialog .wpsg_form_field input, .wpsg_dialog .wpsg_form_field select { width:100%; box-sizing:border-box; }
 .wpsg_dialog .wpsg_form_field .wpsg_form_left { width:50%; }
 .wpsg_dialog .wpsg_form_field .wpsg_form_right { width:50%; }
+
+/*
+ * Seitenrefresh im Backend
+ * z.B. in der Bestellverwaltung 
+ */
+#wpsg_backend_loading { position:fixed; z-index:100000; width:100%; height:100%; left:0px; top:0px; background-color:rgba(0, 0, 0, 0.75); } 
+#wpsg_backend_loading .wpsg_inner { color:#FFFFFF; font-size:2rem; margin:auto; text-align:center; margin-top:20%; }
 
 /*
  * Produktverwaltung
@@ -332,6 +348,11 @@ table.wpsg_admin_laender_list tr.even td {}
 .wpsg_mod_kundenverwaltung_customeramount .wpsg_payed { color:#008000; }
 .wpsg_customer_index .wpsg-row-actions > div { visibility:hidden; }
 .wpsg_customer_index .wpsg-row-actions:hover > div { visibility:visible; } /* Bug:? Chrome */
+#wpsg_customerpassword_result { float:right; padding:20px 0; }
+#wpsg_customerpasswd .short { color:#FF0000; font-weight:bold; }
+#wpsg_customerpasswd .weak { color:#E66C2C; font-weight:bold; }
+#wpsg_customerpasswd .good { color:#2D98F3; font-weight:bold; }
+#wpsg_customerpasswd .strong { color:#006400; font-weight:bold; }
 
 /* Kundengruppenverwaltung */
 .wpsg_mod_kundenverwaltung_customergroup_index .col-id { width:55px; }
@@ -490,7 +511,7 @@ table.wpsg_admin_laender_list tr.even td {}
 
 /* Bestellvariablen */
 .wpsg_ov_table { width:100%; }
-.wpsg_ov_table .wpsg_id { width:20px; text-align:left; }
+.wpsg_ov_table .wpsg_id { width:20px; text-align:left; cursor:move; }
 .wpsg_ov_table .wpsg_delcol { width:24px; text-align:center; }
 .wpsg_ov_table .wpsg_typ { width:100px; text-align:left; }
 .wpsg_ov_table .wpsg_pflicht { width:100px; text-align:center; }
@@ -521,6 +542,7 @@ table.wpsg_admin_laender_list tr.even td {}
 /* Rabattmodul */
 .wpsg_mod_discount_generalcol { float:left; width:33%; }
 .wpsg_mod_discount_seriescol { float:left; width:50%; line-height:25px; vertical-align:middle; }
+.wpsg_mod_discount_seriescol_sub { width:25%; }
 .wpsg_mod_discount_seriescol input[type=text] { width:70% !important; }
 .wpsg_mod_discount_seriescol input[type=checkbox] { width:auto !important; margin-right:5px; }
 .wpsg_mod_discount_settings #wpsg_mod_discount_hierarchie ul { margin-top:0px; }
@@ -654,11 +676,20 @@ select.wpsg_ps_format { float:right; width:23%; }
 .wpsg_mod_protectedshops #wpsg_mod_trustedshops_reminderDays { width:50px; float:left; margin-right:5px; }
 .wpsg_mod_protectedshops .wpsg_form_field .wpsg_form_trustedshops_reminderDays p { float:left; padding-right:5px; padding-left:2px; } 
  
+/* Passwort Visualisierung */
+#wpsg_pwd_info { width:250px; background:#fefefe; width:100%; padding:25px; border-radius:5px; box-shadow:0 1px 3px #ccc; border:1px solid #ddd; display:none; }
+#wpsg_pwd_info::before { position:absolute; font-size:14px; text-shadow:none; disblay:block; color:#ddd; line-height:14px; }
+#wpsg_pwd_info ul li { margin:10px 20px; display:block; }
+
+.invalid { background:url(../images/invalid:png) no-repeat 0 50%; padding-left:22px; line-height:24px; color:#ec3f41; }
+.valid { background:url(../images/valid:png) no-repeat 0 50%; padding-left:22px; line-height:24px; color:#3a7d34; }
+ 
 /* News Bereich */
 .wpsg_news_wrap {}
 .wpsg_news_wrap .wpsg_news .markRead { text-align:right; width:100px; display:none; position:absolute; right:15px; top:15px; }
 .wpsg_news_wrap .wpsg_news_read .markRead img { float:right; margin-left:5px; }
 .wpsg_news_wrap .wpsg_news { width:100%; box-sizing:border-box; position:relative; padding:5px 10px 10px 10px; margin-bottom:15px; background-color:#FFFFFF; }
+.wpsg_news_wrap .wpsg_news h2 a { text-decoration:none; color:inherit !important; }
 .wpsg_news_wrap .wpsg_news_read {  }
 .wpsg_news_wrap .wpsg_news_read .markRead { display:block; }
 .wpsg_news_unreadhint { color:#FFFFFF; background-color:#FF0000; padding:0px 4px; line-height:16px; font-size:8px; display:inline-block; font-weight:bold; border-radius:15px; width:8px; text-align:center; vertical-align:top; margin-top:4px; margin-left:0px; }

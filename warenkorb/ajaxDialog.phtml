@@ -1,0 +1,150 @@
+<?php
+	
+	/**
+	 * Template für den Dialog wenn im Backend "Lightbox Meldung" eingestellt ist
+	 */
+	 
+	// $this->view['error'] // Steht auf true wenn ein Fehler produziert und angezeigt werden soll
+	// $this->view['product_key'] // Der ProduktSchlüssel des hinzugefügten Produktes
+	// $this->view['amount_add'] // So oft wurde das Produkt hinzugefügt
+	// $this->view['amount_basket'] // So oft befindet sich das hinzugefügte Produkt im Warenkorb
+	// $this->view['product_data'] // Array mit Produktdaten
+	// $this->view['product_index'] // Index des Produktes im Warenkorb	 	
+
+?><div id="wpsg_basket_ajax_message">
+ 	
+ 	<div class="wpsg_basket_ajax_message_content">
+ 	 
+ 		<?php if ($this->view['error'] === true) { ?>
+
+			<h3><?php echo __('Es sind folgende Fehler aufgetreten:', 'wpsg'); ?></h3>
+
+			<?php echo $this->writeFrontendMessage(); ?>
+ 		 		 
+ 			<div class="wpsg_button_wrap">
+	 			<button class="wpsg_button wpsg_button_continue_shopping" onclick="return wpsg_basket_ajax_message_close();"><?php echo __('Weiter Einkaufen', 'wpsg'); ?></button>	 		
+	 		</div>
+	 	
+	 		<div class="wpsg_clear"></div>
+ 		
+ 		<?php } else { ?>
+ 	
+	 		<div class="wpsg_basket_ajax_message_content_left">
+	 		<?php if ($this->hasMod('wpsg_mod_produktbilder')) { ?> 
+	 			<?php $arBilder = $this->callMod('wpsg_mod_produktbilder', 'getProduktBilder', array($this->getProduktId($this->view['product_data']['id']))); ?>
+	  			<?php if (wpsg_isSizedArray($arBilder)) { ?> 
+	  				<img src="<?php echo $this->callMod('wpsg_mod_produktbilder', 'makeTn', array($this->getProduktId($this->view['product_data']['id']), $arBilder[0], 150, 150, 's')); ?>" alt="" />
+	  			<?php } ?>
+	 		<?php } ?>
+	 		</div>
+	 		
+	 		<div class="wpsg_basket_ajax_message_content_right">
+	 		<?php if ($this->view['error'] === true) { echo $this->writeFrontendMessage(); } else { ?>
+	 		 
+	 		 	<span class="wpsg_basket_ajax_message_content_success">
+	 			<?php echo wpsg_translate(
+	 				__('Es wurde #1#x "#2#" in den Warenkorb gelegt.', 'wpsg'),
+	 				$this->view['amount_add'],
+	 				$this->getProductName($this->view['product_data']['id'], true)); ?>
+	 			</span>
+	 			<?php } ?>
+				<div class="wpsg_clear"></div>
+	 			
+	 			<?php /* Preisanzeige Start */ ?>
+	 			<div class=wpsg_ajaxdialog_form>
+	 				<?php echo __('Der Preis für das Produkt beträgt:','wpsg')?>
+	 				<?php echo wpsg_ff($this->view['product_data']['preis'], $this->get_option('wpsg_currency')); ?>
+	 			</div>
+	 			<div class="wpsg_clear"></div>
+	 			<?php /* Preisanzeige ENDE */ ?>
+	
+	 			<?php /* Füllmengenanzeige START */ ?>
+				<?php if ($this->hasMod('wpsg_mod_fuellmenge') && $this->get_option('wpsg_mod_fuellmenge_showAjaxDialog') === '1') { ?>
+					<div class="wpsg_ajaxdialog_form">
+					<?php echo wpsg_translate(__('Füllmenge: #1# #2#', 'wpsg'),'<span class="wpsg_fmenge">'.wpsg_ff($this->view['product_data']['fmenge']).'</span>', $this->view['product_data']['feinheit']); ?> 
+					</div>	
+				<?php } ?>	
+				<div class="wpsg_clear"></div>	
+				<?php /* Füllmengenanzeige ENDE */ ?>
+	 			
+	 			<?php /* Gewichtsanzeige Start */ ?>
+	 			<?php if ($this->hasMod('wpsg_mod_weight') && $this->get_option('wpsg_mod_weight_showAjaxDialog') === '1') { ?>
+					<div class="wpsg_ajaxdialog_form">
+						<?php echo wpsg_translate(__('Gewicht: #1# #2#', 'wpsg'), '<span class="wpsg_weight"">'.wpsg_ff($this->view['product_data']['weight']).'</span>', $this->view['product_data']['weight_unit']); ?>
+					</div>
+				<?php } ?>
+				<div class="wpsg_clear"></div>
+				<?php /* Gewichtsanzeige ENDE */ ?>
+				
+			</div>
+			
+			<div class="wpsg_clear"></div>
+	 		
+	 		<?php /* Zubehörprodukte START */?>
+	 		<?php if ($this->hasMod('wpsg_mod_relatedproducts') && $this->get_option('wpsg_mod_relatedproducts_showAjaxDialog') === '1') { ?>
+	 			<?php $arRelatedProducts = $this->callMod('wpsg_mod_relatedproducts', 'getRelatedProducts', array($this->getProduktID($this->view['product_key']))); ?>
+	 			<?php if (wpsg_isSizedArray($arRelatedProducts)) { ?> 			 
+	 				<div class="wpsg_ajaxdialog_relatedproducts">
+	 				 	<h3><?php echo __('Das könnte Ihnen auch gefallen:', 'wpsg'); ?></h3>
+	 	
+	 					<div class="wpsg_clear"></div>
+	 					
+	 					<?php foreach ($arRelatedProducts as $rp_data) { $product_data = $this->loadProduktArray($rp_data['product_id']); ?>
+	 					
+	 					<div class="wpsg_ajaxdialog_productrow">
+	 						<h4><?php echo $this->getProductName($rp_data['product_id']); ?></h4>
+	 						<a href="<?php echo $this->getProduktLink($rp_data['product_id']); ?>">
+	 							<?php if ($this->hasMod('wpsg_mod_produktbilder')) { ?> 
+	 								<?php $arBilder = $this->callMod('wpsg_mod_produktbilder', 'getProduktBilder', array($rp_data['product_id'])); ?>
+	  								<?php if (wpsg_isSizedArray($arBilder)) { ?> 
+	  									<img src="<?php echo $this->callMod('wpsg_mod_produktbilder', 'makeTn', array($rp_data['product_id'], $arBilder[0], 150, 150, 's')); ?>" alt="" />
+	  								<?php } ?>
+	 							<?php } ?>
+	 						</a>
+	 					</div>
+	 					
+						<?php } ?>
+					</div>
+	 			<?php }?>	
+	 		<?php } ?>	
+	 		
+	 		<div class="wpsg_clear"></div>
+	 		<?php /* Zubehörprodukte ENDE*/?>
+	 		
+	 		<div class="wpsg_button_wrap">
+	 			<button class="wpsg_button wpsg_button_continue_shopping" onclick="return wpsg_basket_ajax_message_close();"><?php echo __('Weiter Einkaufen', 'wpsg'); ?></button>
+	 			<a href="<?php echo $this->getUrl(wpsg_ShopController::URL_BASKET); ?>"><button class="wpsg_button wpsg_button_basket"><?php echo __('Zum Warenkorb', 'wpsg'); ?></button></a>
+	 			<div class="wpsg_clear"></div>
+	 		</div>
+	 			 		
+	 	<?php } ?>
+	 	
+	 	<?php $this->clearFrontendMessage(); ?>
+ 		
+ 	</div>
+
+</div><div id="wpsg_basket_ajax_layer"></div>
+
+<script type="text/javascript">/* <![CDATA[ */
+
+	function wpsg_basket_ajax_message_close()
+	{
+
+		jQuery('#wpsg_basket_ajax_message').remove();
+		jQuery('#wpsg_basket_ajax_layer').remove();
+
+		return false;
+		
+	}
+                                    
+	jQuery(document).ready(function() { 
+
+		jQuery('#wpsg_basket_ajax_layer').bind('click', function() {
+
+			wpsg_basket_ajax_message_close();
+			
+		} );
+		 
+	} );
+    
+/* ]]> */</script>

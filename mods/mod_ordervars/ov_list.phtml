@@ -8,14 +8,14 @@
 <?php if (is_array($this->view['data']) && sizeof($this->view['data']) > 0) { ?>
 <table class="wpsg_ov_table">
 	 <tr>
-	 	<th class="wpsg_id"><?php echo __('ID', 'wpsg'); ?></th>
+	 	<th><?php echo __('ID', 'wpsg'); ?></th>
     	<th class="wpsg_label"><?php echo __('Name', 'wpsg'); ?></th>
     	<th class="wpsg_typ"><?php echo __('Typ', 'wpsg'); ?></th>
     	<th class="wpsg_pflicht"><?php echo __('Pflicht', 'wpsg'); ?></th>
     	<th class="wpsg_delcol"></th>
   	</tr>
   	<?php $i = 0; foreach ($this->view['data'] as $ov) { $i ++; ?>
-	<tr class="wpsg_table wpsg_tablerow <?php echo (($i % 2 == 0)?'odd':'even'); ?>">
+	<tr class="wpsg_table wpsg_tablerow <?php echo (($i % 2 == 0)?'odd':'even'); ?>" id="ov_<?php echo $ov['id']; ?>">
 		<td class="wpsg_id"><?php echo $ov['id']; ?></td>
 		<td id="wpsg_ov_name_<?php echo $ov['id']; ?>" class="wpsg_label wpsg_editable"><?php echo wpsg_hspc(__($ov['name'], 'wpsg')); ?></td>
 		<td id="wpsg_ov_typ_<?php echo $ov['id']; ?>" class="wpsg_typ wpsg_editable"><?php echo $this->mod->arTypen[$ov['typ']]; ?></td>
@@ -116,6 +116,39 @@
 	</tr>
 	<?php } ?>
 </table>
+<p class="wpsg_hinweis"><?php echo __('Die Reihenfolge lässt sich mittels Drag&Drop verändern.', 'wpsg'); ?>
+
+<script type="text/javascript">/* <![CDATA[ */
+
+	jQuery(document).ready(function() {
+
+		jQuery('.wpsg_ov_table').sortable( {
+			helper: wpsg_Tablefix,
+			items: 'tr.wpsg_tablerow',
+			handler: '.wpsg_id',
+			update: function(event, ui) {
+
+				var wpsg_reorder = jQuery(this).sortable('serialize');
+
+				jQuery.ajax( {
+					url: '<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_ordervars&noheader=1&do=reorder',
+					data: { 
+						wpsg_reorder: wpsg_reorder
+					},
+					success: function(data) {
+
+						if (data !== "1") alert(data);
+						
+					}
+				} );
+				
+			}
+		} );
+		
+	} );
+			
+/* ]]> */</script>
+
 <?php } else { ?>
 <?php echo __('Bisher noch keine Bestellvariablen angelegt.', 'wpsg'); ?>
 <?php } ?>

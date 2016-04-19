@@ -18,8 +18,8 @@
 		<th class="col_action"></th>
 	</tr>
 	<?php foreach ($this->view['data'] as $pa) { ?>
-	<tr>
-		<td class="col_id"><?php echo $pa['id']; ?></td>
+	<tr id="pa_<?php echo $pa['id']; ?>" class="wpsg_tablerow">
+		<td class="col_id wpsg_id"><?php echo $pa['id']; ?></td>
 		<td colspan="2" id="pa_<?php echo $pa['id']; ?>_name" class="col_name wpsg_editable"><?php echo wpsg_hspc($pa['name']); ?></td>
 		<td class="col_html">
 			<a class="wpsg_icon wpsg_icon_html wpsg_icon_center" href="#" title="<?php echo __('HTML Code generieren', 'wpsg'); ?>" onclick="return wpsg_genPACode(<?php echo $pa['id']; ?>);"></a>
@@ -125,4 +125,39 @@
 	</tr>
 	<?php } ?>
 </table>
+
+<p class="wpsg_hinweis"><?php echo __('Die Reihenfolge lässt sich mittels Drag&Drop verändern.', 'wpsg'); ?>
+
+<script type="text/javascript">/* <![CDATA[ */
+
+	jQuery(document).ready(function() {
+
+		jQuery('.wpsg_mod_produktattribute_table').sortable( {
+			helper: wpsg_Tablefix,
+			items: 'tr.wpsg_tablerow',
+			handler: '.wpsg_id',
+			update: function(event, ui) {
+
+				var wpsg_reorder = jQuery(this).sortable('serialize');
+
+				jQuery.ajax( {
+					url: '<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Admin&action=module&modul=wpsg_mod_produktattribute&noheader=1&do=reorder',
+					data: { 
+						wpsg_reorder: wpsg_reorder
+					},
+					success: function(data) {
+
+						if (data !== "1") alert(data);
+						
+					}
+				} );
+				
+			}
+		} );
+		
+	} );
+			
+/* ]]> */</script>
+
+
 <?php } ?>

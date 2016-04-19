@@ -10,14 +10,16 @@
 ?>
 <div class="wpsg wpsg_overview">
 
+	<?php echo $this->writeFrontendMessage(); ?>
+
+	<?php $GLOBALS['step'] = 4; $this->render(WPSG_PATH_VIEW.'/warenkorb/progress.phtml'); ?>
+
 	<form method="post" action="<?php echo $this->getURL(wpsg_ShopController::URL_BASKET); ?>">
 
 		<h2><?php echo __('Zusammenfassung', 'wpsg'); ?></h2>
 		
 		<div class="wpsg_spacer"></div>
 		
-		<?php echo $this->writeFrontendMessage(); ?>
-
 		<?php if (!$this->hasMod('wpsg_mod_ordercondition')) { ?>
 		<div class="wpsg_agb">
 			<label>

@@ -8,6 +8,7 @@
 ?>
 <?php echo wpsg_drawForm_Input('wpsg_mod_fuellmenge_einheit', __('Mögliche Einheiten (Kommagetrennt)', 'wpsg'), $this->get_option('wpsg_mod_fuellmenge_einheit'), array('help' => 'wpsg_mod_fuellmenge_einheit')); ?>
 <?php echo wpsg_drawForm_Input('wpsg_mod_fuellmenge_bezug', __('Bezugsgröße', 'wpsg'), $this->get_option('wpsg_mod_fuellmenge_bezug'), array('help' => 'wpsg_mod_fuellmenge_bezug')); ?>
+<?php echo wpsg_drawForm_Checkbox('wpsg_mod_fuellmenge_showAjaxDialog', __('In der Warenkorb-Lightbox anzeigen', 'wpsg'), $this->get_option('wpsg_mod_fuellmenge_showAjaxDialog'), array('help' => 'wpsg_mod_fuellmenge_showAjaxDialog')); ?>
 <?php if ($this->hasMod('wpsg_mod_productindex')) { ?>
 <?php echo wpsg_drawForm_Checkbox('wpsg_mod_fuellmenge_showProductindex_fmenge', __('Füllmenge auf Produktübersichtsseiten anzeigen', 'wpsg'), $this->get_option('wpsg_mod_fuellmenge_showProductindex_fmenge'), array('help' => 'wpsg_mod_fuellmenge_showProductindex_fmenge')); ?>
 <?php echo wpsg_drawForm_Checkbox('wpsg_mod_fuellmenge_showProductindex_grundpreis', __('Grundpreis auf Produktübersichtsseiten anzeigen', 'wpsg'), $this->get_option('wpsg_mod_fuellmenge_showProductindex_grundpreis'), array('help' => 'wpsg_mod_fuellmenge_showProductindex_grundpreis')); ?>

@@ -142,13 +142,10 @@
 					<?php } else { ?>
 						<?php echo wpsg_translate(__('ab #1#', 'wpsg'), wpsg_ff($p['min_preis'], $this->get_option('wpsg_currency'))); ?>
 					<?php } ?>
-					<?php if ($this->get_option('wpsg_kleinunternehmer')) { /* Kleinunternehmerregelung aktiviert START */ ?>	
-					<a href="#kkhint" title="<?php echo $this->get_option('wpsg_kleinunternehmer_text'); ?>">*</a>
-					<?php } ?>
 				</div>
 				<?php if ($this->get_option('wpsg_kleinunternehmer')) { /* Kleinunternehmerregelung aktiviert START */ ?>		
 				<div class="wpsg_produkt_preishinweis">
-					<?php echo wpsg_translate(__('Preise zzgl. #1#', 'wpsg'), '<a href="'.$this->getURL(wpsg_ShopController::URL_VERSANDKOSTEN).'">'.__('Versandkosten', 'wpsg').'</a>'); ?>
+					<?php echo wpsg_translate(__('#2# zzgl. #1#', 'wpsg'), '<a href="'.$this->getURL(wpsg_ShopController::URL_VERSANDKOSTEN).'">'.__('Versandkosten', 'wpsg').'</a>', '<a href="#kkhint" title="'.wpsg_hspc($this->get_option('wpsg_kleinunternehmer_text')).'">Endpreis</a>'); ?>
 				</div>
 				<?php } else { /* Kleinunternehmerregelung aktiviert ENDE */ ?>	
 				<div class="wpsg_produkt_preishinweis">		
@@ -159,8 +156,8 @@
 					<?php } ?>
 				</div>	
 				<?php } ?>
-				<div class="wpsg_mod_productindex_button">
-					<?php if ($this->hasMod('wpsg_mod_stock') && isset($p['stock']) && $p['stock'] <= 0) { ?>
+				<div class="wpsg_mod_productindex_button">					
+					<?php if ($this->hasMod('wpsg_mod_stock') && $this->callMod('wpsg_mod_stock', 'checkBestand', array($p['id'], 1)) === false) { ?>
 					<span class="wpsg_produkt_soldout"><?php echo __('Produkt ausverkauft', 'wpsg'); ?></span>
 					<?php } else { ?>		
 					<a class="wpsg_button" title="<?php echo __('Zur Detailseite des Produkts', 'wpsg'); ?>" href="<?php echo wpsg_url($p['url']); ?>"><?php echo __('Zum Produkt', 'wpsg'); ?></a>

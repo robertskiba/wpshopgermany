@@ -58,7 +58,7 @@
 				<label for="plz" class="wpsg_checkout"><?php echo __("Postleitzahl:", "wpsg"); ?> 
 					<span class="wpsg_required">*</span>
 				</label>
-				<input class="validate[required_shipping] wpsg_checkout <?php echo ((in_array("shipping_plz", (array)$this->view['error']))?'wpsg_error':''); ?>" type="text" id="shipping_plz" name="wpsg[checkout][shipping_plz]" value="<?php echo htmlspecialchars($this->view['basket']['checkout']['shipping_plz']); ?>" />
+				<input class="validate[required_shipping] wpsg_checkout <?php echo ((in_array("shipping_plz", (array)$this->view['error']))?'wpsg_error':''); ?>" type="number" id="shipping_plz" name="wpsg[checkout][shipping_plz]" value="<?php echo htmlspecialchars($this->view['basket']['checkout']['shipping_plz']); ?>" />
 			</div>
 				
 			<div class="wpsg_checkoutblock">

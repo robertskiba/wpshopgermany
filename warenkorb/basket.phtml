@@ -13,7 +13,12 @@
 	
 	<?php echo $this->writeFrontendMessage(); ?>
 	
+	<?php $this->callMods('basket_top'); ?>
+	
 	<?php if (sizeof($this->view['basket']['produkte']) > 0) { ?>
+
+	<?php $GLOBALS['step'] = 1; $this->render(WPSG_PATH_VIEW.'/warenkorb/progress.phtml'); ?>
+		
 	<form id="wpsg_basket_form" name="wpsg_basket_form"  method="post" action="<?php echo $this->getURL(wpsg_ShopController::URL_CHECKOUT); ?>">
 	
 		<h2><?php echo __('Bestellte Produkte', 'wpsg'); ?></h2>
@@ -94,7 +99,7 @@
 				<td class="wpsg_cell_gesamtpreis"><?php echo '-'.wpsg_ff($this->view['basket']['sum']['gs'], $this->get_option('wpsg_currency')); ?></td>
 			</tr>
 			<tr class="productrow_2">
-				<td colspan="4" class="wpsg_cell_name">
+				<td colspan="<?php echo $this->view['colspan']; ?>" class="wpsg_cell_name">
 					<?php echo __('Gutschein', 'wpsg'); ?> <?php echo ($this->view['basket']['gs']['code'] != '')? '('.$this->view['basket']['gs']['code'].')':'' ?>
 				</td>
 			</tr>
@@ -206,7 +211,7 @@
 						echo __('anteilig', 'wpsg');
 						
 					}
-					else if (array_key_exists($this->view['basket']['checkout']['payment'], $this->arPayment))
+					else if (array_key_exists(wpsg_getStr($this->view['basket']['checkout']['payment']), $this->arPayment))
 					{
 						
 						echo wpsg_ff($this->arPayment[$this->view['basket']['checkout']['payment']]['mwst_value'], '%');
@@ -268,6 +273,8 @@
 		<?php $this->callMods('basket_inner_prebutton', array(&$this->view)); ?>
 				
 		<br /> 
+		
+		<input type="hidden" name="wpsg_basket_submit" value="1" />
 		
 		<input type="submit" class="wpsg_button wpsg_refreshbutton" value="<?php echo __('aktualisieren', 'wpsg'); ?>" name="wpsg_basket_refresh" />
 		<input type="submit" class="wpsg_button wpsg_checkoutbutton" value="<?php echo __('zur Kasse', 'wpsg'); ?>" name="wpsg_checkout" />

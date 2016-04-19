@@ -6,9 +6,9 @@
 
 ?>
 <tr class="productrow productrow2 <?php echo ((($this->view['i'] % 2) == 0)?'productrow_odd':'productrow_even'); ?>">
-	<td class="col_pos">&nbsp;</td>
-	<td class="col_name"><?php echo __('Variante', 'wpsg'); ?>:</td>
-	<td class="col_variant_value" colspan="<?php echo ((sizeof($this->view['basket']['mwst']) > 1 || $this->get_option('wpsg_showMwstAlways') == '1')?'4':'3'); ?>">
+	<td style="padding:4px; line-height:100%; vertical-align:middle;" class="col_pos">&nbsp;</td>
+	<td style="padding:4px; line-height:100%; vertical-align:middle;" class="col_name"><?php echo __('Variante', 'wpsg'); ?>:</td>
+	<td style="padding:4px; line-height:100%; vertical-align:middle;" class="col_variant_value" colspan="<?php echo ((sizeof($this->view['basket']['mwst']) > 1 || $this->get_option('wpsg_showMwstAlways') == '1')?'4':'3'); ?>">
 		<?php if (get_option('wpsg_vp_detailview') == 1) { ?>
 			<?php foreach ($this->view['variante'] as $vari => $value) { ?>
 			<?php if (is_numeric($vari)) { ?>

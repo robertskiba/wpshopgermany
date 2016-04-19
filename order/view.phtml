@@ -5,8 +5,43 @@
 	 */
 
 ?>
-<script type="text/javascript">
-/* <![CDATA[ */
+<script type="text/javascript">/* <![CDATA[ */
+
+	function wpsg_editInvoiceAdress()
+	{
+
+		jQuery('#wpsg_InvoiceDialog').dialog( {                   
+	        'dialogClass': 'wp-dialog',           
+	        'modal': true,
+	        'width': 600,
+	        'title': '<?php echo __('Anschrift ändern (Kundendaten)', 'wpsg'); ?>',
+	        'autoOpen': true, 
+	        'closeOnEscape': true,      
+	        'buttons': {
+	            "<?php echo __('Speichern', 'wpsg'); ?>": function() {
+
+					jQuery('#wpsg_backend_loading').show();
+					jQuery(this).dialog('close');
+	            							            	
+					jQuery.ajax( {
+						url: '<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Order&action=ajax&wpsg_action=saveInvoiceAdress&edit_id=<?php echo $this->view['data']['id']; ?>&noheader=1',
+						data: {
+							form_data: jQuery('#wpsg_InvoiceDialog input, #wpsg_InvoiceDialog select').serialize()
+						},
+						success: function(data) {
+							
+							location.href = location.href;
+							
+						}
+					} );
+	                
+	            }
+	        }
+	    } );
+
+		return false;
+		
+	}
  
  	function wpsg_reloadOrderLog()
 	{
@@ -25,7 +60,9 @@
 	} // function wpsg_reloadOrderLog()
 
 	jQuery(document).ready(function() {
- 
+
+		jQuery('body').append('<div id="wpsg_backend_loading" style="display:none;"><div class="wpsg_inner"><?php echo __('Bestellung wird aktualisiert.', 'wpsg'); ?><br /><br /><img src="<?php echo $this->getRessourceURL('gfx/ajax-loader.gif'); ?>" alt="" /></div></div>');
+		 
 		jQuery("#normal-sortables, #side-sortables").sortable({
 			connectWith: ".meta-box-sortables",
 			placeholder: 'wpsg_placeholder',
@@ -112,8 +149,7 @@
  		
 	} );
 	 
-/* ]]> */
-</script>
+/* ]]> */</script>
 
 <div class="wrap columns-2 wpsg_order_view">
 	<div class="icon32 icon32-posts-post" id="icon-edit"><br /></div>
@@ -153,6 +189,7 @@
 						<div class="wpsg_form_field">
 							<div class="wpsg_form_left">
 								<?php echo __('Anschrift', 'wpsg'); ?>:
+								<a style="float:none; display:inline-block;" onclick="return wpsg_editInvoiceAdress();" class="wpsg_icon wpsg_icon_edit" href="#" title="<?php echo __('Rechnungsanschrift ändern', 'wpsg'); ?>"></a>
 							</div>
 							<div class="wpsg_form_right">
 								<p>		
@@ -166,6 +203,19 @@
 							</div>
 						</div>
 						<div class="wpsg_clear"></div>
+						
+						<div id="wpsg_InvoiceDialog" class="wpsg_dialog" style="display:none;">
+							<?php echo wpsg_drawForm_Input('dialog_firma', __('Firma', 'wpsg'), $this->view['data']['firma']); ?>
+							<?php echo wpsg_drawForm_Select('dialog_title', __('Anschrift', 'wpsg'), $this->view['arTitles'], $this->view['data']['title'], array('noIndex' => true)); ?>
+							<?php echo wpsg_drawForm_Input('dialog_vname', __('Vorname', 'wpsg'), $this->view['data']['vname']); ?>
+							<?php echo wpsg_drawForm_Input('dialog_name', __('Name', 'wpsg'), $this->view['data']['name']); ?>
+							<?php echo wpsg_drawForm_Input('dialog_strasse', __('Straße', 'wpsg'), $this->view['data']['strasse']); ?>
+							<?php echo wpsg_drawForm_Input('dialog_plz', __('Postleitzahl', 'wpsg'), $this->view['data']['plz']); ?>
+							<?php echo wpsg_drawForm_Input('dialog_ort', __('Ort', 'wpsg'), $this->view['data']['ort']); ?>
+							<?php echo wpsg_drawForm_Select('dialog_land', __('Land', 'wpsg'), $this->view['arCountry'], $this->view['data']['land']); ?>
+							<br />
+							<?php echo wpsg_drawForm_Checkbox('dialog_shipping', __('Auch Lieferanschrift anpassen', 'wpsg'), false); ?>
+						</div>
 						
 						<?php if (strtotime($this->view['data']['geb']) > 0) { ?>
 						<?php echo wpsg_drawForm_Input('', __('Geburtsdatum', 'wpsg'), wpsg_fromDate($this->view['data']['geb']), array('text' => true)); ?>
@@ -280,7 +330,7 @@
 						<span title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>" class="handlediv"><br /></span>
 						<span><?php echo __('Allgemein', 'wpsg'); ?></span>
 					</h3>
-					<div class="inside">
+					<div class="inside wpsg_order_top">
 						
 						<div class="wpsg_form_field">
 							<div class="wpsg_form_left">
@@ -367,7 +417,7 @@
 						
 					</div>					
 				</div>
-								
+							  
 				<div class="postbox" id="wpsg_orderdata">		
 					<h3 class="wpsg_handlediv">
 						<span title="<?php echo __('Zum Ein/Ausklappen hier klicken', 'wpsg'); ?>" class="handlediv"><br /></span>

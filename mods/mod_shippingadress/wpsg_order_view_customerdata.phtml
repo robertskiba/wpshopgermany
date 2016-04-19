@@ -5,9 +5,51 @@
 	 */
 	//wpsg_debug($this->view);
 ?>
+
+<script type="text/javascript">/* <![CDATA[ */
+
+	function wpsg_editShippingAdress()
+	{
+
+		jQuery('#wpsg_ShippingDialog').dialog( {                   
+	        'dialogClass': 'wp-dialog',           
+	        'modal': true,
+	        'width': 600,
+	        'title': '<?php echo __('Lieferanschrift ändern', 'wpsg'); ?>',
+	        'autoOpen': true, 
+	        'closeOnEscape': true,      
+	        'buttons': {
+	            "<?php echo __('Speichern', 'wpsg'); ?>": function() {
+
+	            	jQuery('#wpsg_backend_loading').show();
+					jQuery(this).dialog('close');
+	            	
+					jQuery.ajax( {
+						url: '<?php echo WPSG_URL_WP; ?>wp-admin/admin.php?page=wpsg-Order&action=ajax&mod=wpsg_mod_shippingadress&edit_id=<?php echo $this->view['data']['id']; ?>&noheader=1',
+						data: {
+							form_data: jQuery('#wpsg_ShippingDialog input, #wpsg_ShippingDialog select').serialize()
+						},
+						success: function(data) {
+ 
+							location.href = location.href;
+							
+						}
+					} );
+	                
+	            }
+	        }
+	    } );
+
+		return false;
+		
+	}
+
+/* ]]> */</script>
+
 <div class="wpsg_form_field">
 	<div class="wpsg_form_left">
 		<?php echo __('Lieferadresse', 'wpsg'); ?>:
+		<a style="float:none; display:inline-block;" onclick="return wpsg_editShippingAdress();" class="wpsg_icon wpsg_icon_edit" href="#" title="<?php echo __('Rechnungsanschrift ändern', 'wpsg'); ?>"></a>
 	</div>
 	<div class="wpsg_form_right">
 		<p>		
@@ -19,5 +61,17 @@
 			<?php echo wpsg_hspc($this->view['wpsg_mod_shippingadress']['shipping_plz']); ?> <?php echo wpsg_hspc($this->view['wpsg_mod_shippingadress']['shipping_ort']); ?> <?php echo wpsg_hspc($this->view['shipping_country']['kuerzel']); ?><br />
 		</p>						
 	</div>
+	
+	<div id="wpsg_ShippingDialog" class="wpsg_dialog" style="display:none;">
+		<?php echo wpsg_drawForm_Input('dialog_shipping_firma', __('Firma', 'wpsg'), $this->view['wpsg_mod_shippingadress']['shipping_firma']); ?>
+		<?php echo wpsg_drawForm_Select('dialog_shipping_title', __('Anschrift', 'wpsg'), $this->view['arTitles'], $this->view['wpsg_mod_shippingadress']['shipping_title'], array('noIndex' => true)); ?>
+		<?php echo wpsg_drawForm_Input('dialog_shipping_vname', __('Vorname', 'wpsg'), $this->view['wpsg_mod_shippingadress']['shipping_vname']); ?>
+		<?php echo wpsg_drawForm_Input('dialog_shipping_name', __('Name', 'wpsg'), $this->view['wpsg_mod_shippingadress']['shipping_name']); ?>
+		<?php echo wpsg_drawForm_Input('dialog_shipping_strasse', __('Straße', 'wpsg'), $this->view['wpsg_mod_shippingadress']['shipping_strasse']); ?>
+		<?php echo wpsg_drawForm_Input('dialog_shipping_plz', __('Postleitzahl', 'wpsg'), $this->view['wpsg_mod_shippingadress']['shipping_plz']); ?>
+		<?php echo wpsg_drawForm_Input('dialog_shipping_ort', __('Ort', 'wpsg'), $this->view['wpsg_mod_shippingadress']['shipping_ort']); ?>
+		<?php echo wpsg_drawForm_Select('dialog_shipping_land', __('Land', 'wpsg'), $this->view['arCountry'], $this->view['wpsg_mod_shippingadress']['shipping_land']); ?>
+	</div>
+	
 </div>
 <div class="wpsg_clear"></div>

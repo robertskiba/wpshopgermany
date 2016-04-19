@@ -67,6 +67,8 @@
 
 	<?php echo $this->writeFrontendMessage(); ?>
 		
+	<?php $GLOBALS['step'] = 2; $this->render(WPSG_PATH_VIEW.'/warenkorb/progress.phtml'); ?>
+		
 	<form id="form-step2" method="post" action="<?php echo $this->getURL(wpsg_ShopController::URL_BASKET); ?>" enctype="multipart/form-data">
 
 		<?php /* Einbindung des Logins im Checokut */ ?>	
@@ -160,7 +162,7 @@
 					<label for="plz" class="wpsg_checkout"><?php echo __("Postleitzahl", "wpsg"); ?> 
 					<?php if ($this->view['pflicht']['plz'] != '1') { ?><span class="wpsg_required">*</span><?php } ?>:
 					</label>
-					<input class="wpsg_input_text <?php echo (($this->view['pflicht']['plz'] != '1')?'validate[required]':''); ?> wpsg_checkout <?php echo ((in_array("plz", (array)$this->view['error']))?'wpsg_error':''); ?>" type="number" id="plz" name="wpsg[checkout][plz]" value="<?php echo htmlspecialchars($this->view['basket']['checkout']['plz']); ?>" />
+					<input class="wpsg_input_text <?php echo (($this->view['pflicht']['plz'] != '1')?'validate[required]':''); ?> wpsg_checkout <?php echo ((in_array("plz", (array)$this->view['error']))?'wpsg_error':''); ?>" type="text" id="plz" name="wpsg[checkout][plz]" value="<?php echo htmlspecialchars($this->view['basket']['checkout']['plz']); ?>" />
 				</div>
 				
 				<div class="wpsg_checkoutblock" id="wpsg_ort">

@@ -14,7 +14,7 @@
 
 <?php $vAktiv = false; if (is_array($this->view['data']['vp_data']) && sizeof($this->view['data']['vp_data']) > 0) { ?>
 	<?php foreach ($this->view['data']['vp_data'] as $k => $var) { if ($var['aktiv'] == "1") { $vAktiv = true; ?>
-	
+		
 	<div class="wpsg_vp_field wpsg_vp_field_<?php echo $this->getProduktId($this->view['data']['id']); ?>">
 		
 		<script type="text/javascript">/* <![CDATA[ */
@@ -45,11 +45,23 @@
 					</option>
 					<?php } } ?>
 				</select> 
-				<?php if ($this->get_option("wpsg_vp_showpic") == "1") { ?>
+				<?php if ($this->get_option("wpsg_vp_showpic") == "1" && $this->hasMod('wpsg_mod_produktbilder')) { ?>
 				<span class="wpsg_vp_field_image">				
 					<?php foreach ($var['vari'] as $kv => $vari) { if ($vari['aktiv'] == "1" && isset($vari['showpic'])) { ?>
 					<span class="wpsg_vp_image wpsg_vp_image_<?php echo $kv; ?>" style="display:<?php echo (($this->view['wpsg_mod_varianten']['set'][$k] == $kv)?'block':'none'); ?>;">
-						<?php echo $this->callMod('wpsg_mod_produktbilder', 'genBild', array($this->getProduktId($this->view['data']['id']), $vari['showpic'], $this->get_option("wpsg_vp_showpic_width"), $this->get_option("wpsg_vp_showpic_height"), 's')); ?>
+						
+						<?php 
+							
+						$img_src = $this->callMod('wpsg_mod_produktbilder', 'makeTn', array(
+							$this->getProduktId($this->view['data']['id']), 
+							$vari['showpic'],
+							$this->get_option("wpsg_vp_showpic_width"),
+							$this->get_option("wpsg_vp_showpic_height"), 
+							's'
+						));
+							
+						?><img src="<?php echo $img_src; ?>" alt="" />
+												
 					</span>
 					<?php } } ?>
 				</span>
@@ -80,7 +92,19 @@
 				<?php } ?>
 				<?php if ($this->get_option("wpsg_vp_showpic") == "1" && isset($vari['showpic']) && $vari['showpic'] != false) { ?>
 				<span class="wpsg_vp_field_image">
-					<?php echo $this->callMod('wpsg_mod_produktbilder', 'genBild', array($this->getProduktId($this->view['data']['id']), $vari['showpic'], $this->get_option("wpsg_vp_showpic_width"), $this->get_option("wpsg_vp_showpic_height"), 's')); ?>
+				
+					<?php 
+							
+					$img_src = $this->callMod('wpsg_mod_produktbilder', 'makeTn', array(
+						$this->getProduktId($this->view['data']['id']), 
+						$vari['showpic'],
+						$this->get_option("wpsg_vp_showpic_width"),
+						$this->get_option("wpsg_vp_showpic_height"), 
+						's'
+					));
+						
+					?><img src="<?php echo $img_src; ?>" alt="" />
+					
 				</span>
 				<?php } ?>		
 			</label>
@@ -96,7 +120,18 @@
 				<?php } ?>
 				<?php if ($this->get_option("wpsg_vp_showpic") == "1" && $var['showpic'] != false) { ?>
 				<span class="wpsg_vp_field_image">
-					<?php echo $this->callMod('wpsg_mod_produktbilder', 'genBild', array($this->getProduktId($this->view['data']['id']), $var['showpic'], $this->get_option("wpsg_vp_showpic_width"), $this->get_option("wpsg_vp_showpic_height"), 's')); ?>
+					
+					<?php 
+						
+					$img_src = $this->callMod('wpsg_mod_produktbilder', 'makeTn', array(
+						$this->getProduktId($this->view['data']['id']), 
+						$var['showpic'],
+						$this->get_option("wpsg_vp_showpic_width"),
+						$this->get_option("wpsg_vp_showpic_height"), 
+						's'
+					));
+							
+					?><img src="<?php echo $img_src; ?>" alt="" />
 				</span>
 				<?php } ?>
 			</label>

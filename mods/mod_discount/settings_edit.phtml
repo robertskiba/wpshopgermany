@@ -51,7 +51,7 @@
 					<?php echo wpsg_drawForm_Checkbox('wpsg_mod_discount_customergroup', __('Rabatt auf Kundengruppen', 'wpsg'), $this->get_option('wpsg_mod_discount_customergroup'), array('help' => 'wpsg_mod_discount_customergroup')); ?>
 				<?php } ?>
 				
-				<?php echo wpsg_drawForm_Checkbox('wpsg_mod_discount_show', __('Originalpreis im Produkttemplate anzeigen', 'wpsg'), $this->get_option('wpsg_mod_discount_show')); ?>
+				<?php echo wpsg_drawForm_Checkbox('wpsg_mod_discount_show', __('Originalpreis im Produkttemplate anzeigen', 'wpsg'), $this->get_option('wpsg_mod_discount_show'), array ('help' => 'wpsg_mod_discount_show')); ?>
 									
 				<div class="wpsg_form_field" id="wpsg_mod_discount_hierarchie">
 					<div class="wpsg_form_left">
@@ -95,13 +95,13 @@
 						<div class="wpsg_clear"></div>
 						
 						<div class="wpsg_mod_discount_seriescol"><?php echo __('ab', 'wpsg').' '.wpsg_ff(0, $this->get_option('wpsg_currency')); ?></div>
-						<div class="wpsg_mod_discount_seriescol"><input type="text" name="value[0][rabatt]" value="<?php echo wpsg_ff($this->view['data'][0]['rabatt']); ?>" /></div>
+						<div class="wpsg_mod_discount_seriescol wpsg_mod_discount_seriescol_sub"><input type="text" name="value[0][rabatt]" value="<?php echo wpsg_ff($this->view['data'][0]['rabatt']); ?>" /></div>
 						<div class="wpsg_clear"></div>
 						
 						<?php foreach ($this->view['data'] as $k => $v) { if ($k > 0) { ?>
 						<div class="wpsg_mod_discount_seriescol"><?php echo __('ab', 'wpsg').' '.wpsg_ff($v['value'], $this->get_option('wpsg_currency')); ?></div>
-						<div class="wpsg_mod_discount_seriescol"><input type="text" name="value[<?php echo $k; ?>][rabatt]" value="<?php echo wpsg_ff($v['rabatt']); ?>" /></div>
-						<div class="wpsg_mod_discount_seriescol"><label><input type="checkbox" name="value[<?php echo $k; ?>][del]" value="1" /> <?php echo __('löschen', 'wpsg'); ?></label></div>
+						<div class="wpsg_mod_discount_seriescol wpsg_mod_discount_seriescol_sub"><input type="text" name="value[<?php echo $k; ?>][rabatt]" value="<?php echo wpsg_ff($v['rabatt']); ?>" /></div>
+						<div class="wpsg_mod_discount_seriescol wpsg_mod_discount_seriescol_sub"><label><input type="checkbox" name="value[<?php echo $k; ?>][del]" value="1" /> <?php echo __('löschen', 'wpsg'); ?></label></div>
 						<input type="hidden" name="value[<?php echo $k; ?>][value]" value="<?php echo $v['value']; ?>" /><div class="wpsg_clear"></div>
 						<?php } } ?>
 						
@@ -112,6 +112,10 @@
 					</div>
 				</div>
 				<div class="wpsg_clear"></div>
+				
+				<br />
+				
+				<?php echo wpsg_drawForm_Checkbox('wpsg_mod_discount_showBasket', __('Nächste Staffelung im Warenkorb anpreisen', 'wpsg'), $this->get_option('wpsg_mod_discount_showBasket')); ?>
 				
 			</div>  
 			

@@ -14,11 +14,18 @@
  
 ?>
 <div class="wpsg_produkt_wrapper">
+
+	<input type="hidden" name="wpsg_post_id" value="<?php echo get_the_ID(); ?>" />
+
+	<?php $this->callMods('product_top', array(&$this->view['data']['id'], $this->getTemplateIndex())); ?>
+
 	<div itemscope itemtype="http://schema.org/Product" class="wpsg_produkt wpsg_produkt_<?php echo $this->view['data']['id']; ?>">
 				
 		<div class="wpsg_product_afterimage">
 	
 			<h2 itemprop="name" class="wpsg_producttitle"><?php echo $this->getProductName($this->view['data']['id']); ?></h2>
+	
+			<?php $this->callMods('product_top_afterheadline', array(&$this->view['data']['id'], $this->getTemplateIndex())); ?>
 	
 			<?php /* Block für die Produktbilder START */ ?>
 			<?php if ($this->hasMod('wpsg_mod_produktbilder')) { ?>	
@@ -68,7 +75,7 @@
 			<?php if ($this->get_option('wpsg_kleinunternehmer')) { /* Kleinunternehmerregelung aktiviert START */ ?>		
 			
 				<div class="wpsg_produkt_preishinweis">
-					<?php echo wpsg_translate(__('Preise zzgl. #1#', 'wpsg'), '<a href="'.$this->getURL(wpsg_ShopController::URL_VERSANDKOSTEN).'">'.__('Versandkosten', 'wpsg').'</a>'); ?>
+					<?php echo wpsg_translate(__('#2# zzgl. #1#', 'wpsg'), '<a href="'.$this->getURL(wpsg_ShopController::URL_VERSANDKOSTEN).'">'.__('Versandkosten', 'wpsg').'</a>', '<a href="#kkhint" title="'.wpsg_hspc($this->get_option('wpsg_kleinunternehmer_text')).'">Endpreis</a>'); ?>
 				</div>
 			
 			<?php } else { /* Kleinunternehmerregelung aktiviert ENDE */ ?>	
@@ -99,10 +106,10 @@
 						
 			<?php /* Lagerbestand START*/?>
 			<?php if ($this->hasMod('wpsg_mod_stock') && $this->get_option('wpsg_mod_stock_showProduct') == '1') { ?>
-							<div class="wpsg_mod_produktindex_stock">
-								<?php echo wpsg_translate(__('Lagerbestand: #1#','wpsg'), $this->view['data']['stock']);  ?>	
-							</div>
-						<?php } ?>
+			<div class="wpsg_mod_produktindex_stock">
+				<?php echo wpsg_translate(__('Lagerbestand: #1#','wpsg'), $this->view['data']['stock']);  ?>	
+			</div>
+			<?php } ?>
 			<?php /* Lagerbestand ENDE*/?>
 						
 			<?php /* Lieferzeit Anzeige START */ ?>
@@ -113,7 +120,8 @@
 				</div>
 				
 			<?php } ?>
-			<?php /* Lieferzeit Anzeige ENDE */ ?> 
+			<?php /* Lieferzeit Anzeige ENDE */ ?>
+			
 			
 			<?php /* Gewichtsanzeige START */ ?>
 			<?php if ($this->hasMod('wpsg_mod_weight') && $this->get_option('wpsg_mod_weight_showProduct') === '1') { ?>
@@ -125,10 +133,11 @@
 			
 			<?php /* Varianten START */ ?>
 			<div class="wpsg_produkt_varianten">
-			<?php echo $this->callMod('wpsg_mod_varianten', 'renderTemplate', array($this->view['data']['product_key'])); ?>
+				<?php echo $this->callMod('wpsg_mod_varianten', 'renderTemplate', array($this->view['data']['product_key'])); ?>
 			</div>
 			<?php /* Varianten ENDE */ ?>
-					
+										
+			<?php if ($this->callMods('productForSale', array($this->view['data']['product_key'])) || ($this->hasMod('wpsg_mod_request') && $this->callMod('wpsg_mod_request', 'isRequestProduct', array($this->view['data']['id'])))) { ?>
 			<div class="wpsg_produkt_add_basket_wrapper">	
 				
 				<label class="wpsg_amount_label" for="wpsg_menge_<?php echo $this->getTemplateIndex(); ?>"><?php echo __('Anzahl', 'wpsg'); ?>:</label>
@@ -137,24 +146,38 @@
 					<?php echo (($this->view['data']['basket_multiple'] == 4)?' readonly="readonly" ':''); ?>	
 				/>	
 							
-				<?php if ($this->get_option('wpsg_afterinsert') == '2') { ?>
+				<?php if (in_array($this->get_option('wpsg_afterinsert'), array('2', '3'))) { ?>
 				<script type="text/javascript">
 	
 					jQuery(document).ready(function() { 
 						
 						jQuery('.wpsg_add_basket_<?php echo $this->getTemplateIndex(); ?>').bind('click', function() {
+							
+							jQuery('.wpsg_add_basket_<?php echo $this->getTemplateIndex(); ?>').prop('disabled', true);
 				 			 
 							jQuery.ajax( {
 								url: '<?php echo $this->getURL(wpsg_ShopController::URL_BASKET); ?>',
 								data:
 								{
-									wpsg_form_data: jQuery('#wpsg_produktform_<?php echo $this->getTemplateIndex(); ?>').serialize(),
+									'wpsg_form_data': jQuery('#wpsg_produktform_<?php echo $this->getTemplateIndex(); ?>').serialize(),
 									'wpsg[ajax]': '1',
 									'wpsg[submit]': '1'					
-								},
+								}, 
 								success: function(data) 
 								{
+									  
+									<?php if ($this->get_option('wpsg_afterinsert') == '2') { ?>
 									tb_show('<?php echo __('Ihr Warenkorb', 'wpsg'); ?>', '<?php echo $this->getURL(wpsg_ShopController::URL_BASKET_AJAX); ?>&height=500');
+									<?php } else { ?>
+
+									jQuery('#wpsg_basket_ajax_message_wrap').remove();
+									jQuery('body').append('<div id="wpsg_basket_ajax_message_wrap">' + data + '</div>');
+									
+									<?php } ?>
+
+									wpsg_refreshBasketWidget();
+									jQuery('.wpsg_add_basket_<?php echo $this->getTemplateIndex(); ?>').prop('disabled', false);
+									
 								}
 							} );	
 							
@@ -168,10 +191,12 @@
 				<?php } ?>
 				
 			</div>
-					
-			<?php if (!$this->hasMod('wpsg_mod_request') || $this->callMod('wpsg_mod_request', 'productForSale', array($this->view['data']['id']))) { ?>
-			<input class="wpsg_button wpsg_add_basket wpsg_add_basket_<?php echo $this->getTemplateIndex(); ?>" type="submit" value="<?php echo __('In den Warenkorb', 'wpsg'); ?>" name="wpsg[submit]" />
 			<?php } ?>
+			  
+			<?php if ($this->callMods('productForSale', array($this->view['data']['product_key']))) { ?>
+			<input class="wpsg_button wpsg_add_basket wpsg_add_basket_<?php echo $this->getTemplateIndex(); ?>" type="submit" value="<?php echo __('In den Warenkorb', 'wpsg'); ?>" name="wpsg[submit]" />
+			<?php } ?>		
+			
 			
 			<?php if ($this->hasMod('wpsg_mod_request') && $this->callMod('wpsg_mod_request', 'isRequestProduct', array($this->view['data']['id']))) { ?> 
 			<input class="wpsg_button wpsg_add_requestlist" id="wpsg_add_requestlist_<?php echo $this->getTemplateIndex(); ?>" type="submit" value="<?php echo __('Auf die Anfrageliste', 'wpsg'); ?>" name="wpsg[submit_request]" />

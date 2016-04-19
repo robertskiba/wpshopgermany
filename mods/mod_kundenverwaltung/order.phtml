@@ -4,6 +4,8 @@
 	 * Template für die Übersichtsseite der Bestellungen im Frontend
 	 */
 
+	//wpsg_debug($this->view['arOrder']);
+
 ?>
 
 <div class="wpsg_mod_kundenverwaltung_order wpsg">
@@ -41,7 +43,7 @@
 					<?php foreach ((array)$order['arProdukte'] as $p) { ?>					
 					<tr>
 						<td class="col_name">
-							<a href="<?php echo $p['url']; ?>"><?php echo wpsg_hspc($p['name']); ?><?php echo $this->getProductName($this->getProduktID($p['id']), true); ?></a>
+							<a href="<?php echo $p['url']; ?>"><?php echo $this->getProductName($this->getProduktID($p['id']), true); ?></a>
 							<br /><?php echo __('Artikelnummer', 'wpsg'); ?>: <?php echo $p['anr']; ?>
 							<?php if ($this->hasMod('wpsg_mod_varianten') && wpsg_isSizedString($p['mod_vp_varkey'])) { $arVarInfo = $this->callMod('wpsg_mod_varianten', 'getVariantenInfoArray', array($p['mod_vp_varkey'])); ?>
 							<br /><?php echo __('Variante', 'wpsg'); ?>: <?php echo $arVarInfo['key']; ?>
@@ -86,7 +88,7 @@
 				
 		<?php } ?>
 	<?php } else { ?>
-	<p><?php echo __('Bisher keine Bestellungen durchgeführt.', 'wpsg'); ?>
+	<p><?php echo __('Bisher keine Bestellungen durchgeführt.', 'wpsg'); ?></p>
 	<?php } ?>
 	
 </div>

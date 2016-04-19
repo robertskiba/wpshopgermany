@@ -5,18 +5,18 @@
 	 */
 
 ?>
-<?php echo wpsg_drawForm_Checkbox('wpsg_vp_showpic', __('Direkte Anzeige eines Variantenbildes', 'wpsg'), $this->get_option('wpsg_vp_showpic')); ?>
-<?php echo wpsg_drawForm_Checkbox('wpsg_vp_detailview', __('Erweiterte Variantenanzeige aktivieren', 'wpsg'), $this->get_option('wpsg_vp_detailview')); ?>
-<?php echo wpsg_drawForm_Input('wpsg_vp_showpic_width', __('Breite des Vorschaubildes', 'wpsg'), $this->get_option('wpsg_vp_showpic_width')); ?>
-<?php echo wpsg_drawForm_Input('wpsg_vp_showpic_height', __('Höhe des Vorschaubildes', 'wpsg'), $this->get_option('wpsg_vp_showpic_height')); ?>
-<?php echo wpsg_drawForm_Checkbox('wpsg_vp_replaceanr', __('Produktartikelnummer ersetzen', 'wpsg'), $this->get_option('wpsg_vp_replaceanr'), array('hint' => __('Ersetzt die Produktartikelnummer durch die zusammengesetzte Artikelnummern der Varianten.', 'wpsg'))); ?>
+<?php echo wpsg_drawForm_Checkbox('wpsg_vp_showpic', __('Direkte Anzeige eines Variantenbildes', 'wpsg'), $this->get_option('wpsg_vp_showpic'), array('help' => 'wpsg_vp_showpic')); ?>
+<?php echo wpsg_drawForm_Checkbox('wpsg_vp_detailview', __('Erweiterte Variantenanzeige aktivieren', 'wpsg'), $this->get_option('wpsg_vp_detailview'), array('help' => 'wpsg_vp_detailview')); ?>
+<?php echo wpsg_drawForm_Input('wpsg_vp_showpic_width', __('Breite des Vorschaubildes', 'wpsg'), $this->get_option('wpsg_vp_showpic_width'), array('help' => 'wpsg_vp_showpic_width')); ?>
+<?php echo wpsg_drawForm_Input('wpsg_vp_showpic_height', __('Höhe des Vorschaubildes', 'wpsg'), $this->get_option('wpsg_vp_showpic_height'), array('help' => 'wpsg_vp_showpic_height')); ?>
+<?php echo wpsg_drawForm_Checkbox('wpsg_vp_replaceanr', __('Produktartikelnummer ersetzen', 'wpsg'), $this->get_option('wpsg_vp_replaceanr'), array('hint' => __('Ersetzt die Produktartikelnummer durch die zusammengesetzte Artikelnummern der Varianten.', 'wpsg'), 'help' => 'wpsg_vp_replaceanr')); ?>
 
 <?php if ($this->hasMod('wpsg_mod_produktbilder')) { ?>
 <br />
 <h3><?php echo __('Bild für Varianten mit "Grafikauswahl"', 'wpsg'); ?></h3>
-<?php echo wpsg_drawForm_Input('wpsg_vp_imageselect_width', __('Breite des Vorschaubildes', 'wpsg'), $this->get_option('wpsg_vp_imageselect_width')); ?>
-<?php echo wpsg_drawForm_Input('wpsg_vp_imageselect_height', __('Höhe des Vorschaubildes', 'wpsg'), $this->get_option('wpsg_vp_imageselect_height')); ?>
-<?php echo wpsg_drawForm_Select('wpsg_vp_imageselect_mode', __('Bild Modus', 'wpsg'), $this->callMod('wpsg_mod_produktbilder', 'getImageModes'), $this->get_option('wpsg_vp_imageselect_mode')); ?>
+<?php echo wpsg_drawForm_Input('wpsg_vp_imageselect_width', __('Breite des Vorschaubildes', 'wpsg'), $this->get_option('wpsg_vp_imageselect_width'), array('help' => 'wpsg_vp_imageselect_width')); ?>
+<?php echo wpsg_drawForm_Input('wpsg_vp_imageselect_height', __('Höhe des Vorschaubildes', 'wpsg'), $this->get_option('wpsg_vp_imageselect_height'), array('help' => 'wpsg_vp_imageselect_height')); ?>
+<?php echo wpsg_drawForm_Select('wpsg_vp_imageselect_mode', __('Bild Modus', 'wpsg'), $this->callMod('wpsg_mod_produktbilder', 'getImageModes'), $this->get_option('wpsg_vp_imageselect_mode'), array('help' => 'wpsg_vp_imageselect_mode')); ?>
 <br />
 <?php } ?>
 

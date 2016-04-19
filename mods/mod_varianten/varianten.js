@@ -39,6 +39,7 @@
 			'method': 'get',
 			'data': {
 				'action': 'wpsg_varianten_switch',
+				'wpsg_post_id': jQuery('#wpsg_produktform_' + product_index + ' input[name="wpsg_post_id"]').val(),
 				'quantity': jQuery('#wpsg_menge_' + product_index).val(),
 				'template': jQuery('#wpsg_produktform_' + product_index + ' input[name="wpsg[template]"]').val(),
 				'referer': jQuery('#wpsg_produktform_' + product_index + ' input[name="myReferer"]').val(),

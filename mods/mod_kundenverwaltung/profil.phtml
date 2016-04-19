@@ -9,10 +9,109 @@
 <script type="text/javascript">
 
 	jQuery(document).ready(function() {
+
+		<?php if ($this->get_option('wpsg_form_validation') == '1') { ?>
+
+		if (typeof jQuery.validationEngine == "object")
+		{
+
+			jQuery("#form-profil").validationEngine('attach', {promptPosition : "centerRight", scroll: false});
+
+		}
+
+		<?php } else if ($this->get_option('wpsg_form_validation') == '2') { ?>
+
+		jQuery.validator.addMethod("cRequired", jQuery.validator.methods.required, "<?php echo __('Dieses Feld ist ein Pflichtfeld.', 'wpsg'); ?>");
+		jQuery.validator.addClassRules('validate[required]', { cRequired: true } );
+		jQuery("#form-profil").validate( { 
+			ignore: '',
+			errorClass: 'wpsg_error',
+			onsubmit: false,
+			showErrors: function(errorMap, errorList) {
+
+				this.defaultShowErrors();	
+
+			}
+		} ); 
+
+		jQuery('#wpsg_mod_kundenverwaltung_save').bind('click', function() { 
+
+			var bReturn = jQuery('#form-profil').validate().form();
+			if (jQuery('#form-profil input.wpsg_error').length > 0) jQuery('#form-profil input.wpsg_error')[0].focus();
+			return bReturn;
+			  
+		} );
 		
-		jQuery("#form-profil").validationEngine('attach', {promptPosition : "centerRight", scroll: false});
+		<?php } ?>
 		
-	} );
+// Visualisierung der Passwortstärke 
+
+		jQuery('input[type=password]').keyup(function(){
+
+			var password = jQuery(this).val();
+			
+			if (password.length < 6) {
+				
+				jQuery('#wpsg_pwd_length').removeClass('valid').addClass('invalid');
+
+			}else{
+
+				jQuery('#wpsg_pwd_length').removeClass('invalid').addClass('valid');
+	
+			}
+
+			if (password.match(/([a-z])/)) {
+				
+				jQuery('#wpsg_pwd_letter').removeClass('invalid').addClass('valid');
+
+			}else{
+
+				jQuery('#wpsg_pwd_letter').removeClass('valid').addClass('invalid');
+	
+			}
+
+			if (password.match(/([A-Z])/)) {
+				
+				jQuery('#wpsg_pwd_capital').removeClass('invalid').addClass('valid');
+
+			}else{
+
+				jQuery('#wpsg_pwd_capital').removeClass('valid').addClass('invalid');
+	
+			}
+			
+			if (password.match(/([0-9])/)) {
+				
+				jQuery('#wpsg_pwd_number').removeClass('invalid').addClass('valid');
+
+			}else{
+
+				jQuery('#wpsg_pwd_number').removeClass('valid').addClass('invalid');
+	
+			}
+
+			if (password.match(/([~,!,%,@,&,#,°,^,$,?,_,*,§])/)) {
+				
+				jQuery('#wpsg_pwd_speziell').removeClass('invalid').addClass('valid');
+
+			}else{
+
+				jQuery('#wpsg_pwd_speziell').removeClass('valid').addClass('invalid');
+	
+			}
+			
+
+			jQuery('#wpsg_pwd_info').show(); 		
+			
+			jQuery(this).blur(function(){
+
+				jQuery('#wpsg_pwd_info').hide(); 
+				
+			});
+			
+		});	
+
+	});	
 		
 </script>
 
@@ -106,7 +205,7 @@
 			<label for="plz" class="wpsg_checkout"><?php echo __("Postleitzahl", "wpsg"); ?> 
 			<?php if ($this->view['pflicht']['plz'] != '1') { ?><span class="wpsg_required">*</span><?php } ?>:
 			</label>
-			<input class="wpsg_input_text <?php echo (($this->view['pflicht']['plz'] != '1')?'validate[required]':''); ?> wpsg_checkout <?php echo ((in_array("plz", (array)$this->view['error']))?'wpsg_error':''); ?>" type="number" id="plz" name="wpsg[profil][plz]" value="<?php echo htmlspecialchars($this->view['data']['plz']); ?>" />		
+			<input class="wpsg_input_text <?php echo (($this->view['pflicht']['plz'] != '1')?'validate[required]':''); ?> wpsg_checkout <?php echo ((in_array("plz", (array)$this->view['error']))?'wpsg_error':''); ?>" type="text" id="plz" name="wpsg[profil][plz]" value="<?php echo htmlspecialchars($this->view['data']['plz']); ?>" />		
 		</div>
 		
 		<div class="wpsg_checkoutblock">		
@@ -141,21 +240,21 @@
 		<div class="wpsg_checkoutblock">
 			<label class="wpsg_cv" for="wpsg_cv_<?php echo $c_id; ?>">
 				<?php echo wpsg_hspc(__($c['name'], 'wpsg')); ?><?php if ($c['show'] == '0') { ?> <span class="wpsg_required">*</span><?php } ?>:
-				<?php if ($c['typ'] == '0') { // Textfeld ?>
-				<input class="<?php echo (($c['show'] == '0')?'validate[required]':''); ?> <?php echo ((in_array("custom_".$c_id, (array)$this->view['error']))?'wpsg_error':''); ?>" name="wpsg[profil][custom][<?php echo $c_id; ?>]" type="text" value="<?php echo wpsg_hspc($this->view['data']['custom'][$c_id]); ?>" />
-				<?php } else if ($c['typ'] == '1') { $arAuswahl = explode("|", $c['auswahl']); // Auswahlfeld ?>
-				<select class="<?php echo (($c['show'] == '0')?'validate[required]':''); ?> <?php echo ((in_array("custom_".$c_id, (array)$this->view['error']))?'wpsg_error':''); ?>" name="wpsg[profil][custom][<?php echo $c_id; ?>]">
-					<option value="-1"><?php echo __('Bitte Auswählen', 'wpsg'); ?></option>
-					<?php foreach ((array)$arAuswahl as $a) { ?>
-					<option value="<?php echo wpsg_hspc($a); ?>" <?php echo (($a == $this->view['data']['custom'][$c_id])?'selected="selected"':''); ?>><?php echo wpsg_hspc($a); ?></option>
-					<?php } ?>
-				</select>
-				<?php } else if ($c['typ'] == '2') { // Checkbox ?>
-				<input type="hidden" name="wpsg[profil][custom][<?php echo $c_id; ?>]" value="0" />
-				<input id="wpsg_cv_<?php echo $c_id; ?>" class="<?php echo (($c['show'] == '0')?'validate[required]':''); ?> checkbox" type="checkbox" value="1" name="wpsg[profil][custom][<?php echo $c_id; ?>]" value="1" <?php echo wpsg_hspc(($this->view['data']['custom'][$c_id] == '1')?'checked="checked"':''); ?> />
-				<span class="wpsg_clear"></span> 
-				<?php } ?>
 			</label>
+			<?php if ($c['typ'] == '0') { // Textfeld ?>
+			<input class="<?php echo (($c['show'] == '0')?'validate[required]':''); ?> <?php echo ((in_array("custom_".$c_id, (array)$this->view['error']))?'wpsg_error':''); ?>" name="wpsg[profil][custom][<?php echo $c_id; ?>]" type="text" value="<?php echo wpsg_hspc($this->view['data']['custom'][$c_id]); ?>" />
+			<?php } else if ($c['typ'] == '1') { $arAuswahl = explode("|", $c['auswahl']); // Auswahlfeld ?>
+			<select class="<?php echo (($c['show'] == '0')?'validate[required]':''); ?> <?php echo ((in_array("custom_".$c_id, (array)$this->view['error']))?'wpsg_error':''); ?>" name="wpsg[profil][custom][<?php echo $c_id; ?>]">
+				<option value="-1"><?php echo __('Bitte Auswählen', 'wpsg'); ?></option>
+				<?php foreach ((array)$arAuswahl as $a) { ?>
+				<option value="<?php echo wpsg_hspc($a); ?>" <?php echo (($a == $this->view['data']['custom'][$c_id])?'selected="selected"':''); ?>><?php echo wpsg_hspc($a); ?></option>
+				<?php } ?>
+			</select>
+			<?php } else if ($c['typ'] == '2') { // Checkbox ?>
+			<input type="hidden" name="wpsg[profil][custom][<?php echo $c_id; ?>]" value="0" />
+			<input id="wpsg_cv_<?php echo $c_id; ?>" class="<?php echo (($c['show'] == '0')?'validate[required]':''); ?> checkbox" type="checkbox" value="1" name="wpsg[profil][custom][<?php echo $c_id; ?>]" value="1" <?php echo wpsg_hspc(($this->view['data']['custom'][$c_id] == '1')?'checked="checked"':''); ?> />
+			<span class="wpsg_clear"></span> 
+			<?php } ?>			
 		</div>
 		<?php } } ?>
 		<?php } ?>
@@ -166,7 +265,7 @@
 			<label for="wpsg_mod_kundenverwaltung_pwd1"><?php echo __("Passwort", "wpsg"); ?>
 			<?php if ($this->get_option('wpsg_mod_kundenverwaltung_showCheckoutRegisterzwand') == '1') { ?><span class="wpsg_required">*</span><?php } ?>:
 			</label>
-			<input class="wpsg_checkout <?php echo ((in_array("mod_kundenverwaltung_pwd1", (array)$this->view['error']))?'wpsg_error':''); ?>" type="password" id="mod_kundenverwaltung_pwd1" name="wpsg[mod_kundenverwaltung][register_pwd1]" value="" />	
+			<input class="wpsg_checkout <?php echo ((in_array("mod_kundenverwaltung_pwd1", (array)$this->view['error']))?'wpsg_error':''); ?>" type="password" id="wpsg_mod_kundenverwaltung_pw1" name="wpsg[mod_kundenverwaltung][register_pwd1]" value="" /><span id="wpsg_mod_kundenverwaltung_password_result"></span>	
 		</div>
 		
 		<div class="wpsg_checkoutblock">		
@@ -174,6 +273,17 @@
 			<?php if ($this->get_option('wpsg_mod_kundenverwaltung_showCheckoutRegisterzwand') == '1') { ?><span class="wpsg_required">*</span><?php } ?>:
 			</label>
 			<input class="wpsg_checkout <?php echo ((in_array("mod_kundenverwaltung_pwd2", (array)$this->view['error']))?'wpsg_error':''); ?>" type="password" id="wpsg_mod_kundenverwaltung_pwd2" name="wpsg[mod_kundenverwaltung][register_pwd2]" value="" />
+		</div>
+		
+		<div id="wpsg_pwd_info"> 
+		<h4><?php echo __('Passwort sollte folgende Regeln befolgen:','wpsg') ?></h4>
+			<ul>
+				<li id="wpsg_pwd_length" class="invalid"><?php echo __('Das Passwort ist zu kurz!','wpsg')?></li>
+				<li id="wpsg_pwd_letter" class="invalid"><?php echo __('Mit mindestens einem Kleinbuchstaben wird das Passwort noch sicherer','wpsg') ?></li>
+				<li id="wpsg_pwd_capital" class="invalid"><?php echo __('Mit mindestens einem Großbuchstaben wird das Passwort noch sicherer','wpsg') ?></li>
+				<li id="wpsg_pwd_number" class="invalid"><?php echo __('Mit mindestens einer Zahl wird das Passwort noch sicherer','wpsg') ?></li>
+				<li id="wpsg_pwd_speziell" class="invalid"><?php echo __('Mit mindestens einem Sonderzeichen wird das Passwort noch sicherer','wpsg') ?></li>
+			</ul>
 		</div>
 		
 		<div class="wpsg_clear"></div><br />
@@ -184,7 +294,7 @@
 		
 		<div class="wpsg_clear"></div><br />
 		
-		<input type="submit" class="wpsg_button wpsg_saveButton" value="<?php echo __('Speichern', 'wpsg'); ?>" name="wpsg_mod_kundenverwaltung_save" />
+		<input type="submit" class="wpsg_button wpsg_saveButton" id="wpsg_mod_kundenverwaltung_save" value="<?php echo __('Speichern', 'wpsg'); ?>" name="wpsg_mod_kundenverwaltung_save" />
 	
 		<?php $this->ClearSessionErrors(); ?>
 	
